@@ -1,0 +1,40 @@
+# matplotlib / fontconfig cache (see notebook setup cell)
+.cache/
+
+# trained model artifacts
+trained_models/
+
+# device calibrations (may contain site-specific URLs / raw dumps)
+calibrations/
+
+# routing sweep / pilot outputs
+routing_ladder.csv
+hardware_results.csv
+zne_dryrun_results.csv
+*.jobs.log
+
+# generated figures
+figures/
+
+# latex build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+raport_month_1.pdf
+
+# banknote study: upstream clone (has its own git) + generated results
+banknote_study/upstream/
+banknote_study/*.csv
+
+# top-level generated result CSVs (regenerable via the scripts; device-specific)
+two_curves_mirror_fidelity.csv
+two_curves_mirror_fidelity_sim.csv
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

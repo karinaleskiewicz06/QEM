@@ -1,0 +1,515 @@
+"""Device-calibrated noisy simulator for the Tier-A 5-qubit star (ODRA / IQM Spark-class).
+
+Month-1 deliverable (plan.md §9): build a noise-calibrated classical simulator that
+reproduces Tier-A error rates, so the VQC-ZNE pipeline can be validated end-to-end
+*in simulation* before any hardware time is spent.
+
+Design
+------
+* IQM Spark-class native gate set: single-qubit **PRX** (Qiskit ``r``) + two-qubit **CZ**.
+* Star coupling: hub = physical qubit 0, outer qubits 1..4.
+* Noise per component:
+    - 1q gate: thermal relaxation (T1/T2 over gate duration) ∘ depolarizing.
+    - 2q gate (CZ): 2q depolarizing ∘ (thermal ⊗ thermal).
+    - idle: thermal relaxation on ``id`` (and scheduled ``delay`` expanded to ``id``),
+      so Dynamical Decoupling has something to suppress in simulation.
+    - readout: per-qubit bit-flip confusion matrix.
+
+The default :class:`DeviceCalibration` holds **placeholder** Spark-class numbers, clearly
+flagged. Replace them with live ODRA calibration (see :func:`load_iqm_calibration` /
+``collect_odra_calibration.py``) before using any results quantitatively.
+
+On real ODRA hardware, idle decoherence is physical and always present; the idle-``id``
+model is only needed so simulated DD/REM dry-runs are meaningful.
+"""
+
+from __future__ import annotations
+
+import json
+import pathlib
+from dataclasses import dataclass, field
+
+import numpy as np
+
+from qiskit import QuantumCircuit, transpile
+from qiskit.quantum_info import SparsePauliOp
+from qiskit.transpiler import InstructionDurations
+from qiskit_aer import AerSimulator
+from qiskit_aer.noise import (
+    NoiseModel,
+    ReadoutError,
+    depolarizing_error,
+    thermal_relaxation_error,
+)
+
+from ansatz import HardwareEfficientAnsatz
+
+# IQM native basis. Qiskit ``r`` == PRX(theta, phi); ``cz`` == CZ.
+# ``id`` is kept so scheduled idle windows can carry thermal noise.
+IQM_BASIS_GATES: list[str] = ["r", "cz", "id", "measure"]
+# Time unit for InstructionDurations / id padding (nanoseconds).
+DT_NS: float = 1.0
+
+
+def star_coupling_map(num_qubits: int = 5, hub: int = 0) -> list[list[int]]:
+    """Bidirectional star coupling: every outer qubit connects only to the hub."""
+    edges: list[list[int]] = []
+    for q in range(num_qubits):
+        if q == hub:
+            continue
+        edges.append([hub, q])
+        edges.append([q, hub])
+    return edges
+
+
+@dataclass
+class DeviceCalibration:
+    """Per-qubit calibration for the 5-qubit star.
+
+    NOTE: defaults are PLACEHOLDER Spark-class order-of-magnitude values.
+    Replace with live ODRA calibration before quantitative use.
+    """
+
+    num_qubits: int = 5
+    hub: int = 0
+    # coherence times (seconds). t2 = Ramsey T2* (free-induction idle dephasing).
+    t1: np.ndarray = field(default_factory=lambda: np.full(5, 40e-6))
+    t2: np.ndarray = field(default_factory=lambda: np.full(5, 15e-6))
+    # Hahn-echo T2 (idle dephasing achievable UNDER dynamical decoupling). If not
+    # provided it defaults to t2 (i.e. DD gives no modelled benefit).
+    t2_echo: np.ndarray | None = None
+    # gate durations (seconds)
+    t_1q: float = 40e-9
+    t_2q: float = 100e-9
+    # depolarizing gate error probabilities
+    p_1q: np.ndarray = field(default_factory=lambda: np.full(5, 1e-3))
+    p_2q: float = 1e-2
+    # symmetric readout error probability per qubit  P(0|1) = P(1|0)
+    p_ro: np.ndarray = field(default_factory=lambda: np.full(5, 3e-2))
+
+    def __post_init__(self) -> None:
+        # allow scalars -> broadcast to arrays
+        n = self.num_qubits
+        self.t1 = np.broadcast_to(np.asarray(self.t1, float), (n,)).copy()
+        self.t2 = np.broadcast_to(np.asarray(self.t2, float), (n,)).copy()
+        self.p_1q = np.broadcast_to(np.asarray(self.p_1q, float), (n,)).copy()
+        self.p_ro = np.broadcast_to(np.asarray(self.p_ro, float), (n,)).copy()
+        # physical constraint: T2 <= 2*T1
+        self.t2 = np.minimum(self.t2, 2.0 * self.t1)
+        if self.t2_echo is None:
+            self.t2_echo = self.t2.copy()
+        else:
+            self.t2_echo = np.broadcast_to(
+                np.asarray(self.t2_echo, float), (n,)
+            ).copy()
+        # echo T2 must also respect T2 <= 2*T1, and never be worse than T2*
+        self.t2_echo = np.clip(self.t2_echo, self.t2, 2.0 * self.t1)
+
+
+def load_iqm_calibration(path: str | pathlib.Path) -> DeviceCalibration:
+    """Load a DeviceCalibration from an IQM/ODRA calibration JSON.
+
+    Expected flat schema (produced by ``collect_odra_calibration.py``)::
+
+        {t1, t2, p_1q, p_ro (lists), t_1q, t_2q, p_2q (scalars), num_qubits, hub}
+
+    Extra keys (e.g. ``meta``) are ignored.
+    """
+    d = json.loads(pathlib.Path(path).read_text())
+    return DeviceCalibration(
+        num_qubits=int(d.get("num_qubits", 5)),
+        hub=int(d.get("hub", 0)),
+        t1=np.asarray(d["t1"], float),
+        t2=np.asarray(d["t2"], float),
+        t2_echo=(np.asarray(d["t2_echo"], float) if "t2_echo" in d else None),
+        t_1q=float(d.get("t_1q", 40e-9)),
+        t_2q=float(d.get("t_2q", 100e-9)),
+        p_1q=np.asarray(d["p_1q"], float),
+        p_2q=float(d["p_2q"]),
+        p_ro=np.asarray(d["p_ro"], float),
+    )
+
+
+def build_noise_model(
+    cal: DeviceCalibration,
+    *,
+    idle_t2: np.ndarray | None = None,
+    with_idle: bool = True,
+) -> NoiseModel:
+    """Assemble an Aer :class:`NoiseModel` for the star from a calibration.
+
+    Args:
+        idle_t2: T2 used for the idle (``id``) thermal channel. Defaults to
+            ``cal.t2`` (Ramsey T2*). Pass ``cal.t2_echo`` to model dynamical
+            decoupling (DD), which refocuses low-frequency dephasing so idle
+            qubits decohere at the slower Hahn-echo rate.
+        with_idle: if False, omit the ``id`` idle channel entirely (ablation).
+
+    Gate (``r``/``cz``) thermal channels always use ``cal.t2`` — DD protects
+    *idle* windows, not the gates themselves. Use :func:`schedule_with_idle`
+    so idle windows become ``id`` sequences that carry this channel.
+    """
+    nm = NoiseModel(basis_gates=IQM_BASIS_GATES)
+    idle_t2 = cal.t2 if idle_t2 is None else np.broadcast_to(
+        np.asarray(idle_t2, float), (cal.num_qubits,)
+    )
+
+    # single-qubit gate errors (PRX ~ Qiskit 'r') + idle ('id')
+    for q in range(cal.num_qubits):
+        relax = thermal_relaxation_error(cal.t1[q], cal.t2[q], cal.t_1q)
+        err_1q = relax.compose(depolarizing_error(cal.p_1q[q], 1))
+        nm.add_quantum_error(err_1q, ["r"], [q])
+        if with_idle:
+            # Idle: thermal relaxation over one 1q-gate duration, at idle_t2
+            # (T2* by default, echo T2 under DD).
+            nm.add_quantum_error(
+                thermal_relaxation_error(cal.t1[q], idle_t2[q], cal.t_1q),
+                ["id"], [q],
+            )
+        # readout confusion matrix
+        p = cal.p_ro[q]
+        nm.add_readout_error(ReadoutError([[1 - p, p], [p, 1 - p]]), [q])
+
+    # two-qubit gate errors (CZ), on both edge orientations
+    for a, b in {tuple(sorted(e)) for e in star_coupling_map(cal.num_qubits, cal.hub)}:
+        relax_a = thermal_relaxation_error(cal.t1[a], cal.t2[a], cal.t_2q)
+        relax_b = thermal_relaxation_error(cal.t1[b], cal.t2[b], cal.t_2q)
+        err_2q = depolarizing_error(cal.p_2q, 2).compose(relax_a.tensor(relax_b))
+        nm.add_quantum_error(err_2q, ["cz"], [a, b])
+        nm.add_quantum_error(err_2q, ["cz"], [b, a])
+
+    return nm
+
+
+def instruction_durations(cal: DeviceCalibration) -> InstructionDurations:
+    """Gate durations in ``DT_NS`` units for scheduling / idle padding."""
+    t1q = max(1, int(round(cal.t_1q * 1e9 / DT_NS)))
+    t2q = max(1, int(round(cal.t_2q * 1e9 / DT_NS)))
+    return InstructionDurations(
+        [
+            ("r", None, t1q),
+            ("cz", None, t2q),
+            ("id", None, t1q),
+            ("measure", None, max(t2q, 1000)),
+            ("delay", None, 1),
+        ],
+        dt=DT_NS * 1e-9,
+    )
+
+
+def schedule_with_idle(
+    circuit: QuantumCircuit,
+    cal: DeviceCalibration | None = None,
+) -> QuantumCircuit:
+    """Insert ``id`` gates on idle qubits so Aer applies thermal idle noise.
+
+    For each non-barrier / non-delay op of duration ``D``, every qubit *not*
+    participating gets ``round(D / t_1q)`` identity gates (each carrying T1/T2
+    noise via the noise model). Measurements are appended unchanged at the end.
+
+    This avoids Qiskit 2.x ``PadDelay`` / ``InstructionDurations`` issues while
+    still giving Dynamical Decoupling something non-trivial to suppress in sim.
+    On real ODRA, idle decoherence is physical — skip this helper.
+    """
+    cal = cal or DeviceCalibration()
+    t1q = cal.t_1q
+    t2q = cal.t_2q
+    n = circuit.num_qubits
+
+    compute = QuantumCircuit(n, name=circuit.name)
+    measures: list = []
+    for inst in circuit.data:
+        name = inst.operation.name
+        if name == "barrier":
+            continue
+        if name == "measure":
+            measures.append(inst)
+            continue
+        if name == "delay":
+            # Expand an existing delay into ids on that qubit.
+            dur = float(getattr(inst.operation, "duration", t1q) or t1q)
+            # duration may be in dt units; treat large ints as ns, floats as seconds
+            if dur > 1.0:  # likely ns or dt counts
+                dur_s = dur * 1e-9
+            else:
+                dur_s = dur
+            n_ids = max(1, int(round(dur_s / t1q)))
+            for _ in range(n_ids):
+                compute.id(inst.qubits[0])
+            continue
+
+        # Duration of this op
+        nq = inst.operation.num_qubits
+        dur_s = t2q if nq >= 2 else t1q
+        active = {compute.find_bit(q).index for q in inst.qubits}
+        n_ids = max(1, int(round(dur_s / t1q)))
+        for q in range(n):
+            if q not in active:
+                for _ in range(n_ids):
+                    compute.id(q)
+        compute.append(inst.operation, inst.qubits, inst.clbits)
+
+    # Re-attach classical registers / measurements if present
+    if circuit.num_clbits:
+        out = QuantumCircuit(*circuit.qregs, *circuit.cregs, name=circuit.name)
+        for inst in compute.data:
+            out.append(inst.operation, inst.qubits, inst.clbits)
+        for inst in measures:
+            out.append(inst.operation, inst.qubits, inst.clbits)
+        return out
+    return compute
+
+
+def make_noisy_simulator(
+    cal: DeviceCalibration | None = None,
+    *,
+    with_idle: bool = True,
+    dd: bool = False,
+) -> AerSimulator:
+    """Return an AerSimulator configured with the star noise model + topology.
+
+    ``with_idle=True`` (default) includes ``id`` thermal errors. Pair with
+    :func:`schedule_with_idle` before execution for a meaningful DD dry-run.
+    ``dd=True`` models dynamical decoupling: idle qubits decohere at the
+    Hahn-echo rate ``cal.t2_echo`` instead of Ramsey ``cal.t2``.
+    """
+    cal = cal or DeviceCalibration()
+    idle_t2 = cal.t2_echo if dd else cal.t2
+    nm = build_noise_model(cal, idle_t2=idle_t2, with_idle=with_idle)
+    return AerSimulator(
+        noise_model=nm,
+        coupling_map=star_coupling_map(cal.num_qubits, cal.hub),
+        basis_gates=IQM_BASIS_GATES,
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Frozen-model loading + expectation-value execution (executor for ZNE later)  #
+# --------------------------------------------------------------------------- #
+
+def load_frozen_model(
+    models_dir: str | pathlib.Path = "trained_models",
+    tag: str | None = None,
+) -> tuple[QuantumCircuit, SparsePauliOp, dict]:
+    """Rebuild the trained (weight-bound) circuit + observable from a saved model.
+
+    Returns ``(bound_circuit, observable, config)`` where ``bound_circuit`` still
+    has its feature parameters ``x[...]`` free (bind per data point at inference).
+    If ``tag`` is None, picks the highest test-accuracy model in ``models_dir``.
+    """
+    models_dir = pathlib.Path(models_dir)
+    lock_file = models_dir / "LOCKED.json"
+    if tag is None and lock_file.exists():
+        # Prefer the explicit lock pointer (methodological: select by tag, not acc).
+        tag = json.loads(lock_file.read_text()).get("locked_tag")
+    if tag is not None:
+        cfg = json.loads((models_dir / f"{tag}.json").read_text())
+    else:
+        candidates = []
+        for jf in models_dir.glob("*_q*_*.json"):  # only new-schema files
+            if jf.name == "LOCKED.json":
+                continue
+            try:
+                c = json.loads(jf.read_text())
+                candidates.append((c.get("test_acc", -1), jf, c))
+            except Exception:
+                continue
+        if not candidates:
+            raise FileNotFoundError(f"no frozen models found in {models_dir}")
+        _, _, cfg = max(candidates, key=lambda t: t[0])
+
+    ans = HardwareEfficientAnsatz(
+        num_qubits=cfg["n_qubits"],
+        num_layers=cfg["n_layers"],
+        num_features=cfg["n_features"],
+        entanglement=cfg["entanglement"],
+        entangling_gate=cfg.get("entangling_gate", "cx"),
+    )
+    circ = ans.build()
+    weights = np.load(models_dir / cfg["weights_file"])
+    wparams = ans.weight_parameters(circ)
+    bound = circ.assign_parameters(dict(zip(wparams, weights)))
+
+    observable = readout_observable(cfg["n_qubits"], cfg["readout"])
+    return bound, observable, cfg
+
+
+def readout_observable(num_qubits: int, readout: str) -> SparsePauliOp:
+    """Build the study observable: 'hub' -> Z on qubit 0; 'mean' -> (1/n) Σ Zᵢ."""
+    if readout == "hub":
+        lab = ["I"] * num_qubits
+        lab[num_qubits - 1] = "Z"  # qubit 0 is rightmost in Qiskit label order
+        return SparsePauliOp.from_list([("".join(lab), 1.0)])
+    # mean-Z
+    terms = []
+    for q in range(num_qubits):
+        lab = ["I"] * num_qubits
+        lab[num_qubits - 1 - q] = "Z"
+        terms.append(("".join(lab), 1.0 / num_qubits))
+    return SparsePauliOp.from_list(terms)
+
+
+def expval_z_from_counts(counts: dict[str, int], coeffs: np.ndarray) -> float:
+    """Expectation of Σ_q coeffs[q]·Z_q from measurement counts.
+
+    ``coeffs`` is length n (qubit 0 == least-significant bit, Qiskit convention).
+    Bitstrings in ``counts`` are big-endian (qubit n-1 .. qubit 0).
+    """
+    n = len(coeffs)
+    total = sum(counts.values())
+    acc = 0.0
+    for bitstr, c in counts.items():
+        bits = bitstr.replace(" ", "")[-n:].zfill(n)
+        # bits[0] is qubit n-1 ; z_q = +1 if bit 0 else -1
+        val = 0.0
+        for q in range(n):
+            bit = int(bits[n - 1 - q])
+            val += coeffs[q] * (1.0 - 2.0 * bit)
+        acc += val * c
+    return acc / total
+
+
+def perqubit_z_from_counts(counts: dict[str, int], n: int) -> np.ndarray:
+    """Per-qubit ⟨Z_q⟩ (length n, qubit 0 = LSB) from measurement counts."""
+    total = sum(counts.values())
+    z = np.zeros(n)
+    for bitstr, c in counts.items():
+        bits = bitstr.replace(" ", "")[-n:].zfill(n)
+        for q in range(n):
+            bit = int(bits[n - 1 - q])
+            z[q] += (1.0 - 2.0 * bit) * c
+    return z / total
+
+
+def rem_correct_z(zq: np.ndarray, p_ro: np.ndarray) -> np.ndarray:
+    """Readout Error Mitigation for single-qubit Z (symmetric bit-flip model).
+
+    A symmetric bit-flip with probability p attenuates ⟨Z⟩ by (1-2p), so the
+    unbiased estimate is ⟨Z⟩_meas / (1-2p). Exact for Z/I observables; the
+    denominator is floored to avoid blow-up when p -> 0.5.
+    """
+    atten = np.clip(1.0 - 2.0 * np.asarray(p_ro, float), 1e-2, 1.0)
+    return zq / atten
+
+
+def observable_coeffs(observable: SparsePauliOp, num_qubits: int) -> np.ndarray:
+    """Extract per-qubit Z coefficients from a diagonal (Z/I only) observable."""
+    coeffs = np.zeros(num_qubits)
+    for pauli, coeff in zip(observable.paulis, observable.coeffs):
+        label = pauli.to_label()
+        if set(label) - {"I", "Z"}:
+            raise ValueError("expval_z_from_counts supports only Z/I observables")
+        for q in range(num_qubits):
+            if label[num_qubits - 1 - q] == "Z":
+                coeffs[q] += float(np.real(coeff))
+    return coeffs
+
+
+def execute_expectation(
+    circuit: QuantumCircuit,
+    observable: SparsePauliOp,
+    sim: AerSimulator,
+    shots: int = 4096,
+    *,
+    cal: DeviceCalibration | None = None,
+    apply_idle_schedule: bool = True,
+    pre_transpiled: bool = False,
+    rem: bool = False,
+) -> float:
+    """Run a (Z/I-observable) circuit on the noisy sim and return ⟨O⟩ from counts.
+
+    This is the executor shape a ZNE loop calls. ``circuit`` must have all
+    parameters bound and NO measurements (they are appended here).
+
+    ``pre_transpiled=True`` skips transpilation (use when the circuit is already
+    in the native {r,cz} basis, e.g. a folded ZNE circuit whose U†U structure
+    must NOT be optimised away).
+    When ``apply_idle_schedule=True``, idle windows are expanded to ``id`` gates
+    so thermal idle noise (and later DD) is active in simulation.
+    ``rem=True`` applies Readout Error Mitigation (per-qubit, using ``cal.p_ro``).
+    """
+    n = circuit.num_qubits
+    cal = cal or DeviceCalibration()
+    meas = circuit.copy()
+    if not pre_transpiled:
+        meas = transpile(
+            meas,
+            basis_gates=IQM_BASIS_GATES,
+            coupling_map=star_coupling_map(n),
+            optimization_level=1,
+        )
+    if apply_idle_schedule:
+        meas = schedule_with_idle(meas, cal)
+    meas.measure_all()
+    result = sim.run(meas, shots=shots).result()
+    counts = result.get_counts()
+    coeffs = observable_coeffs(observable, n)
+    if rem:
+        zq = rem_correct_z(perqubit_z_from_counts(counts, n), cal.p_ro)
+        return float(np.dot(coeffs, zq))
+    return expval_z_from_counts(counts, coeffs)
+
+
+def expectation_error(noisy_ev: float, ideal_ev: float) -> float:
+    """Absolute error |⟨O⟩_noisy − ⟨O⟩_ideal| — primary ZNE y-signal (plan §7).
+
+    Accuracy is a *derived* secondary metric (sign decision on ⟨O⟩). Prefer this
+    continuous signal for locating breakdown regions.
+    """
+    return abs(float(noisy_ev) - float(ideal_ev))
+
+
+def mean_expectation_error(
+    ideal_evs: np.ndarray | list[float],
+    noisy_evs: np.ndarray | list[float],
+) -> float:
+    """Mean absolute expectation-value error over a dataset."""
+    ideal = np.asarray(ideal_evs, float)
+    noisy = np.asarray(noisy_evs, float)
+    return float(np.mean(np.abs(noisy - ideal)))
+
+
+# --------------------------------------------------------------------------- #
+# Sanity check (plan.md §9: simulated readout/2q errors match device specs)     #
+# --------------------------------------------------------------------------- #
+
+def sanity_check(cal: DeviceCalibration | None = None, shots: int = 20000) -> None:
+    """Empirically verify readout error and that idle scheduling increases noise."""
+    cal = cal or DeviceCalibration()
+    sim = make_noisy_simulator(cal)
+    print("=== noisy_sim sanity check (PLACEHOLDER calibration) ===")
+    print(f"coupling (star): {star_coupling_map(cal.num_qubits, cal.hub)}")
+
+    # Readout: prepare |1> on each qubit, measure, estimate P(0|1) vs spec p_ro.
+    print("\nreadout error  (spec -> measured P(0|1)):")
+    for q in range(cal.num_qubits):
+        qc = QuantumCircuit(cal.num_qubits, 1)
+        qc.x(q)
+        qc.measure(q, 0)
+        tqc = transpile(qc, basis_gates=IQM_BASIS_GATES,
+                        coupling_map=star_coupling_map(cal.num_qubits))
+        counts = sim.run(tqc, shots=shots).result().get_counts()
+        p01 = counts.get("0", 0) / shots
+        print(f"  q{q}: {cal.p_ro[q]:.3f} -> {p01:.3f}")
+
+    # Idle effect: exaggerate idle time so T1/T2 shows up in a short demo.
+    # (Real routed circuits accumulate far more idle; 30 gates is tiny vs T1=40µs.)
+    obs = readout_observable(cal.num_qubits, "mean")
+    idle_qc = QuantumCircuit(cal.num_qubits)
+    idle_qc.x(0)
+    for _ in range(500):  # ~20 µs of idle on q0 while q1 is busy → ~T1/2
+        idle_qc.x(1)
+    z_no_sched = execute_expectation(
+        idle_qc, obs, sim, shots=shots, apply_idle_schedule=False
+    )
+    z_sched = execute_expectation(
+        idle_qc, obs, sim, shots=shots, cal=cal, apply_idle_schedule=True
+    )
+    print(f"\nidle effect on mean-Z (500 x on q1, X on q0; ~20µs idle ≈ T1/2):")
+    print(f"  no idle schedule:   {z_no_sched:.3f}")
+    print(f"  with idle schedule: {z_sched:.3f}")
+    print("  (with-schedule should decay |Z| more if idle T1/T2 is active)")
+
+
+if __name__ == "__main__":
+    sanity_check()
