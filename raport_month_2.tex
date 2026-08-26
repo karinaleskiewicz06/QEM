@@ -1,0 +1,395 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{placeins}
+\usepackage{hyperref}
+
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue}
+
+\title{%
+    Przygotowanie benchmarku i protokołu eksperymentalnego do oceny wpływu\\
+    topologii sprzętu oraz kodowania logicznego na jakość obliczeń kwantowych\\
+    \large Sprawozdanie z Miesiąca 2
+}
+\author{Karina Leśkiewicz}
+\date{Sierpień 2026}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+% =====================================================================
+\section{Wprowadzenie: druga metoda mitygacji --- Clifford Data Regression}
+\label{sec:cdr-intro}
+% =====================================================================
+
+Miesiąc~2 rozszerza badanie z pojedynczej metody mitygacji do \emph{porównania} strategii
+mitygacji i bliskoterminowej ochrony logicznej wzdłuż tej samej osi kosztu routingu. W~Miesiącu~1
+potok stanowiła para REM${+}$ZNE; teraz dokładam drugą metodę mitygacji błędów ---
+\textbf{Clifford Data Regression (CDR)} --- oraz warstwę „logical-ish'' opartą na detekcji błędów
+(kod $[[4,2,2]]$, sekcja osobna). Wszystkie metody oceniam na tych samych metrykach jakości
+(błąd $\langle O\rangle$, dokładność, mirror fidelity) oraz na \emph{wspólnej walucie kosztu} ---
+liczbie shotów QPU potrzebnych do osiągnięcia zadanej tolerancji --- tak, aby były wprost
+porównywalne mimo różnych narzutów natywnych.
+
+\paragraph{Pozycjonowanie i wkład.} Samo \emph{istnienie} progu, przy którym mitygacja przestaje
+się opłacać, nie jest wynikiem nowym --- wynika wprost z ram bias/wariancja~\cite{cai2023}
+(rosnący narzut próbkowania $C_{em}$ w~ZNE) oraz z teorii jałowych płaskowyżów indukowanych
+szumem~\cite{wang2021}: przy
+dostatecznej głębokości stan zbiega do maksymalnie zmieszanego i \emph{każda} metoda musi zawieść.
+Wkładem tej pracy nie jest więc odkrycie, że próg istnieje, lecz jego \textbf{ilościowy,
+rozdzielony po urządzeniach i topologiach pomiar}: gdzie dokładnie leży punkt opłacalności --- na
+gwieździe IQM~Spark (ODRA) wobec kraty kwadratowej (Garnet, Emerald) --- jest wielkością
+specyficzną dla urządzenia, kalibracji i topologii, której nie sposób podać bez pomiaru.
+Kluczowe przeramowanie polega na tym, że \textbf{osią kosztu jest narzut routingu (bramki SWAP),
+a nie sama głębokość obwodu}: ten sam obwód logiczny przekracza próg w \emph{różnych} punktach na
+różnych topologiach wyłącznie z powodu rozmieszczenia (placementu) kubitów. Widać to już w~samej
+drabinie kosztu: identyczny obwód wzorca \texttt{star} kompiluje się do $12$~CZ przy rozmieszczeniu
+zwartym, ale do $78$~CZ przy rozproszonym na Emeraldzie (sekcja mapowania). To porównanie --- próg
+opłacalności mitygacji jako funkcja \emph{topologii i metody}, mierzony wzdłuż osi narzutu
+routingu --- stanowi właściwy wkład sprawozdania; wynik progowy z Miesiąca~1 (${\approx}85$--$90$~CZ
+na gwieździe) jest jego punktem odniesienia, a nie tezą samą w sobie.
+
+\paragraph{Motywacja: inny profil narzutu niż ZNE.} ZNE sztucznie zwiększa szum i ekstrapoluje do
+zera, więc jego estymator jest różnicą dużych liczb o naprzemiennych znakach; narzut wariancji
+$C_{em}$ rośnie z kosztem obwodu i to on wyznacza górną granicę użyteczności ZNE (w~Miesiącu~1
+zmierzoną w okolicach $85$--$90$~CZ, gdzie współczynnik redukcji błędu spadał do ${\approx}1{,}0$).
+CDR \emph{nie} zwiększa szumu --- zamiast tego \emph{uczy się} korekty z danych --- więc ma z zasady
+inny profil załamania. Jest to naturalny kandydat na drugą metodę: pytanie badawcze brzmi, która
+z metod załamuje się pierwsza wraz z rosnącym kosztem routingu.
+
+\paragraph{Mechanizm.} CDR~\cite{czarnik2021} (Czarnik i~in., \emph{Error mitigation with Clifford
+quantum-circuit data}, Quantum~\textbf{5}, 592, 2021; arXiv:2005.10189) buduje klasyczny model korekcji na
+\textbf{obwodach treningowych bliskich Cliffordowi}. Konstrukcja przebiega w trzech krokach:
+\begin{enumerate}
+\item \textbf{Generacja zbioru treningowego.} Z obwodu docelowego tworzę warianty o
+      \emph{identycznej strukturze} (ten sam wzorzec splątający, ta sama transpilacja i routing),
+      w których obroty niekliffordowskie --- w naszym VQC data-zależne $R_y(x)$ --- zostają
+      „przyciągnięte'' do najbliższego kąta kliffordowskiego (wielokrotności $\pi/2$). Dzięki
+      twierdzeniu Gottesmana--Knilla wartość oczekiwana takiego obwodu jest \emph{dokładnie i
+      efektywnie} obliczalna symulacją stabilizatorową, co daje bezszumową referencję
+      $\langle O\rangle_{\text{ideal}}$ bez kosztu wektora stanu.
+\item \textbf{Zbieranie par (szum, ideał).} Każdy obwód treningowy wykonuję na urządzeniu (lub w
+      kalibrowanym symulatorze), otrzymując parę
+      $\bigl(\langle O\rangle_{\text{noisy}},\,\langle O\rangle_{\text{ideal}}\bigr)$. Ponieważ
+      obwody treningowe mają ten sam profil szumu co docelowy, para ta próbkuje odwzorowanie
+      szumu urządzenia.
+\item \textbf{Dopasowanie i zastosowanie.} Dopasowuję regresję (w wariancie podstawowym
+      \emph{liniową})
+      \begin{equation}
+      \langle O\rangle_{\text{ideal}} \approx a\,\langle O\rangle_{\text{noisy}} + b,
+      \end{equation}
+      a wyuczone współczynniki $(a,b)$ stosuję do surowej wartości obwodu \emph{docelowego}. Estymator
+      CDR nie wymaga wzmacniania szumu, więc nie dziedziczy eksplozji wariancji ZNE.
+\end{enumerate}
+
+\paragraph{Koszt i założenia.} Narzutem CDR jest budżet obwodów treningowych: $N$ obwodów bliskich
+Cliffordowi ${\times}$ liczba shotów każdego. Ten koszt wliczam do wspólnej waluty
+(shots-to-target), aby porównanie z ZNE było uczciwe. Kluczowe założenie CDR to
+\emph{stacjonarność i wyuczalność} odwzorowania szumu: jeśli kalibracja dryfuje między pomiarem
+zbioru treningowego a obwodu docelowego, wyuczona korekta przestaje pasować. Dlatego --- inaczej
+niż w ZNE --- obwody treningowe i docelowy uruchamiam w tym samym oknie/zadaniu, a wrażliwość CDR na
+dryf (udokumentowany w sekcji~\ref{sec:cv-full}) traktuję jako część wyniku, a nie usterkę
+pomiaru.
+
+\FloatBarrier
+
+% =====================================================================
+\section{Pełna walidacja krzyżowa 5-fold na QPU (Banknote, wszystkie głębokości)}
+\label{sec:cv-full}
+% =====================================================================
+
+Rozszerzyłam walidację krzyżową z Miesiąca~1 (dotąd tylko $L=6$, dwa ansätze) na
+\textbf{pełną siatkę}: trzy ansätze $\times$ trzy głębokości $\{2,4,6\}$ $\times$ wszystkie
+pięć foldów, wykonane na rzeczywistym QPU ODRA (IQM~Spark). Metodyka jest identyczna z pracą
+źródłową i z Miesiącem~1: dla każdego foldu używam \emph{jego własnych} wag (uczonych na
+zbiorze treningowym tego foldu) i oceniam na jego rozłącznym zbiorze testowym --- pełnym
+foldzie (274--275~pkt, naturalna proporcja klas), więc bez wycieku danych i z sensowną
+macro-F1. Konfiguracja: DD wyłączone, 4096~shotów, potok raw${}\to{}$+REM${}\to{}$+ZNE
+(Richardson, skale $\{1,3,5\}$). Wynik podaję jako średnią${}\pm{}$odchylenie
+\emph{międzyfoldowe} (ddof${}=1$). Dane: \texttt{banknote\_hardware\_cv\_full.csv};
+agregacja: \texttt{run\_cv\_banknote.py -\/-aggregate-csv}.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Banknote na ODRA --- \textbf{pełna 5-fold CV}, wszystkie ansätze i głębokości
+(DD-off, 4096 shots, pełny fold). Dokładność i macro-F1 podane jako
+średnia${}\pm{}$odchylenie międzyfoldowe; kolumna err to średni $|\langle O\rangle$-błąd$|$
+wobec ideału bezszumowego. ZNE ${}={}$ REM${+}$ekstrapolacja Richardsona. Wiersze uporządkowane
+rosnącym kosztem CZ w obrębie każdej głębokości (drabina routingu star${}<{}$odra${}<{}$sim).}
+\label{tab:cv-full}
+\begin{tabular}{@{}lc cc cc c@{}}
+\toprule
+& & \multicolumn{2}{c}{\textbf{dokładność}} & \multicolumn{2}{c}{\textbf{macro-F1}}
+  & err $\langle O\rangle$ \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Ansatz & CZ & raw & ZNE & raw & ZNE & raw${}\to{}$ZNE \\
+\midrule
+\multicolumn{7}{@{}l}{\emph{głębokość 2}} \\
+star      & 8  & $0{,}840\pm0{,}035$ & $0{,}843\pm0{,}031$ & $0{,}834\pm0{,}041$ & $0{,}838\pm0{,}033$ & $0{,}072\to0{,}043$ \\
+odra      & 13 & $0{,}855\pm0{,}029$ & $0{,}875\pm0{,}020$ & $0{,}854\pm0{,}029$ & $0{,}873\pm0{,}021$ & $0{,}112\to0{,}058$ \\
+simulator & 20 & $0{,}808\pm0{,}038$ & $0{,}813\pm0{,}079$ & $0{,}796\pm0{,}050$ & $0{,}792\pm0{,}098$ & $0{,}149\to0{,}163$ \\
+\midrule
+\multicolumn{7}{@{}l}{\emph{głębokość 4}} \\
+star      & 16 & $0{,}886\pm0{,}009$ & $0{,}886\pm0{,}035$ & $0{,}885\pm0{,}010$ & $0{,}881\pm0{,}039$ & $0{,}126\to0{,}036$ \\
+odra      & 36 & $0{,}682\pm0{,}187$ & $0{,}744\pm0{,}100$ & $0{,}645\pm0{,}223$ & $0{,}729\pm0{,}107$ & $0{,}259\to0{,}217$ \\
+simulator & 52 & $0{,}699\pm0{,}074$ & $0{,}711\pm0{,}052$ & $0{,}672\pm0{,}089$ & $0{,}677\pm0{,}089$ & $0{,}246\to0{,}220$ \\
+\midrule
+\multicolumn{7}{@{}l}{\emph{głębokość 6}} \\
+star      & 24 & $0{,}868\pm0{,}058$ & $0{,}886\pm0{,}039$ & $0{,}862\pm0{,}071$ & $0{,}883\pm0{,}044$ & $0{,}161\to0{,}093$ \\
+odra      & 58 & $0{,}731\pm0{,}050$ & $0{,}776\pm0{,}063$ & $0{,}698\pm0{,}062$ & $0{,}760\pm0{,}068$ & $0{,}226\to0{,}177$ \\
+simulator & 86 & $0{,}583\pm0{,}062$ & $0{,}594\pm0{,}075$ & $0{,}537\pm0{,}084$ & $0{,}548\pm0{,}098$ & $0{,}285\to0{,}281$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+% ---------------------------------------------------------------------
+\subsection{Wnioski}
+% ---------------------------------------------------------------------
+
+\begin{enumerate}
+
+\item \textbf{Drabina routingu obowiązuje na każdej głębokości.} Dokładność surowa spada
+      monotonicznie z kosztem CZ przy \emph{każdej} głębokości i zachowuje ten sam porządek
+      ansätze (dla $L=6$: star~$0{,}868$ ${>}$ odra~$0{,}731$ ${>}$ simulator~$0{,}583$). Jest
+      to najczystsze jak dotąd potwierdzenie, że transpilowany koszt CZ jest właściwą zmienną
+      niezależną --- teraz z pasmami błędu z pięciu foldów.
+
+\item \textbf{ZNE odzyskuje dokładność dokładnie tam, gdzie istnieje luka --- i wygasa na
+      szczycie drabiny.} Największy zysk mają średnio- i wysokokosztowe pierścienie
+      (odra $L{=}4$: $0{,}682\to0{,}744$; odra $L{=}6$: $0{,}731\to0{,}776$; ${+}0{,}05$--$0{,}06$).
+      Dla tanich obwodów dokładność surowa jest już przy ideale, więc ZNE nic nie wnosi
+      (star $L{=}2,4$). W najdroższym punkcie --- \textbf{simulator $L{=}6$, 86~CZ} --- odzysk
+      \emph{zanika}: $0{,}583\to0{,}594$ (w granicach rozrzutu), a błąd $\langle O\rangle$
+      $0{,}285\to0{,}281$ (współczynnik ${\approx}1{,}0$). To bezpośredni pomiar granicy
+      opłacalności ZNE w okolicach $85$--$90$~CZ zapowiadanej w Miesiącu~1.
+
+\item \textbf{Redukcja błędu $\langle O\rangle$ jest monotoniczna w koszcie i najsilniejsza przy
+      tanich obwodach} (star $L{=}4$: $0{,}126\to0{,}036$, ${\approx}3{,}5\times$; odra $L{=}2$:
+      ${\approx}1{,}9\times$; simulator $L{=}6$: ${\approx}1{,}0\times$, martwa). Potwierdza to,
+      że siła ZNE słabnie z routingiem niezależnie od tego, czy przekłada się na dokładność.
+
+\item \textbf{Nadal nie odtwarzamy zapaści pierścieni z pracy źródłowej.} Najgorszy przypadek
+      (simulator $L{=}6$) degraduje się w stronę floor klasy większościowej ($0{,}56$),
+      osiągając F1~$0{,}537$, ale \emph{nie} zapada do F1${\approx}0{,}04$ raportowanego w pracy;
+      odra $L{=}6$ pozostaje zdrowy (F1~$0{,}698$). W żadnym wierszu DD-off macro-F1 nie odrywa
+      się od dokładności --- brak zapaści klasowej.
+
+\item \textbf{Pierścień odra przy $L{=}4$ jest niestabilny międzyfoldowo.} Dokładność
+      $0{,}682\pm0{,}187$ i F1 $0{,}645\pm0{,}223$ mają ogromny rozrzut: część foldów utrzymuje
+      wynik, część się załamuje. Sam ten rozrzut jest wynikiem --- wskazuje na indukowaną
+      routingiem niestabilność, a nie stabilny punkt pracy, i jest kandydatem do dokładniejszego
+      zbadania (drift, dobór kubitów) na Garnecie/Emeraldzie.
+
+\item \textbf{Dryf urządzenia względem Miesiąca~1.} Te same wagi, ansätze i transpilacja, lecz
+      pomiar $L{=}6$ z pełnej CV (12.08) daje niższe wartości niż CV z Miesiąca~1 (03.08):
+      odra $0{,}809\pm0{,}042 \to 0{,}731\pm0{,}050$, simulator $0{,}626\pm0{,}091 \to
+      0{,}583\pm0{,}062$. Różnicę --- przy identycznym potoku --- przypisuję dryfowi kalibracji
+      między dniami; jest to bezpośrednie, ilościowe potwierdzenie tezy o zależności zachowania
+      on-device od stanu urządzenia. Wynikowo trend (drabina, okno ZNE, brak zapaści klasowej)
+      jest niezmieniony; przesuwa się jedynie bezwzględny poziom.
+
+\end{enumerate}
+
+% =====================================================================
+\section{Porównanie metod na symulatorze ODRA (\texttt{two\_curves})}
+\label{sec:method-comparison}
+% =====================================================================
+
+Poniżej zestawiam trzy metody obsługi błędów --- ZNE, CDR i detekcję $[[4,2,2]]$ --- wzdłuż tej
+samej osi kosztu routingu, na wiernym symulatorze gwiazdy ODRA z \emph{realną} kalibracją
+(\texttt{calibrations/odra.json}). Ustawienia dobrane pod wiarygodność: 8192 shotów (błąd
+statystyczny $\langle Z\rangle$ ${\approx}0{,}005$), 5 powtórzeń dla pasm błędu (ZNE), 200 obwodów
+treningowych (CDR), pełny 30-punktowy zbiór ewaluacyjny, $p_{2q}=0{,}019$ (zmierzony błąd 2q
+ODRA) dla $[[4,2,2]]$. Emeralda ($2^{54}$ stanów) \emph{nie da się} zasymulować klasycznie ---
+cross-topology musi przyjść ze sprzętu; symulator ODRA jest wierną kontrolą.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{ZNE: ablacja raw${}\to{}$DD${+}$REM${}\to{}$ZNE (Richardson), pasma $\pm$odchylenie po
+5 powtórzeniach. Accuracy i macro-F1 (zbiór zbalansowany, więc F1${}\approx{}$acc).}
+\begin{tabular}{@{}lc ccc cc@{}}
+\toprule
+Wzorzec & CZ & raw & DD${+}$REM & ZNE & acc (raw${\to}$ZNE) & F1 (raw${\to}$ZNE) \\
+\midrule
+star        & 12 & $0{,}193$ & $0{,}162$ & $\mathbf{0{,}024}$ & $0{,}87{\to}0{,}87$ & $0{,}87{\to}0{,}87$ \\
+linear      & 27 & $0{,}408$ & $0{,}378$ & $0{,}243$ & $0{,}89{\to}0{,}90$ & $0{,}89{\to}0{,}90$ \\
+circular    & 36 & $0{,}405$ & $0{,}382$ & $0{,}305$ & $0{,}90{\to}0{,}90$ & $0{,}90{\to}0{,}90$ \\
+all\_to\_all & 54 & $0{,}454$ & $0{,}433$ & $0{,}345$ & $0{,}90{\to}0{,}87$ & $0{,}90{\to}0{,}87$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{CDR: błąd $\langle O\rangle$ raw${}\to{}$CDR, jakość dopasowania $r^2$, accuracy i macro-F1.}
+\begin{tabular}{@{}lc cc c cc@{}}
+\toprule
+Wzorzec & CZ & raw & CDR & $r^2$ & acc (raw${\to}$CDR) & F1 (raw${\to}$CDR) \\
+\midrule
+star        & 12 & $0{,}172$ & $\mathbf{0{,}028}$ & $0{,}98$ & $0{,}87{\to}0{,}87$ & $0{,}87{\to}0{,}87$ \\
+linear      & 27 & $0{,}404$ & $0{,}228$ & $0{,}79$ & $0{,}90{\to}0{,}90$ & $0{,}90{\to}0{,}90$ \\
+circular    & 36 & $0{,}398$ & $0{,}199$ & $0{,}66$ & $0{,}90{\to}0{,}90$ & $0{,}90{\to}0{,}90$ \\
+all\_to\_all & 54 & $0{,}448$ & $0{,}278$ & $0{,}49$ & $0{,}90{\to}0{,}90$ & $0{,}90{\to}0{,}90$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{$[[4,2,2]]$ detekcja (Option C, mirror): logiczny błąd $\langle O\rangle$ (bez${}\to{}$z
+detekcją; ideał $\bar Z_1=+1$), fidelity oraz współczynnik akceptacji (koszt post-selekcji).}
+\begin{tabular}{@{}cc cc cc c@{}}
+\toprule
+Warstwy & CZ & \multicolumn{2}{c}{logiczny $\langle O\rangle$-błąd} &
+  \multicolumn{2}{c}{fidelity} & akceptacja \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+ & & bez & z detekcją & bez & z detekcją & \\
+\midrule
+1 & 34  & $0{,}597$ & $\mathbf{0{,}419}$ & $0{,}396$ & $0{,}637$ & $0{,}62$ \\
+2 & 63  & $0{,}874$ & $0{,}788$ & $0{,}226$ & $0{,}410$ & $0{,}55$ \\
+3 & 104 & $0{,}978$ & $0{,}937$ & $0{,}151$ & $0{,}296$ & $0{,}51$ \\
+4 & 157 & $0{,}987$ & $0{,}987$ & $0{,}131$ & $0{,}261$ & $0{,}51$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/fig_method_comparison.png}
+\caption{Porównanie metod na osi kosztu routingu (ODRA sim, realna kalibracja).
+(A) błąd $\langle O\rangle$ vs koszt CZ: raw (kreskowany) i mitygowany (ciągły) dla ZNE, CDR
+oraz logiczny błąd $[[4,2,2]]$; wszystkie metody mitygują najmocniej przy tanim routingu i
+słabną z kosztem. (B) efektywne shoty (skala log) na najtańszym szczeblu --- CDR osiąga ten sam
+błąd co ZNE, lecz ${\sim}67{\times}$ drożej.}
+\label{fig:method-comparison}
+\end{figure}
+
+\FloatBarrier
+\paragraph{Wnioski.}
+\begin{enumerate}
+\item \textbf{Wszystkie trzy metody mitygują najmocniej przy tanim routingu i słabną
+      przewidywalnie z kosztem CZ.} ZNE i CDR tną błąd $\langle O\rangle$ dramatycznie przy
+      gwieździe (ZNE $0{,}193{\to}0{,}024$; CDR $0{,}172{\to}0{,}028$), a zysk maleje monotonicznie
+      do ${\sim}54$~CZ. Detekcja $[[4,2,2]]$ powtarza ten wzorzec w logicznym $\langle O\rangle$-błędzie:
+      $0{,}597{\to}0{,}419$ ($-30\%$) przy 34~CZ, aż do zaniku przy 157~CZ (obwód w pełni
+      zdepolaryzowany, $0{,}987{\to}0{,}987$).
+\item \textbf{Accuracy i macro-F1 są nasycone.} Na zbalansowanym \texttt{two\_curves} obie
+      trzymają się $0{,}87$--$0{,}90$ niezależnie od metody i szczebla, mimo redukcji błędu
+      $\langle O\rangle$ nawet 6-krotnej --- bo predykcja to $\mathrm{sgn}\langle O\rangle$, a
+      punkty leżą daleko od granicy decyzyjnej. \emph{Czułym wskaźnikiem jest ciągły
+      $\langle O\rangle$-błąd, nie accuracy} (potwierdzenie tezy z Miesiąca~1). Przy all\_to\_all
+      ZNE wręcz \emph{obniża} accuracy ($0{,}90{\to}0{,}87$) --- dodana wariancja przerzuca
+      pojedynczy znak blisko sufitu.
+\item \textbf{Na wspólnej walucie kosztu ZNE dominuje.} ZNE i CDR docierają do niemal tego samego
+      błędu (a CDR bywa lekko lepszy przy dużym koszcie, bo nie wzmacnia szumu), lecz efektywny
+      koszt to ZNE ${=}8192{\times}3={}$24\,576 shotów wobec CDR ${=}8192{\times}201={}$1\,646\,592
+      --- \textbf{${\sim}67{\times}$ drożej za ten sam wynik} (rys.~\ref{fig:method-comparison}B).
+      $r^2$ CDR spada $0{,}98{\to}0{,}49$ z kosztem --- własny sygnał załamania metody.
+\item \textbf{$[[4,2,2]]$ kupuje wierność kosztem shotów.} Detekcja podnosi fidelity ${\sim}1{,}6{\times}$
+      i tnie logiczny $\langle O\rangle$-błąd przy niskim koszcie, przy akceptacji ${\sim}0{,}5$
+      (${\sim}2{\times}$ więcej shotów). Uwaga metodologiczna: accuracy jest \emph{nieinformatywna}
+      dla kodu detekcyjnego na surogacie Clifforda (wartości logiczne kolapsują do $\pm1$ lub $0$),
+      więc właściwymi metrykami są logiczny $\langle O\rangle$-błąd, fidelity i koszt akceptacji.
+\end{enumerate}
+
+% =====================================================================
+\begin{thebibliography}{99}
+% =====================================================================
+
+% --- Mitygacja błędów: przegląd, ZNE, CDR ---
+\bibitem{cai2023}
+Z. Cai, R. Babbush, S. C. Benjamin, S. Endo, W. J. Huggins, Y. Li, J. R. McClean,
+T. E. O'Brien, \emph{Quantum Error Mitigation}, arXiv:2210.00921 (2023).
+
+\bibitem{temme2017}
+K. Temme, S. Bravyi, J. M. Gambetta, \emph{Error mitigation for short-depth quantum
+circuits}, Phys. Rev. Lett. \textbf{119}, 180509 (2017); arXiv:1612.02058.
+
+\bibitem{giurgica2020}
+T. Giurgica-Tiron, Y. Hindy, R. LaRose, A. Mari, W. J. Zeng, \emph{Digital zero-noise
+extrapolation for quantum error mitigation}, IEEE QCE (2020); arXiv:2005.10921.
+
+\bibitem{kandala2019}
+A. Kandala, K. Temme, A. D. Córcoles, A. Mezzacapo, J. M. Chow, J. M. Gambetta,
+\emph{Error mitigation extends the computational reach of a noisy quantum processor},
+Nature \textbf{567}, 491 (2019); arXiv:1805.04492.
+
+\bibitem{czarnik2021}
+P. Czarnik, A. Arrasmith, P. J. Coles, L. Cincio, \emph{Error mitigation with Clifford
+quantum-circuit data}, Quantum \textbf{5}, 592 (2021); arXiv:2005.10189.
+
+% --- Readout error mitigation ---
+\bibitem{maciejewski2020}
+F. B. Maciejewski, Z. Zimborás, M. Oszmaniec, \emph{Mitigation of readout noise in
+near-term quantum devices by classical post-processing based on detector tomography},
+Quantum \textbf{4}, 257 (2020); arXiv:1907.08518.
+
+\bibitem{nation2021}
+P. D. Nation, H. Kang, N. Sundaresan, J. M. Gambetta, \emph{Scalable mitigation of
+measurement errors on quantum computers}, PRX Quantum \textbf{2}, 040326 (2021);
+arXiv:2108.12518.
+
+% --- Topologia, routing, jałowe płaskowyże ---
+\bibitem{li2019}
+G. Li, Y. Ding, Y. Xie, \emph{Tackling the qubit mapping problem for NISQ-era quantum
+devices (SABRE)}, ASPLOS (2019); arXiv:1809.02573.
+
+\bibitem{wang2021}
+S. Wang, E. Fontana, M. Cerezo, K. Sharma, A. Sone, L. Cincio, P. J. Coles,
+\emph{Noise-induced barren plateaus in variational quantum algorithms}, Nat. Commun.
+\textbf{12}, 6961 (2021); arXiv:2007.14384.
+
+\bibitem{mcclean2018}
+J. R. McClean, S. Boixo, V. N. Smelyanskiy, R. Babbush, H. Neven, \emph{Barren plateaus
+in quantum neural network training landscapes}, Nat. Commun. \textbf{9}, 4812 (2018);
+arXiv:1803.11173.
+
+% --- Detekcja/korekcja błędów (warstwa logical-ish) ---
+\bibitem{vuillot2018}
+C. Vuillot, \emph{Is error detection helpful on IBM 5Q chips?}, Quantum Inf. Comput.
+\textbf{18}, 949 (2018); arXiv:1705.08957.
+
+\bibitem{linke2017}
+N. M. Linke, M. Gutierrez, K. A. Landsman, C. Figgatt, S. Debnath, K. R. Brown,
+C. Monroe, \emph{Fault-tolerant quantum error detection}, Sci. Adv. \textbf{3},
+e1701074 (2017); arXiv:1611.06946.
+
+\bibitem{googleqec2025}
+Google Quantum AI, \emph{Quantum error correction below the surface code threshold},
+Nature \textbf{638}, 920 (2025); arXiv:2408.13687.
+
+% --- QML: benchmark, kodowanie, ansatz ---
+\bibitem{bowles2024}
+J. Bowles, S. Ahmed, M. Schuld, \emph{Better than classical? The subtle art of
+benchmarking quantum machine learning models}, arXiv:2403.07059 (2024).
+
+\bibitem{schuld2021}
+M. Schuld, R. Sweke, J. J. Meyer, \emph{The effect of data encoding on the expressive
+power of variational quantum machine learning models}, Phys. Rev. A \textbf{103},
+032430 (2021); arXiv:2008.08605.
+
+\bibitem{perezsalinas2020}
+A. Pérez-Salinas, A. Cervera-Lierta, E. Gil-Fuster, J. I. Latorre, \emph{Data
+re-uploading for a universal quantum classifier}, Quantum \textbf{4}, 226 (2020);
+arXiv:1907.02085.
+
+\end{thebibliography}
+
+\end{document}

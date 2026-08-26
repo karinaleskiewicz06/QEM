@@ -11,6 +11,7 @@
 \usepackage{array}
 \usepackage{xcolor}
 \usepackage{tikz}
+\usepackage{placeins}
 \usepackage{hyperref}
 
 \usetikzlibrary{positioning,decorations.pathreplacing}
@@ -24,8 +25,8 @@
 \newcommand{\wtoku}[1]{\textcolor{red}{\textbf{[W TOKU: #1]}}}
 
 \title{%
-    Topology-aware ewaluacja mitygacji błędów\\
-    i narzutu kubitów logicznych na sprzęcie nadprzewodzącym\\
+    Przygotowanie benchmarku i protokołu eksperymentalnego do oceny wpływu\\
+    topologii sprzętu oraz kodowania logicznego na jakość obliczeń kwantowych\\
     \large Sprawozdanie z Miesiąca 1
 }
 \author{Karina Leśkiewicz}
@@ -85,8 +86,7 @@ w trakcie obliczeń, QEM \emph{redukuje ich wpływ na końcową wartość oczeki
 statystycznymi i post-processingiem (Zero-Noise Extrapolation, Readout Error Mitigation,
 Dynamical Decoupling), bez dodatkowych kubitów i bez feed-forward. Kosztem jest zwiększona
 wariancja, czyli więcej powtórzeń pomiaru. Dlatego QEM jest dziś głównym praktycznym narzędziem otrzymywania wiarygodnych
-wyników z maszyn NISQ i przedmiotem intensywnych badań~\cite{cai2023}: to pomost między erą
-szumu a erą korekcji. Kluczowe pytanie, które QEM stawia, jest jednak empiryczne --- \emph{do
+wyników z maszyn NISQ i przedmiotem intensywnych badań~\cite{cai2023}. Kluczowe pytanie, które QEM stawia, jest jednak empiryczne --- \emph{do
 jakiego poziomu szumu (kosztu obwodu) mitygacja realnie pomaga, zanim jej narzut wariancji
 przeważy zysk}. To pytanie jest osią niniejszego projektu.
 
@@ -176,9 +176,12 @@ C & IQM Emerald      & 54 & krata kwadratowa & walidacja wielkoskalowa \\
 każda interakcja między kubitami zewnętrznymi musi przejść przez hub, generując SWAP.
 (b) Garnet i (c) Emerald --- kraty kwadratowe o stopniu wierzchołka do 4, w których
 sąsiedztwo jest znacznie bogatsze, więc ten sam obwód logiczny wymaga mniej operacji SWAP.
-Panele (b) i (c) są schematami poglądowymi o właściwej liczbie kubitów; służą porównaniu
-klasy łączności, a nie odwzorowaniu dokładnego układu sprzężeń.}
+}
 \end{figure}
+
+Ten sam benchmark (routing ladder, ansätze, protokół REM${}+{}$ZNE i mirror fidelity) jest
+z założenia niezależny od urządzenia: w Miesiącu~2 zostanie zastosowany bez zmian na Garnecie
+i Emeraldzie, co pozwoli porównać wpływ topologii wprost, przy identycznej procedurze pomiarowej.
 
 % =====================================================================
 \section{Podstawy teoretyczne}
@@ -198,7 +201,7 @@ $\mathrm{Tr}[O\rho_0]$:
 \end{equation}
 Przy dużej liczbie wykonań MSE jest ograniczone przez bias --- błąd systematyczny, którego
 nie usuwa zwiększanie liczby powtórzeń. Mitygacja konstruuje estymator $\hat{O}_{em}$
-o mniejszym biasie, $|\mathrm{Bias}[\hat{O}_{em}]| \le |\mathrm{Bias}[\hat{O}_\rho]|$, lecz
+o mniejszym biasie, $|\mathrm{Bias}[\hat{O}_{em}]| \le |\mathrm{Bias}[\hat{O}_\rho]|$,
 \begin{equation}
 C_{em} = \frac{\mathrm{Var}[\hat{O}_{em}]}{\mathrm{Var}[\hat{O}_\rho]}.
 \end{equation}
@@ -313,8 +316,7 @@ pojedynczym $Z$ na kubicie readout (Banknote).
 $\varepsilon = |\langle O\rangle_{\text{noisy}} - \langle O\rangle_{\text{ideal}}|$, gdzie
 $\langle O\rangle_{\text{ideal}}$ liczę dokładnie ze statevectora (zamrożona referencja).
 Mierzę właśnie tę wielkość, ponieważ: (i) to dokładnie ją redukuje mitygacja (bias
-estymatora); (ii) jest ciągła i czuła, w przeciwieństwie do dokładności, która jest progowym
-testem znaku i zmienia się skokowo; (iii) jest wprost porównywalna z referencją bezszumową;
+estymatora); (ii) jest ciągła i czuła, w przeciwieństwie do dokładności, która zmienia się skokowo; (iii) jest wprost porównywalna z referencją bezszumową;
 (iv) pozwala zlokalizować region załamania ZNE. Dokładność raportuję jako metrykę wtórną.
 
 \paragraph{Fidelity (mirror circuit).} Obwód lustrzany wykonuje $U$, a potem $U^{\dagger}$,
@@ -322,14 +324,14 @@ więc stan idealny to dokładnie $|0\rangle^{\otimes n}$, niezależnie od danych
 Mierzoną wielkością jest prawdopodobieństwo przeżycia $F = P(|0\rangle^{\otimes n})$.
 
 Wartość $F=1$ oznacza obwód wykonany idealnie. Dolnym
-ograniczeniem \emph{nie} jest zero, lecz podłoga stanu maksymalnie zdepolaryzowanego: dla
+ograniczeniem \emph{nie} jest zero, lecz floor stanu maksymalnie zdepolaryzowanego: dla
 $n=5$ kubitów losowy rozkład daje $F = 2^{-5} = 0{,}031$. Wynik na poziomie $0{,}03$ oznacza
 zatem, że obwód utracił całą informację. Ponieważ obwód lustrzany zawiera $U$ i $U^{\dagger}$,
 jego koszt bramkowy jest \emph{dwukrotnością} kosztu obwodu inferencyjnego --- w tabelach
 podaję dlatego „mirror CZ”, czyli $2\times$ liczbę CZ obwodu użytkowego. Zaletą tej metryki
 jest to, że nie zależy ona od zadania ani od granicy decyzyjnej klasyfikatora: mierzy
 wyłącznie jakość wykonania danej struktury routingu na urządzeniu. Praktyczne ograniczenie:
-gdy $F$ zbliża się do podłogi $0{,}031$, metryka traci rozdzielczość i nie odróżnia już
+gdy $F$ zbliża się do floor $0{,}031$, metryka traci rozdzielczość i nie odróżnia już
 obwodów między sobą.
 
 \subsection{Uzasadnienie zbioru danych i konfiguracja \texttt{two\_curves}}
@@ -452,7 +454,7 @@ czym następuje odczyt obserwabli. Warianty różnią się \emph{wyłącznie} bl
 
 \ansatzcirc{circular}{5.8}{%
   \czg{2.9}{0}{1}\czg{3.5}{1}{2}\czg{4.1}{2}{3}\czg{4.7}{3}{4}\czg{5.3}{0}{4}}
-\\[4mm]{\small (c) \textbf{circular} --- łańcuch domknięty w pierścień; 5 bramek CZ.}
+\\[4mm]{\small (c) \textbf{circular} --- łańcuch domknięty w ring; 5 bramek CZ.}
 
 \vspace{5mm}
 
@@ -472,24 +474,29 @@ tabela~\ref{tab:tc-ladder}.}
 \subsection{Model szumu i kalibracja urządzenia}
 
 Symulator Aer skalibrowałam do 5-kubitowej gwiazdy ODRA (hub QB3 $=$ kubit logiczny 0).
-Parametry (kalibracja z 30.07.2026):
+Zebrałam dwa okna kalibracyjne (\texttt{collect\_odra\_calibration.py}): pierwsze do budowy
+modelu szumu, drugie w dniu pomiaru na QPU, co pozwala ocenić dryf urządzenia.
 
 \begin{center}
-\begin{tabular}{@{}lccccc@{}}
+\begin{tabular}{@{}lccccccc@{}}
 \toprule
-& $T_1$ [$\mu$s] & $T_2^{*}$ [$\mu$s] & $T_2^{\text{echo}}$ [$\mu$s] & $p_{1q}$ & $p_{2q}$ \\
+okno & $T_1$ [$\mu$s] & $T_2^{*}$ [$\mu$s] & $T_2^{\text{echo}}$ [$\mu$s] & $p_{1q}$ & $p_{2q}$ & $p_{ro}$ \\
 \midrule
-zakres & 15,6--21,2 & 7,0--10,4 & 11,0--14,7 & $\sim$0,002 & 0,019 \\
+30.07.2026 (model)   & 15,6--21,2 & 7,0--10,4 & 11,0--14,7 & $\sim$0,0020 & 0,0190 & 0,014--0,026 \\
+03.08.2026 (pomiar)  & 12,8--22,2 & 6,6--11,0 & 11,0--15,1 & $\sim$0,0020 & 0,0203 & 0,015--0,030 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \noindent
-$p_{ro} \in [0{,}014;\,0{,}026]$; $t_{1q} = 20$~ns, $t_{2q} = 60$~ns.
+$t_{1q} = 20$~ns, $t_{2q} = 60$~ns (stałe). Między oknami błąd dwukubitowy $p_{2q}$ wzrósł
+o $\sim7\%$ ($0{,}0190\to0{,}0203$), a błąd odczytu pogorszył się na górnym krańcu
+($0{,}026\to0{,}030$), przy stabilnym $p_{1q}$ i lekkim spadku dolnej granicy $T_1$. Taki
+dryf --- kilkuprocentowy w ciągu kilku dni --- jest bezpośrednim uzasadnieniem, dlaczego ten
+sam obwód potrafi dać różny wynik na QPU w różnych dniach (por.\ sekcja~\ref{sec:bank-qpu}).
 
-\wtoku{świeża kalibracja z dnia pomiaru --- do wstawienia; docelowo $\ge 3$ okna
-kalibracyjne dla oceny dryfu.}
-
+\FloatBarrier
+\clearpage
 % =====================================================================
 \section{Zbiór danych i ansätze Banknote}
 % =====================================================================
@@ -504,14 +511,16 @@ Stosuję nazewnictwo z pracy źródłowej:
 \begin{itemize}
 \item \textbf{topology} (w kodzie \texttt{star}) --- natywny, hub QB2, readout $Z$ na
       kubicie 2; kompiluje się na gwiazdę bez SWAP;
-\item \textbf{native} (w kodzie \texttt{odra}) --- pierścień $R_Z$/CZ, readout kubit 0;
-\item \textbf{baseline} (w kodzie \texttt{simulator}) --- pierścień CRX/CRY, readout
+\item \textbf{native} (w kodzie \texttt{odra}) --- ring $R_Z$/CZ, readout kubit 0;
+\item \textbf{baseline} (w kodzie \texttt{simulator}) --- ring CRX/CRY, readout
       kubit 0, najdroższy w CZ.
 \end{itemize}
 
 Ewaluacja odbywa się na pełnym zbiorze testowym foldu 1 (275 punktów, naturalna
-niezbalansowana proporcja 153/122), zgodnie z metodologią
-pracy źródłowej. Ze względu na koszt czasu QPU nie wykonuję pełnej walidacji krzyżowej.
+niezbalansowana proporcja 153/122), zgodnie z metodologią pracy źródłowej. Ze względu na
+koszt czasu QPU głównego sweepu (wszystkie ansätze i głębokości) nie powtarzam na pięciu
+foldach; pełną 5-foldową walidację krzyżową wykonuję wyłącznie w kluczowym punkcie $L=6$
+(sekcja~\ref{sec:bank-qpu}), gdzie porównuję się z pracą źródłową.
 
 % =====================================================================
 \section{Wyniki}
@@ -558,8 +567,9 @@ raw $\rightarrow$ ${+}$REM $\rightarrow$ ${+}$ZNE (Richardson).
 
 \begin{table}[htbp]
 \centering
-\caption{\texttt{two\_curves}: błąd $\langle O\rangle$ i dokładność. Symulator (DD${+}$REM)
-oraz rzeczywiste ODRA (wiersze DD-off), $R=3$.}
+\caption{\texttt{two\_curves}: błąd $\langle O\rangle$ i dokładność. \emph{Symulator} oznacza
+tu nasz \textbf{kalibrowany, szumowy} model Aer (DD${+}$REM) --- \emph{nie} bezszumowy ideał;
+poniżej rzeczywiste ODRA (wiersze DD-off), $R=3$.}
 \begin{tabular}{@{}lc ccc ccc@{}}
 \toprule
 & & \multicolumn{3}{c}{\textbf{błąd $\langle O\rangle$}} & \multicolumn{3}{c}{\textbf{accuracy}} \\
@@ -594,6 +604,7 @@ all\_to\_all & 54 & 0,458 & 0,454 & 0,373 & 0,900 & 0,900 & 0,911 \\
 ODRA, szczeble raw / ${+}$REM / ${+}$ZNE.}
 \end{figure}
 
+\FloatBarrier
 \paragraph{Wnioski.}
 \begin{enumerate}
 \item \textbf{Błąd rośnie monotonicznie z kosztem CZ} --- i na symulatorze, i na sprzęcie.
@@ -619,7 +630,7 @@ w symulatorze przy identycznym protokole.
 
 \begin{table}[htbp]
 \centering
-\caption{\texttt{two\_curves}: mirror fidelity $P(|0\rangle^{5})$. Podłoga depolaryzacyjna
+\caption{\texttt{two\_curves}: mirror fidelity $P(|0\rangle^{5})$. Floor depolaryzacyjny
 wynosi $2^{-5} = 0{,}031$.}
 \begin{tabular}{@{}lc cc cc c@{}}
 \toprule
@@ -635,7 +646,7 @@ all\_to\_all & 108 & 0,094 & 0,048 & 0,054 & 0,059 & 1,73$\times$ \\
 \end{tabular}
 \end{table}
 
-\paragraph{Dlaczego te wartości są tak niskie.} Bezwzględny poziom fidelity może wydawać
+\paragraph{Uzasadnienie niskich wartości fidelity} Bezwzględny poziom fidelity może wydawać
 się zaskakująco mały, jest jednak dokładnie taki, jakiego należy oczekiwać, i nie wynika
 z błędu pomiaru. Składają się na to trzy niezależne czynniki.
 
@@ -672,7 +683,7 @@ wyznaczonymi parametrami błędu.
       zawiera. Wniosek praktyczny: \emph{o skuteczności DD nie wolno wnioskować z symulacji},
       trzeba ją zmierzyć na urządzeniu --- i na IQM SPARKu wypada ona negatywnie.
 \item \textbf{Najdroższe warianty wyczerpują metrykę.} Wartości $0{,}118$ i $0{,}094$ są już
-      tylko 3--4$\times$ powyżej podłogi $0{,}031$, więc mirror fidelity traci tam
+      tylko 3--4$\times$ powyżej floor $0{,}031$, więc mirror fidelity traci tam
       rozdzielczość i nie należy nadinterpretować różnicy między circular a all\_to\_all.
 \end{enumerate}
 
@@ -682,7 +693,8 @@ wyznaczonymi parametrami błędu.
 
 \begin{table}[htbp]
 \centering
-\caption{Banknote: dokładność bezszumowa (średnia z 5 foldów) i koszt CZ na gwieździe.}
+\caption{Banknote: dokładność bezszumowa (\textbf{nasz symulator statevector}, średnia z
+5 foldów) i koszt CZ na gwieździe.}
 \begin{tabular}{@{}llccc@{}}
 \toprule
 Ansatz (nazwa w kodzie) & głęb. & CZ & głęb. po komp. & dokł. bezszum. \\
@@ -706,8 +718,8 @@ niemal wyłącznie koszt kompilacji.
 
 \begin{table}[htbp]
 \centering
-\caption{Banknote (symulator): błąd $\langle O\rangle$ raw $\to$ ZNE oraz dokładność
-raw $\to$ ZNE.}
+\caption{Banknote --- \textbf{nasz kalibrowany symulator szumowy} (Aer, DD${+}$REM): błąd
+$\langle O\rangle$ raw $\to$ ZNE oraz dokładność raw $\to$ ZNE.}
 \begin{tabular}{@{}llc ccc c@{}}
 \toprule
 Ansatz & głęb. & CZ & err raw & err ${+}$DD${+}$REM & err ZNE & dokł. (raw $\to$ ZNE) \\
@@ -750,7 +762,7 @@ jest na tyle duży, że zaczyna zmieniać znak wartości oczekiwanej.
 % ---------------------------------------------------------------------
 
 Wynik główny tej sekcji pochodzi z \textbf{pełnego foldu testowego (275 punktów, fold~1,
-naturalna proporcja klas 153/122, podłoga większości $0{,}56$)} --- czyli dokładnie ze
+naturalna proporcja klas 153/122, floor większości $0{,}56$)} --- czyli dokładnie ze
 zbioru ewaluacyjnego pracy źródłowej --- wykonanego na rzeczywistym QPU dla wszystkich
 trzech ansätze i trzech głębokości. Metryki: błąd $\langle O\rangle$ (raw${}\to{}$ZNE),
 dokładność (ideał / raw / ZNE) oraz macro-F1 (raw / ZNE). DD wyłączone (uzasadnienie:
@@ -758,9 +770,10 @@ wynik negatywny DD, sekcja poniżej i 5.7).
 
 \begin{table}[htbp]
 \centering
-\caption{Banknote na ODRA --- pełny fold (275 pkt), DD-off. Dla każdego ansatzu podano błąd
-$\langle O\rangle$ raw${}\to{}$ZNE, dokładność (ideał bezszumowy / raw / ZNE) oraz macro-F1
-(raw / ZNE). ZNE = REM${+}$ekstrapolacja Richardsona.}
+\caption{Banknote na ODRA --- \textbf{nasz pomiar QPU}, pełny fold (275 pkt), DD-off. Dla
+każdego ansatzu podano błąd $\langle O\rangle$ raw${}\to{}$ZNE, dokładność (ideał bezszumowy
+z naszego symulatora statevector / raw QPU / ZNE) oraz macro-F1 (raw / ZNE). ZNE ${}={}$
+REM${+}$ekstrapolacja Richardsona.}
 \label{tab:bank-qpu-full}
 \begin{tabular}{@{}llc cc ccc cc@{}}
 \toprule
@@ -856,12 +869,13 @@ głębokości 6 (native i baseline, DD-off, 275 pkt/fold, 4096 shots); wynik zap
 \begin{table}[htbp]
 \centering
 \caption{Banknote L=6 na ODRA --- walidacja krzyżowa 5-fold (275 pkt/fold, DD-off, 4096 shots),
-średnia${}\pm{}$odchylenie międzyfoldowe. Kolumna \emph{raw} jest bezpośrednio porównywalna z
-pracą źródłową (QPU, bez mitygacji); ZNE ${}={}$ REM${+}$ekstrapolacja Richardsona.}
+średnia${}\pm{}$odchylenie międzyfoldowe. Kolumny \emph{raw}/\emph{ZNE} to \textbf{nasz pomiar
+QPU}; ostatnia kolumna to wynik \textbf{pracy źródłowej na QPU} (raw, bez mitygacji) ---
+i to ją należy porównywać z naszą kolumną \emph{raw}. ZNE ${}={}$ REM${+}$ekstrapolacja Richardsona.}
 \label{tab:bank-qpu-cv}
 \begin{tabular}{@{}lc cc cc c@{}}
 \toprule
-& & \multicolumn{2}{c}{dokładność} & \multicolumn{2}{c}{macro-F1} & praca (QPU) \\
+& & \multicolumn{2}{c}{\textbf{nasze QPU}: dokł.} & \multicolumn{2}{c}{\textbf{nasze QPU}: macro-F1} & praca QPU \\
 \cmidrule(lr){3-4}\cmidrule(lr){5-6}
 Ansatz & CZ & raw & ZNE & raw & ZNE & dokł. / F1 \\
 \midrule
@@ -873,35 +887,32 @@ baseline (sim) & 84--87 & $0{,}626\pm0{,}091$ & $0{,}643\pm0{,}097$ & $0{,}601\p
 
 \noindent Wnioski z walidacji krzyżowej:
 \begin{enumerate}
-\item \textbf{Nie odtwarzam zapaści pierścieni z pracy.} Praca raportuje przy L=6 zapaść obu
-      pierścieni do podłogi klasy większościowej (native dokł. $0{,}590$ / F1 $0{,}142$;
-      baseline $0{,}565$ / F1 $0{,}044$). U nas native pozostaje \emph{zdrowy}
-      (raw $0{,}809$ / F1 $0{,}796$), a baseline degraduje się w stronę podłogi dokładności,
-      ale zachowuje F1${}\approx0{,}60$ --- czyli \emph{nie} zapada się w stronę klasy
-      większościowej. Nawet nasz surowy, niemitygowany wynik jest wyraźnie powyżej pracy.
-\item \textbf{Różnica nie pochodzi z naszej mitygacji.} Wagi, ansätze, odczyt (q0), kodowanie,
-      transpilacja (star coupling, \texttt{optimization\_level=1}) i rodzina urządzenia są
-      identyczne z pracą, a nasz \emph{raw} już ją przewyższa. Jedyną pozostałą zmienną jest
-      stan urządzenia: kalibracja, dryf, crosstalk oraz to, na które fizyczne kubity trafił
-      layout. Bezpośredni dowód dryfu mam we własnych danych: ten sam fold~1 baseline L=6 dał
-      raw $0{,}673$ w pomiarze z 1~sierpnia (tab.~\ref{tab:bank-qpu-full}) i $0{,}607$ w
-      pomiarze 5-foldowym z 3~sierpnia --- różnica $0{,}066$ na identycznych obwodach.
-\item \textbf{To wzmacnia tezę pracy.} Praca argumentuje, że zachowanie on-device jest zależne
-      od kalibracji i nie transferuje z symulacji; nasz wynik dokłada mocniejszą wersję: sama
-      \emph{zapaść} pierścieni nie jest powtarzalna między kalibracjami tego samego urządzenia.
+\item \textbf{Nie odtwarzamy zapaści ringów z pracy --- i nie wynika to z naszej mitygacji.}
+      Praca raportuje przy L=6 zapaść obu ringów do floor klasy większościowej (native
+      $0{,}590$ / F1 $0{,}142$; baseline $0{,}565$ / F1 $0{,}044$); u nas native pozostaje
+      zdrowy (raw $0{,}809$ / F1 $0{,}796$), a baseline degraduje się bez zapaści klasowej
+      (F1${}\approx0{,}60$). Ponieważ wagi, ansätze i transpilacja są identyczne, a nasz raw już
+      przewyższa pracę, różnicę przypisuję dryfowi kalibracji (bezpośredni dowód: ten sam
+      fold~1 baseline dał raw $0{,}673$ dnia 1.08 i $0{,}607$ dnia 3.08). Nie jest to więc
+      wynik, na którym się skupiam --- \textbf{wymaga on jeszcze double-checku}, a kwestia
+      zapadania się ansatzu native (\texttt{odra}) zostanie rozstrzygnięta w Miesiącu~2.
 \item \textbf{ZNE odzyskuje ponad raw także tutaj, ale słabnie z kosztem CZ.} Native (57 CZ):
       raw $0{,}809\to$ ZNE $0{,}867$ (błąd $\langle O\rangle$ $0{,}190\to0{,}119$, $1{,}6\times$).
       Baseline (87 CZ): raw $0{,}626\to$ ZNE $0{,}643$ (błąd $0{,}278\to0{,}284$) --- przy tym
       koszcie redukcja błędu \emph{zanika} i uśredniona po foldach potrafi się odwrócić, co
       potwierdza górną granicę użyteczności ZNE z sekcji~\ref{sec:takeaways}.
-\item \textbf{Duża rozbieżność międzyfoldowa baseline} (odch.\ std dokł.\ $\pm0{,}091$ wobec
-      $\pm0{,}042$ dla native) pokazuje, że pojedynczy fold jest tu zawodny --- to właśnie
-      uzasadniało konieczność pełnej walidacji 5-fold.
 \end{enumerate}
 
 % ---------------------------------------------------------------------
 \subsection{Banknote: mirror fidelity na QPU}
 % ---------------------------------------------------------------------
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_mirror_fidelity.png}
+\caption{Banknote mirror-circuit fidelity $P(|0\rangle^{5})$ na rzeczywistym QPU wobec kosztu
+routingu (mirror CZ), DD-off vs DD-on; linia przerywana to floor depolaryzacyjny $2^{-5}$.}
+\end{figure}
 
 \begin{table}[htbp]
 \centering
@@ -925,20 +936,15 @@ baseline & 6 & 174 & 0,051 & 0,032 & 0,63 \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.85\textwidth]{figures/fig_mirror_fidelity.png}
-\caption{Mirror-circuit fidelity vs koszt routingu.}
-\end{figure}
-
+\FloatBarrier
 \paragraph{Wnioski.}
 \begin{enumerate}
 \item Fidelity spada monotonicznie z mirror CZ w obrębie każdego ansatzu i porządkuje ansätze
       dokładnie tak, jak przewiduje koszt routingu: topology $>$ native $>$ baseline.
 \item \textbf{DD pogarsza fidelity we wszystkich dziewięciu konfiguracjach}, zachowując
       jedynie 42--69\% wartości DD-off, przy czym kara rośnie z głębokością obwodu.
-\item Baseline przy głębokości 6 osiąga $0{,}051$, czyli praktycznie podłogę
-      depolaryzacyjną $0{,}031$ --- obwód traci niemal całą informację. To niezależne
+\item Baseline przy głębokości 6 osiąga $0{,}051$, czyli praktycznie floor
+      depolaryzacyjny $0{,}031$ --- obwód traci niemal całą informację. To niezależne
       potwierdzenie, że słabnięcie ZNE przy wysokim koszcie CZ zbiega się z reżimem, w którym
       obwód przestaje w ogóle przenosić sygnał.
 \item Łącząc wszystkie 13 punktów pomiarowych QPU z obu badań (\texttt{two\_curves}
@@ -967,8 +973,8 @@ wykonawcze.
       all\_to\_all (54 CZ) $0{,}357\to0{,}239$ ($1{,}5\times$). Trend jest monotoniczny i
       powtarza się na symulatorze.
 
-\item \textbf{Dokładność jest metryką „głuchą”, dopóki szum nie przerzuci znaku
-      $\langle O\rangle$.} W \texttt{two\_curves} dokładność trzyma się w przedziale
+\item \textbf{Accuracy nie jest zawsze miarodajne} --- dopóki szum nie przerzuci znaku
+      $\langle O\rangle$. W \texttt{two\_curves} dokładność trzyma się w przedziale
       $0{,}87$--$0{,}92$ mimo $15\times$ zmiany błędu $\langle O\rangle$. Mitygacja zaczyna
       poprawiać dokładność dopiero \emph{powyżej progu kosztu}, gdy szum przerzucił znak
       $\langle O\rangle$ dla części punktów --- na QPU (Banknote, baseline) próg leży około
@@ -1012,7 +1018,8 @@ wykonawcze.
       monotonicznie z CZ w dwóch różnych zbiorach i niezależnie od ansatzu, co uzasadnia całą
       konstrukcję routing ladder. Zarazem obwody mają $2$--$4\times$ więcej bramek
       jednokubitowych niż CZ, więc te pierwsze odpowiadają za około $60\%$ budżetu błędu ---
-      sam CZ jest dobrym, ale niepełnym predyktorem.
+      sam CZ jest dobrym, ale niepełnym predyktorem. Ta intuicja będzie kluczowa w Miesiącu~2
+      przy ustalaniu progu opłacalności mitygacji (threshold) wzdłuż osi kosztu CZ.
 
 \item \textbf{ZNE ma dwa różne profile zależności od kosztu CZ --- i trzeba je rozróżnić.}
       \begin{itemize}
@@ -1020,8 +1027,7 @@ wykonawcze.
             najsilniejsza przy niskim koszcie i zanika przy wysokim: współczynnik spada z
             $4{,}6\times$ (12 CZ) do $1{,}04\times$ (87 CZ). Dla tej metryki nie ma „okna" ---
             ZNE jest po prostu najlepsze przy tanich obwodach.
-      \item \emph{Odzysk dokładności ma natomiast charakter okna} („wystarczająco dużo szumu,
-            ale nie za dużo"). Pojawia się dopiero powyżej pewnego progu kosztu (tu $\gtrsim50$
+      \item \emph{Odzysk dokładności ma natomiast charakter okna.} Pojawia się dopiero powyżej pewnego progu kosztu (tu $\gtrsim50$
             CZ), gdy szum zdąży obniżyć dokładność surową poniżej ideału i jest co odzyskiwać
             (baseline 52 CZ: $0{,}706\to0{,}767$; 87 CZ: $0{,}673\to0{,}727$). Poniżej progu
             dokładność surowa jest już przy suficie, więc ZNE nic nie wnosi i bywa nieznacznie
@@ -1037,26 +1043,14 @@ wykonawcze.
 
 \item \textbf{Mirror fidelity ma granicę rozdzielczości przy podłodze depolaryzacyjnej}
       $2^{-5}=0{,}031$. Dla all\_to\_all (\texttt{two\_curves}) wynosi $0{,}094$ --- tylko
-      $\sim3\times$ powyżej podłogi --- więc różnic circular vs all\_to\_all nie należy
+      $\sim3\times$ powyżej floor --- więc różnic circular vs all\_to\_all nie należy
       nadinterpretowywać.
-
-\item \textbf{Nie odtwarzamy zapaści pierścieni z pracy źródłowej --- i jest to efekt stanu
-      urządzenia, nie mitygacji.} Praca raportuje na QPU przy L=6 zapaść obu pierścieni do
-      podłogi klasy większościowej (native dokł.\ $0{,}590$ / F1 $0{,}142$; baseline $0{,}565$
-      / F1 $0{,}044$). W naszej walidacji 5-foldowej --- przy identycznych wagach, ansätzach,
-      odczycie i transpilacji --- native pozostaje zdrowy (\emph{raw} $0{,}809$ / F1 $0{,}796$),
-      a baseline degraduje się w stronę podłogi dokładności, lecz \emph{nie} zapada klasowo
-      (F1${}\approx0{,}60$). Ponieważ nawet nasz surowy wynik przewyższa pracę, różnicę
-      przypisuję dryfowi kalibracji (bezpośredni dowód: ten sam fold~1 baseline dał raw
-      $0{,}673$ i $0{,}607$ w dwóch pomiarach z różnych dni). Macro-F1 podąża przy tym za
-      dokładnością (brak zapaści klasowej w wierszach DD-off), a przy DD-on spada do
-      $\sim0{,}52$ (blisko podłogi). Szczegóły w sekcji~\ref{sec:bank-qpu} (tab.~\ref{tab:bank-qpu-cv}).
 \end{enumerate}
 
 \paragraph{Podsumowanie} QEM (REM${+}$ZNE) mierzalnie odzyskuje informację na rzeczywistym
 sprzęcie: redukcja błędu $\langle O\rangle$ jest najsilniejsza przy niskim koszcie CZ i słabnie
 monotonicznie z routingiem, natomiast odzysk dokładności włącza się dopiero powyżej progu
-szumu  --- a przy tym DD na tym urządzeniu szkodzi
+szumu --- a przy tym DD na tym urządzeniu szkodzi
 mimo że symulator przewiduje korzyść, a niezależny od zadania model mirror fidelity wiąże
 wszystko z błędami pojedynczych bramek.
 
@@ -1073,11 +1067,10 @@ powodów~\cite{li2017,cai2023}:
 \item \textbf{Budżet kubitów.} $5 \times 13 = 65 > 54$ (Emerald) --- nie mieści się nawet na
       największym urządzeniu z planu.
 \item \textbf{Wymóg poniżej progu.} QEC pomaga tylko wtedy, gdy błąd fizyczny jest mniejszy
-      niż próg (około 0,5--1\%). ODRA ma $p_{2q}\approx 1{,}9\%$, a Garnet i Emerald są blisko
-      progu; w tym reżimie kodowanie dokłada więcej błędu, niż usuwa.
+      niż próg (około 0,5--1\%)~\cite{googleqec2025}. ODRA ma $p_{2q}\approx 1{,}9\%$, a Garnet
+      i Emerald są blisko progu; w tym reżimie kodowanie dokłada więcej błędu, niż usuwa.
 \item \textbf{Bramki nie-Clifforda.} VQC używa ciągłych obrotów zależnych od danych
-      ($R_y(x)$), nietranswersalnych --- wymagają one kosztownej destylacji stanów
-      magicznych~\cite{li2017}.
+      ($R_y(x)$), nietranswersalnych.
 \end{enumerate}
 
 „Wariant logiczny” realizuję zatem jako uzasadnioną wersję zredukowaną (Deliverable D3).
@@ -1141,7 +1134,7 @@ D4. Protokół eksperymentalny mapowania optymalnego i niekorzystnego
       pogarsza wszystkie mierzone wielkości w czterech niezależnych eksperymentach.
       Właściwym opisem zastosowanego potoku jest zatem REM${}+{}$ZNE.
 \item \textbf{Porównanie z pracą źródłową (raw wobec raw, walidacja 5-fold) nie odtwarza
-      raportowanej zapaści pierścieni przy L=6}: native pozostaje zdrowy, baseline degraduje się
+      raportowanej zapaści ringów przy L=6}: native pozostaje zdrowy, baseline degraduje się
       bez zapaści klasowej, a różnicę --- ponieważ wagi, ansätze i transpilacja są identyczne ---
       przypisuję dryfowi kalibracji urządzenia. Wynik wzmacnia tezę pracy o zależności zachowania
       on-device od kalibracji.
@@ -1238,8 +1231,7 @@ dokładność jest metryką wtórną; punkt odniesienia dla wyboru potoku mityga
 \paragraph{Zero-Noise Extrapolation.}
 Li i Benjamin, \emph{Efficient variational quantum simulator incorporating active error
 minimisation}~\cite{li2017}. Jedna z prac wprowadzających ideę sztucznego zwiększania błędu
-i ekstrapolacji do zera; omawia też, dlaczego QEC jest kosztowne (zwielokrotnienie zasobów,
-destylacja stanów magicznych). \textbf{Związek z projektem:} teoretyczne źródło mojego ZNE
+i ekstrapolacji do zera; omawia też, dlaczego QEC jest kosztowne. \textbf{Związek z projektem:} teoretyczne źródło mojego ZNE
 oraz część uzasadnienia rezygnacji z pełnego QEC (sekcja~\ref{sec:qec}).
 
 Giurgica-Tiron i in., \emph{Digital zero noise extrapolation}~\cite{giurgica2020}. Wprowadza
@@ -1251,10 +1243,19 @@ ekstrapolacji), wykonanej samodzielnie w repozytorium.
 \paragraph{Readout Error Mitigation.}
 Koh, Koh i Thompson, \emph{Readout Error Mitigation for Mid-Circuit Measurements and
 Feedforward}~\cite{koh2024}. Formalizuje błędy odczytu jako proces klasyczny i podaje protokół
-REM (około 60\% redukcji błędu na sprzęcie nadprzewodzącym), także dla pomiarów
+REM, także dla pomiarów
 śródobwodowych. \textbf{Związek z projektem:} uzasadnia REM jako warstwę bazową przed ZNE;
 stosuję dokładny, per-kubitowy model $Z/I$ ($\langle Z\rangle/(1-2p)$) zamiast pełnej
 macierzy $A$.
+
+\paragraph{Narzut kubitów logicznych / QEC.}
+Google Quantum AI, \emph{Quantum error correction below the surface code
+threshold}~\cite{googleqec2025}. Pierwsza demonstracja logicznego kubitu, którego błąd
+\emph{maleje} wraz ze wzrostem odległości kodu ($d=3,5,7$) --- tzn.\ działanie poniżej progu
+--- przy koszcie rzędu $d^2$ kubitów fizycznych na jeden logiczny. \textbf{Związek
+z projektem:} kwantyfikuje narzut kubitów logicznych i wymóg pracy poniżej progu, na których
+opieram uzasadnienie rezygnacji z pełnego QEC na rzecz QEM (sekcja~\ref{sec:qec}); pokazuje
+zarazem, że pełna ochrona logiczna jest poza zasięgiem urządzeń z planu (ODRA/Garnet/Emerald).
 
 \paragraph{Benchmarking QML --- zbiór danych, encoding, ansatz.}
 Bowles, Ahmed i Schuld, \emph{Better than classical?}~\cite{bowles2024}. Duże, systematyczne
@@ -1289,8 +1290,12 @@ quantum machine learning models}, arXiv:2403.07059 (2024).
 Y. Li, S. C. Benjamin, \emph{Efficient variational quantum simulator incorporating active
 error minimisation}, Phys. Rev. X \textbf{7}, 021050 / arXiv:1611.09301 (2017).
 
+\bibitem{googleqec2025}
+Google Quantum AI, \emph{Quantum error correction below the surface code threshold},
+Nature \textbf{638}, 920 / arXiv:2408.13687 (2025).
+
 \bibitem{ondevice2026}
-\emph{On-Device Verification of Variational Quantum Classifiers}, zgłoszenie anonimowe
+\emph{On-Device Verification of Variational Quantum Classifiers},  
 (2026). Źródło modeli i danych Banknote:
 \url{https://github.com/Kolo-Naukowe-Axion/QC1_Quantum_Banknote_Classifier_on_ODRA_5}.
 

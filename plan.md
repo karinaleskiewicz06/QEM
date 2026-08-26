@@ -191,7 +191,6 @@ results against transpiled two-qubit-gate count, not nominal SWAP count.
 - **Full ZNE dry-run in simulation.** End-to-end: routed circuit → DD/REM → folding → execute
   (noisy sim) → extrapolate → recovered accuracy + fit residuals, across the routing ladder.
   *Output:* first *simulated* "accuracy vs. 2q-gate cost" curve; go/no-go review.
-- **[Extra] CDR preparation.** Scaffold near-Clifford training-circuit generation and the CDR regression fit.
 
 **End-of-Month-1 deliverables (definition of done):**
 - Working ansatz + confirmed noiseless classifier (pre-flight passed).
