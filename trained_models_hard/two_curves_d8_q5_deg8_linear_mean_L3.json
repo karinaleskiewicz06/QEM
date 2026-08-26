@@ -1,0 +1,24 @@
+{
+  "dataset": "two_curves",
+  "n_samples": 300,
+  "n_features": 8,
+  "degree": 8,
+  "offset": 0.1,
+  "noise": 0.01,
+  "feature_range": [
+    -3.141592653589793,
+    3.141592653589793
+  ],
+  "n_qubits": 5,
+  "n_layers": 3,
+  "entanglement": "linear",
+  "entangling_gate": "cx",
+  "readout": "mean",
+  "observable": "(1/n) sum_i Z_i (mean-Z)",
+  "num_weights": 55,
+  "logical_2q_gates": 12,
+  "train_acc": 0.7444444444444445,
+  "test_acc": 0.6916666666666667,
+  "seed": 42,
+  "weights_file": "two_curves_d8_q5_deg8_linear_mean_L3_weights.npy"
+}

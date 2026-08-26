@@ -1,0 +1,9 @@
+{
+  "tag": "two_curves_d8_q5_deg8_star_mean_L3",
+  "eval_subset_size": 100,
+  "noiseless_acc_on_subset": 0.7,
+  "mean_abs_margin": 0.34599511237541636,
+  "min_abs_margin": 0.0002209309681841104,
+  "cx_cz_equivalence_max_gap": 1.4432899320127035e-15,
+  "note": "HARD (offset 0.1) reference; balanced-interleaved so any prefix stays balanced."
+}
