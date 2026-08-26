@@ -1,5 +1,6 @@
 # matplotlib / fontconfig cache (see notebook setup cell)
 .cache/
+.mplcache/
 
 # trained model artifacts
 trained_models/
