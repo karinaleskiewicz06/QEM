@@ -1,0 +1,9 @@
+device,placement,layers,transpiled_cz,err_bare,err_detected,err_detected_std,bare_survival,detected_survival,acceptance,n_seeds,shots,effective_shots
+garnet,adverse,1,64,0.6707,0.5408,0.2405,0.3624,0.5711,0.6068,3,8192,13500
+garnet,adverse,2,77,0.8704,0.784,0.0765,0.2338,0.4214,0.5538,3,8192,14791
+garnet,adverse,3,117,0.9518,0.9087,0.0895,0.1654,0.3166,0.5188,3,8192,15789
+garnet,adverse,4,164,0.9832,0.9694,0.0548,0.1417,0.2812,0.5033,3,8192,16276
+garnet,optimal,1,40,0.4175,0.2233,0.0915,0.6187,0.8235,0.7499,3,8192,10923
+garnet,optimal,2,50,0.7074,0.5629,0.1518,0.3852,0.5937,0.6426,3,8192,12747
+garnet,optimal,3,84,0.7731,0.6167,0.0936,0.3172,0.5311,0.5955,3,8192,13756
+garnet,optimal,4,131,0.863,0.7861,0.0971,0.2315,0.4127,0.5585,3,8192,14668

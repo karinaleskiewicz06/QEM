@@ -1,0 +1,5 @@
+device,placement,level,pattern,logical_2q,transpiled_cz,swaps,topo_dist,transpiled_depth,n_qubits,n_layers
+odra,adverse,0,star,12,12,0,4,31,5,3
+odra,adverse,1,linear,12,30,6,7,76,5,3
+odra,adverse,2,circular,15,39,8,8,86,5,3
+odra,adverse,3,all_to_all,30,57,9,16,120,5,3

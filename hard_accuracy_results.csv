@@ -1,0 +1,3 @@
+pattern,transpiled_cz,mean_abs_margin,acc_ideal,acc_raw,acc_zne,f1_raw,f1_zne,offset,shots
+star,12,0.337,0.733,0.733,0.733,0.733,0.733,0.1,4096
+all_to_all,54,0.303,0.733,0.633,0.733,0.576,0.713,0.1,4096

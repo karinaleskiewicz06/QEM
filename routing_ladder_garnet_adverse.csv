@@ -1,0 +1,5 @@
+device,placement,level,pattern,logical_2q,transpiled_cz,swaps,topo_dist,transpiled_depth,n_qubits,n_layers
+garnet,adverse,0,star,12,42,10,14,47,5,3
+garnet,adverse,1,linear,12,48,12,19,52,5,3
+garnet,adverse,2,circular,15,63,16,22,77,5,3
+garnet,adverse,3,all_to_all,30,102,24,42,146,5,3

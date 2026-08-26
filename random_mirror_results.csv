@@ -1,0 +1,5 @@
+device,placement,layers,transpiled_cz,survival,shots
+odra,optimal,1,61,0.1387,8192
+odra,optimal,2,116,0.051,8192
+odra,optimal,3,158,0.03,8192
+odra,optimal,4,226,0.03,8192

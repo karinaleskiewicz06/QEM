@@ -1,0 +1,9 @@
+device,placement,pattern,mirror_cz,survival,survival_std,n_inputs,shots
+garnet,adverse,star,48,0.5518,0.0218,3,4096
+garnet,adverse,linear,54,0.592,0.0314,3,4096
+garnet,adverse,circular,87,0.2514,0.0176,3,4096
+garnet,adverse,all_to_all,150,0.2731,0.0205,3,4096
+garnet,optimal,star,24,0.7757,0.0138,3,4096
+garnet,optimal,linear,42,0.5269,0.027,3,4096
+garnet,optimal,circular,66,0.215,0.0108,3,4096
+garnet,optimal,all_to_all,111,0.2766,0.0285,3,4096

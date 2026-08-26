@@ -1,0 +1,9 @@
+device,placement,pattern,transpiled_cz,rem,err_raw,err_rem,err_zne,err_raw_std,err_zne_std,acc_raw,acc_rem,acc_zne,f1_raw,f1_zne,n_points,shots
+garnet,adverse,star,36,False,0.1166,0.1166,0.0867,0.0775,0.0646,0.8,0.8,0.8,0.7964,0.7964,15,4096
+garnet,adverse,linear,42,False,0.1024,0.1024,0.0823,0.0626,0.0513,0.8,0.8,0.8,0.7847,0.7847,15,4096
+garnet,adverse,circular,54,False,0.1442,0.1442,0.1173,0.0978,0.0774,0.7333,0.7333,0.7333,0.7222,0.7222,15,4096
+garnet,adverse,all_to_all,96,False,0.2054,0.2054,0.1768,0.1561,0.1266,0.8,0.8,0.8,0.7847,0.7847,15,4096
+garnet,optimal,star,12,False,0.0609,0.0609,0.0192,0.0378,0.0116,0.7333,0.7333,0.8,0.7222,0.7964,15,4096
+garnet,optimal,linear,24,False,0.0748,0.0748,0.0728,0.0484,0.0352,0.8,0.8,0.8,0.7847,0.7847,15,4096
+garnet,optimal,circular,39,False,0.1363,0.1363,0.1059,0.0975,0.0773,0.6667,0.6667,0.6667,0.6411,0.6411,15,4096
+garnet,optimal,all_to_all,57,False,0.1629,0.1629,0.1306,0.132,0.083,0.8,0.8,0.8667,0.7964,0.8661,15,4096

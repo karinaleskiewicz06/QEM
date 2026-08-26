@@ -1,0 +1,5 @@
+device,level,pattern,logical_2q,transpiled_cz,swaps,transpiled_depth,n_qubits,n_layers
+emerald,0,linear,12,12,0,27,5,3
+emerald,1,star,12,12,0,31,5,3
+emerald,2,circular,15,24,3,52,5,3
+emerald,3,all_to_all,30,72,14,121,5,3
