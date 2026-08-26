@@ -20,8 +20,14 @@ import pathlib
 
 from qiskit import QuantumCircuit, transpile
 
-from ansatz import HardwareEfficientAnsatz, two_qubit_gate_count
-from noisy_sim import IQM_BASIS_GATES, star_coupling_map
+from ansatz import HardwareEfficientAnsatz, entangling_pairs, two_qubit_gate_count
+from noisy_sim import IQM_BASIS_GATES
+from topology import (
+    device_coupling_map,
+    device_num_qubits,
+    placement,
+    topological_distance,
+)
 
 # Patterns ordered by expected routing pressure (native -> maximal).
 LADDER_PATTERNS: list[str] = ["star", "linear", "circular", "all_to_all"]
@@ -29,6 +35,49 @@ LADDER_PATTERNS: list[str] = ["star", "linear", "circular", "all_to_all"]
 
 def _count_cz(circuit: QuantumCircuit) -> int:
     return sum(1 for inst in circuit.data if inst.operation.name == "cz")
+
+
+def _count_swaps(
+    logical: QuantumCircuit,
+    coupling,
+    seed_transpiler: int,
+    initial_layout: list[int] | None = None,
+) -> int:
+    """Number of SWAP gates the router inserts for ``logical`` on ``coupling``.
+
+    Transpile to a basis that *keeps* ``swap`` (instead of decomposing it into
+    CZ), so the routing overhead is directly observable. This is the SWAP count
+    the supervisor plan asks us to report, distinct from the final CZ cost.
+    """
+    routed = transpile(
+        logical,
+        basis_gates=["r", "cz", "swap"],
+        coupling_map=coupling,
+        initial_layout=initial_layout,
+        optimization_level=1,
+        seed_transpiler=seed_transpiler,
+    )
+    return sum(1 for inst in routed.data if inst.operation.name == "swap")
+
+
+def _topological_distance_sum(
+    n_qubits: int,
+    pattern: str,
+    coupling,
+    dev_qubits: int,
+    layout: list[int],
+) -> int:
+    """Sum of physical hop-distances over the pattern's logical entangling pairs.
+
+    Maps each logical pair through ``layout`` (logical -> physical) and adds the
+    shortest-path distance on the device. A distance of 1 means natively adjacent
+    (no routing); larger values are the routing pressure a placement imposes. This
+    is the topological-distance metric W3 correlates against SWAP / degradation.
+    """
+    total = 0
+    for a, b in entangling_pairs(n_qubits, pattern):
+        total += topological_distance(coupling, dev_qubits, layout[a], layout[b])
+    return total
 
 
 def build_logical_vqc(
@@ -57,13 +106,28 @@ def sweep(
     n_qubits: int = 5,
     n_layers: int = 2,
     n_features: int = 8,
-    hub: int = 0,
+    device: str = "odra",
+    strategy: str = "optimal",
     seed_transpiler: int = 42,
     patterns: list[str] | None = None,
 ) -> list[dict]:
-    """Transpile the logical VQC under each pattern onto the star; record costs."""
+    """Transpile the logical VQC under each pattern onto ``device``; record costs.
+
+    ``device`` is one of ``topology.DEVICES`` (odra/star, garnet, emerald) and
+    ``strategy`` is the fixed placement (``optimal``/``adverse``, W2). The logical
+    payload is fixed; only the entangling pattern, the target device coupling, and
+    the placement change, so transpiled CZ / SWAP / depth / topological distance
+    trace the routing overhead.
+    """
     patterns = patterns or LADDER_PATTERNS
-    coupling = star_coupling_map(n_qubits, hub)
+    coupling = device_coupling_map(device)
+    dev_qubits = device_num_qubits(device)
+    if n_qubits > dev_qubits:
+        raise ValueError(
+            f"logical n_qubits={n_qubits} exceeds device {device!r} "
+            f"({dev_qubits} qubits)"
+        )
+    layout = placement(device, n_qubits, strategy)
     rows: list[dict] = []
     for pattern in patterns:
         logical = build_logical_vqc(n_qubits, n_layers, n_features, pattern)
@@ -72,14 +136,21 @@ def sweep(
             logical,
             basis_gates=IQM_BASIS_GATES,
             coupling_map=coupling,
+            initial_layout=layout,
             optimization_level=1,
             seed_transpiler=seed_transpiler,
         )
         rows.append(
             {
+                "device": device,
+                "placement": strategy,
                 "pattern": pattern,
                 "logical_2q": logical_2q,
                 "transpiled_cz": _count_cz(tqc),
+                "swaps": _count_swaps(logical, coupling, seed_transpiler, layout),
+                "topo_dist": _topological_distance_sum(
+                    n_qubits, pattern, coupling, dev_qubits, layout
+                ),
                 "transpiled_depth": tqc.depth(),
                 "n_qubits": n_qubits,
                 "n_layers": n_layers,
@@ -110,8 +181,9 @@ def load_config_from_frozen(
 
 def write_csv(rows: list[dict], path: str | pathlib.Path = "routing_ladder.csv") -> None:
     path = pathlib.Path(path)
-    fields = ["level", "pattern", "logical_2q", "transpiled_cz",
-              "transpiled_depth", "n_qubits", "n_layers"]
+    fields = ["device", "placement", "level", "pattern", "logical_2q",
+              "transpiled_cz", "swaps", "topo_dist", "transpiled_depth",
+              "n_qubits", "n_layers"]
     with path.open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields)
         w.writeheader()
@@ -126,7 +198,12 @@ def main() -> None:
     p.add_argument("--n-qubits", type=int, default=5)
     p.add_argument("--n-layers", type=int, default=2)
     p.add_argument("--n-features", type=int, default=8)
-    p.add_argument("--out", default="routing_ladder.csv")
+    p.add_argument("--device", default="all",
+                   help="odra/star, garnet, emerald, or 'all' (default)")
+    p.add_argument("--placement", default="both",
+                   help="optimal, adverse, or 'both' (default)")
+    p.add_argument("--out", default="routing_ladder.csv",
+                   help="output CSV; per device/placement suffix is added when >1")
     args = p.parse_args()
 
     nq, nl, nf = args.n_qubits, args.n_layers, args.n_features
@@ -138,17 +215,31 @@ def main() -> None:
             nf = cfg.get("n_features", nf)
             print(f"[from-frozen] using n_qubits={nq} n_layers={nl} n_features={nf}")
 
-    rows = sweep(nq, nl, nf)
-    write_csv(rows, args.out)
+    devices = ["odra", "garnet", "emerald"] if args.device == "all" else [args.device]
+    placements = (
+        ["optimal", "adverse"] if args.placement == "both" else [args.placement]
+    )
+    out = pathlib.Path(args.out)
+    multi = len(devices) * len(placements) > 1
+    for device in devices:
+        for strategy in placements:
+            rows = sweep(nq, nl, nf, device=device, strategy=strategy)
+            if multi:
+                path = out.with_name(f"{out.stem}_{device}_{strategy}{out.suffix}")
+            else:
+                path = out
+            write_csv(rows, path)
 
-    print(f"\nrouting ladder (star topology, IQM basis {IQM_BASIS_GATES}):")
-    print(f"{'lvl':>3} {'pattern':>12} {'logical_2q':>11} "
-          f"{'transpiled_cz':>14} {'depth':>6}")
-    print("-" * 52)
-    for r in rows:
-        print(f"{r['level']:>3} {r['pattern']:>12} {r['logical_2q']:>11} "
-              f"{r['transpiled_cz']:>14} {r['transpiled_depth']:>6}")
-    print(f"\nwrote {args.out}")
+            print(f"\nrouting ladder [{device} / {strategy}] "
+                  f"(IQM basis {IQM_BASIS_GATES}):")
+            print(f"{'lvl':>3} {'pattern':>12} {'logical_2q':>11} "
+                  f"{'transpiled_cz':>14} {'swaps':>6} {'topo_d':>7} {'depth':>6}")
+            print("-" * 70)
+            for r in rows:
+                print(f"{r['level']:>3} {r['pattern']:>12} {r['logical_2q']:>11} "
+                      f"{r['transpiled_cz']:>14} {r['swaps']:>6} "
+                      f"{r['topo_dist']:>7} {r['transpiled_depth']:>6}")
+            print(f"wrote {path}")
 
 
 if __name__ == "__main__":

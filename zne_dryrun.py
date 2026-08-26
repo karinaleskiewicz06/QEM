@@ -48,6 +48,7 @@ from qiskit import QuantumCircuit, transpile
 from qiskit.quantum_info import SparsePauliOp, Statevector
 
 from ansatz import HardwareEfficientAnsatz
+from metrics import macro_f1
 from noisy_sim import (
     DeviceCalibration,
     IQM_BASIS_GATES,
@@ -183,24 +184,26 @@ def main() -> None:
     rem.add_argument("--rem", dest="rem", action="store_true", help="REM on (default)")
     rem.add_argument("--no-rem", dest="rem", action="store_false")
     ap.set_defaults(dd=True, rem=True)
+    ap.add_argument("--models-dir", default="trained_models",
+                    help="model directory (trained_models_hard for the hard config)")
     ap.add_argument("--out", default=str(OUT_CSV))
     args = ap.parse_args()
 
     # locked model + frozen reference
     from noisy_sim import load_frozen_model
-    _, observable, cfg = load_frozen_model()
+    _, observable, cfg = load_frozen_model(models_dir=args.models_dir)
     n = cfg["n_qubits"]
     tag = (f"two_curves_d{cfg['n_features']}_q{n}_deg{cfg['degree']}_"
            f"{cfg['entanglement']}_{cfg['readout']}_L{cfg['n_layers']}")
-    ref = np.load(pathlib.Path("trained_models") / f"{tag}_reference.npz")
+    ref = np.load(pathlib.Path(args.models_dir) / f"{tag}_reference.npz")
     X_eval, y_eval = ref["X_eval"], ref["y_eval"]
-    star_weights = np.load(pathlib.Path("trained_models") / cfg["weights_file"])
+    star_weights = np.load(pathlib.Path(args.models_dir) / cfg["weights_file"])
 
     def weights_for(pattern: str) -> tuple[np.ndarray, bool]:
         """Per-pattern weights; (weights, per_pattern?) with star fallback."""
         ptag = (f"two_curves_d{cfg['n_features']}_q{n}_deg{cfg['degree']}_"
                 f"{pattern}_{cfg['readout']}_L{cfg['n_layers']}")
-        wpath = pathlib.Path("trained_models") / f"{ptag}_weights.npy"
+        wpath = pathlib.Path(args.models_dir) / f"{ptag}_weights.npy"
         if wpath.exists():
             return np.load(wpath), True
         print(f"  [warn] no per-pattern weights for {pattern!r} "
@@ -252,6 +255,7 @@ def main() -> None:
         metrics = ["raw", "ddrem", "zne_linear", "zne_richardson", "zne_exp"]
         per_rep_err = {m: [] for m in metrics}
         per_rep_acc = {"raw": [], "ddrem": [], "zne_richardson": []}
+        per_rep_f1 = {"raw": [], "ddrem": [], "zne_richardson": []}
 
         for _rep in range(args.reps):
             err = {m: [] for m in metrics}
@@ -284,6 +288,7 @@ def main() -> None:
                 per_rep_err[m].append(float(np.mean(err[m])))
             for k in per_rep_acc:
                 per_rep_acc[k].append(float(np.mean(np.array(pred[k]) == y_eval)))
+                per_rep_f1[k].append(macro_f1(y_eval, pred[k]))
 
         def ms(vals):  # mean, std across reps
             a = np.asarray(vals)
@@ -297,6 +302,9 @@ def main() -> None:
         arw, _ = ms(per_rep_acc["raw"])
         add, _ = ms(per_rep_acc["ddrem"])
         arich, _ = ms(per_rep_acc["zne_richardson"])
+        f1rw, _ = ms(per_rep_f1["raw"])
+        f1dd, _ = ms(per_rep_f1["ddrem"])
+        f1rich, _ = ms(per_rep_f1["zne_richardson"])
 
         row = {
             "pattern": pattern,
@@ -309,6 +317,7 @@ def main() -> None:
             "zne_richardson_err": rich_m, "zne_richardson_err_std": rich_s,
             "zne_exp_err": exp_m,
             "acc_raw": arw, "acc_ddrem": add, "acc_zne_richardson": arich,
+            "f1_raw": f1rw, "f1_ddrem": f1dd, "f1_zne_richardson": f1rich,
             "dd": args.dd, "rem": args.rem,
             "reps": args.reps, "n_points": len(X_eval), "shots": args.shots,
         }
@@ -317,7 +326,8 @@ def main() -> None:
               f"raw={raw_m:.3f}±{raw_s:.3f} -> "
               f"DD+REM={dd_m:.3f}±{dd_s:.3f} -> "
               f"ZNE(rich)={rich_m:.3f}±{rich_s:.3f} (exp={exp_m:.3f}) | "
-              f"acc {arw:.2f}->{add:.2f}->{arich:.2f}")
+              f"acc {arw:.2f}->{add:.2f}->{arich:.2f} | "
+              f"F1 {f1rw:.2f}->{f1dd:.2f}->{f1rich:.2f}")
 
     rows.sort(key=lambda r: r["transpiled_cz"])
     fields = list(rows[0].keys())

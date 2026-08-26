@@ -27,7 +27,7 @@ from __future__ import annotations
 
 import json
 import pathlib
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 import numpy as np
 
@@ -43,23 +43,15 @@ from qiskit_aer.noise import (
 )
 
 from ansatz import HardwareEfficientAnsatz
+# star_coupling_map now lives in topology.py (single source of truth for the
+# cross-topology port, plan_month_2.md W1); re-exported here for back-compat.
+from topology import star_coupling_map  # noqa: F401  (re-export)
 
 # IQM native basis. Qiskit ``r`` == PRX(theta, phi); ``cz`` == CZ.
 # ``id`` is kept so scheduled idle windows can carry thermal noise.
 IQM_BASIS_GATES: list[str] = ["r", "cz", "id", "measure"]
 # Time unit for InstructionDurations / id padding (nanoseconds).
 DT_NS: float = 1.0
-
-
-def star_coupling_map(num_qubits: int = 5, hub: int = 0) -> list[list[int]]:
-    """Bidirectional star coupling: every outer qubit connects only to the hub."""
-    edges: list[list[int]] = []
-    for q in range(num_qubits):
-        if q == hub:
-            continue
-        edges.append([hub, q])
-        edges.append([q, hub])
-    return edges
 
 
 @dataclass
@@ -73,23 +65,30 @@ class DeviceCalibration:
     num_qubits: int = 5
     hub: int = 0
     # coherence times (seconds). t2 = Ramsey T2* (free-induction idle dephasing).
-    t1: np.ndarray = field(default_factory=lambda: np.full(5, 40e-6))
-    t2: np.ndarray = field(default_factory=lambda: np.full(5, 15e-6))
+    # Per-qubit values may be scalars (broadcast to num_qubits) or length-n arrays.
+    t1: np.ndarray | float = 40e-6
+    t2: np.ndarray | float = 15e-6
     # Hahn-echo T2 (idle dephasing achievable UNDER dynamical decoupling). If not
     # provided it defaults to t2 (i.e. DD gives no modelled benefit).
-    t2_echo: np.ndarray | None = None
+    t2_echo: np.ndarray | float | None = None
     # gate durations (seconds)
     t_1q: float = 40e-9
     t_2q: float = 100e-9
     # depolarizing gate error probabilities
-    p_1q: np.ndarray = field(default_factory=lambda: np.full(5, 1e-3))
+    p_1q: np.ndarray | float = 1e-3
     p_2q: float = 1e-2
     # symmetric readout error probability per qubit  P(0|1) = P(1|0)
-    p_ro: np.ndarray = field(default_factory=lambda: np.full(5, 3e-2))
+    p_ro: np.ndarray | float = 3e-2
+    # Device coupling map (bidirectional [a,b] edges). If None, defaults to the
+    # star on this device's num_qubits/hub (Month-1 ODRA behaviour unchanged).
+    # Set it (or load it) for lattice devices — Garnet (4x5) / Emerald (6x9).
+    coupling_map: list[list[int]] | None = None
 
     def __post_init__(self) -> None:
         # allow scalars -> broadcast to arrays
         n = self.num_qubits
+        if self.coupling_map is None:
+            self.coupling_map = star_coupling_map(n, self.hub)
         self.t1 = np.broadcast_to(np.asarray(self.t1, float), (n,)).copy()
         self.t2 = np.broadcast_to(np.asarray(self.t2, float), (n,)).copy()
         self.p_1q = np.broadcast_to(np.asarray(self.p_1q, float), (n,)).copy()
@@ -127,7 +126,46 @@ def load_iqm_calibration(path: str | pathlib.Path) -> DeviceCalibration:
         p_1q=np.asarray(d["p_1q"], float),
         p_2q=float(d["p_2q"]),
         p_ro=np.asarray(d["p_ro"], float),
+        # A lattice calibration must carry its coupling map; if absent we fall
+        # back to the star (via __post_init__) for back-compat with ODRA files.
+        coupling_map=(
+            [list(e) for e in d["coupling_map"]] if "coupling_map" in d else None
+        ),
     )
+
+
+def synthesize_lattice_calibration(
+    device: str,
+    *,
+    seed: int = 0,
+    jitter: float = 0.0,
+    **overrides,
+) -> DeviceCalibration:
+    """PLACEHOLDER Spark-class calibration for a named lattice device (Garnet/Emerald).
+
+    Spark-class scalar error rates broadcast onto the device, carrying the device's
+    real grid coupling map (from ``topology``). Lets §1/§3/§4 sim runs work *before*
+    live lattice calibration exists. ``jitter`` (fractional, e.g. 0.1) adds seeded
+    per-qubit variation to T1/T2/p_1q/p_ro; any field is overridable via kwargs.
+
+    NOTE: clearly a stand-in — replace with real calibration before quantitative use.
+    """
+    from topology import device_coupling_map, device_num_qubits
+
+    n = device_num_qubits(device)
+    base = dict(t1=40e-6, t2=15e-6, p_1q=1e-3, p_2q=1e-2, p_ro=3e-2)
+    fields: dict = {"num_qubits": n, "coupling_map": device_coupling_map(device)}
+    rng = np.random.default_rng(seed)
+    for key, val in base.items():
+        if key == "p_2q":  # scalar in the model
+            fields[key] = val
+            continue
+        arr = np.full(n, val, float)
+        if jitter:
+            arr = arr * (1.0 + jitter * (2.0 * rng.random(n) - 1.0))
+        fields[key] = arr
+    fields.update(overrides)
+    return DeviceCalibration(**fields)
 
 
 def build_noise_model(
@@ -171,7 +209,7 @@ def build_noise_model(
         nm.add_readout_error(ReadoutError([[1 - p, p], [p, 1 - p]]), [q])
 
     # two-qubit gate errors (CZ), on both edge orientations
-    for a, b in {tuple(sorted(e)) for e in star_coupling_map(cal.num_qubits, cal.hub)}:
+    for a, b in {tuple(sorted(e)) for e in cal.coupling_map}:
         relax_a = thermal_relaxation_error(cal.t1[a], cal.t2[a], cal.t_2q)
         relax_b = thermal_relaxation_error(cal.t1[b], cal.t2[b], cal.t_2q)
         err_2q = depolarizing_error(cal.p_2q, 2).compose(relax_a.tensor(relax_b))
@@ -278,7 +316,7 @@ def make_noisy_simulator(
     nm = build_noise_model(cal, idle_t2=idle_t2, with_idle=with_idle)
     return AerSimulator(
         noise_model=nm,
-        coupling_map=star_coupling_map(cal.num_qubits, cal.hub),
+        coupling_map=cal.coupling_map,
         basis_gates=IQM_BASIS_GATES,
     )
 
@@ -381,6 +419,40 @@ def perqubit_z_from_counts(counts: dict[str, int], n: int) -> np.ndarray:
     return z / total
 
 
+def perqubit_z_on_wires(
+    counts: dict[str, int], wires: list[int], device_width: int
+) -> np.ndarray:
+    """Per-qubit ⟨Z⟩ for specific physical ``wires`` (LSB = qubit 0) from counts.
+
+    Like :func:`perqubit_z_from_counts`, but reads only the given physical wires of
+    a device-width bitstring (used when a small logical circuit is embedded on a
+    larger device). Returns one ⟨Z⟩ per wire, in the order given.
+    """
+    total = sum(counts.values())
+    z = np.zeros(len(wires))
+    for bitstr, c in counts.items():
+        bits = bitstr.replace(" ", "")[-device_width:].zfill(device_width)
+        for i, w in enumerate(wires):
+            bit = int(bits[device_width - 1 - w])
+            z[i] += (1.0 - 2.0 * bit) * c
+    return z / total
+
+
+def logical_final_wires(transpiled: QuantumCircuit, n_logical: int) -> list[int]:
+    """Physical measurement wire for each logical qubit after transpilation.
+
+    Reads ``transpiled.layout.final_index_layout()`` so single-qubit readout lands
+    on the correct wire *after* routing/SWAPs moved the logical qubits around
+    (generalises the Month-1 Banknote readout-wire fix). Falls back to identity
+    ``0..n_logical-1`` when the circuit carries no layout (already-native circuits).
+    """
+    layout = getattr(transpiled, "layout", None)
+    if layout is None:
+        return list(range(n_logical))
+    final = layout.final_index_layout()  # virtual qubit index -> physical wire
+    return [int(final[i]) for i in range(n_logical)]
+
+
 def rem_correct_z(zq: np.ndarray, p_ro: np.ndarray) -> np.ndarray:
     """Readout Error Mitigation for single-qubit Z (symmetric bit-flip model).
 
@@ -415,6 +487,7 @@ def execute_expectation(
     apply_idle_schedule: bool = True,
     pre_transpiled: bool = False,
     rem: bool = False,
+    initial_layout: list[int] | None = None,
 ) -> float:
     """Run a (Z/I-observable) circuit on the noisy sim and return ⟨O⟩ from counts.
 
@@ -427,27 +500,57 @@ def execute_expectation(
     When ``apply_idle_schedule=True``, idle windows are expanded to ``id`` gates
     so thermal idle noise (and later DD) is active in simulation.
     ``rem=True`` applies Readout Error Mitigation (per-qubit, using ``cal.p_ro``).
+
+    ``initial_layout`` places an ``n``-qubit logical circuit onto a larger device
+    (``cal.num_qubits > n``, the optimal/adverse placement of W2). Readout is then
+    taken from each logical qubit's *final* physical wire. When the device size
+    matches the circuit, behaviour is exactly the Month-1 same-size path.
     """
     n = circuit.num_qubits
     cal = cal or DeviceCalibration()
+    embed = cal.num_qubits != n
+    if embed and initial_layout is None:
+        raise ValueError(
+            f"circuit has {n} qubits but device has {cal.num_qubits}; pass "
+            "initial_layout (a placement from topology.placement) to embed it."
+        )
+    if embed and pre_transpiled:
+        raise ValueError(
+            "embedding (device larger than circuit) needs a fresh transpile to "
+            "recover readout wires; pre_transpiled=True is unsupported here."
+        )
     meas = circuit.copy()
     if not pre_transpiled:
         meas = transpile(
             meas,
             basis_gates=IQM_BASIS_GATES,
-            coupling_map=star_coupling_map(n),
+            coupling_map=cal.coupling_map,
+            initial_layout=initial_layout,
             optimization_level=1,
         )
     if apply_idle_schedule:
         meas = schedule_with_idle(meas, cal)
-    meas.measure_all()
-    result = sim.run(meas, shots=shots).result()
-    counts = result.get_counts()
+
     coeffs = observable_coeffs(observable, n)
+
+    if not embed:
+        meas.measure_all()
+        counts = sim.run(meas, shots=shots).result().get_counts()
+        if rem:
+            zq = rem_correct_z(perqubit_z_from_counts(counts, n), cal.p_ro)
+            return float(np.dot(coeffs, zq))
+        return expval_z_from_counts(counts, coeffs)
+
+    # embedded: n-qubit logical circuit placed on a larger device; read the
+    # logical qubits off their post-routing wires.
+    wires = logical_final_wires(meas, n)
+    device_width = meas.num_qubits
+    meas.measure_all()
+    counts = sim.run(meas, shots=shots).result().get_counts()
+    zq = perqubit_z_on_wires(counts, wires, device_width)
     if rem:
-        zq = rem_correct_z(perqubit_z_from_counts(counts, n), cal.p_ro)
-        return float(np.dot(coeffs, zq))
-    return expval_z_from_counts(counts, coeffs)
+        zq = rem_correct_z(zq, np.asarray(cal.p_ro)[wires])
+    return float(np.dot(coeffs, zq))
 
 
 def expectation_error(noisy_ev: float, ideal_ev: float) -> float:
@@ -478,7 +581,7 @@ def sanity_check(cal: DeviceCalibration | None = None, shots: int = 20000) -> No
     cal = cal or DeviceCalibration()
     sim = make_noisy_simulator(cal)
     print("=== noisy_sim sanity check (PLACEHOLDER calibration) ===")
-    print(f"coupling (star): {star_coupling_map(cal.num_qubits, cal.hub)}")
+    print(f"coupling ({len(cal.coupling_map) // 2} edges): {cal.coupling_map}")
 
     # Readout: prepare |1> on each qubit, measure, estimate P(0|1) vs spec p_ro.
     print("\nreadout error  (spec -> measured P(0|1)):")
@@ -487,7 +590,7 @@ def sanity_check(cal: DeviceCalibration | None = None, shots: int = 20000) -> No
         qc.x(q)
         qc.measure(q, 0)
         tqc = transpile(qc, basis_gates=IQM_BASIS_GATES,
-                        coupling_map=star_coupling_map(cal.num_qubits))
+                        coupling_map=cal.coupling_map)
         counts = sim.run(tqc, shots=shots).result().get_counts()
         p01 = counts.get("0", 0) / shots
         print(f"  q{q}: {cal.p_ro[q]:.3f} -> {p01:.3f}")
