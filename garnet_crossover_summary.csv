@@ -1,0 +1,5 @@
+cz,placement,pattern,err_zne,err_cdr,eff_zne,eff_cdr,winner
+12.0,optimal,star,0.0192,0.021,12288.0,83968.0,ZNE
+36.0,adverse,star,0.0867,0.0988,12288.0,83968.0,ZNE
+57.0,optimal,all_to_all,0.1306,0.0425,12288.0,83968.0,CDR
+96.0,adverse,all_to_all,0.1768,0.1249,12288.0,83968.0,CDR

@@ -1,0 +1,13 @@
+window,placement,pattern,transpiled_cz,arm,twirl,err,cdr_r2,n_avg,shots
+coh05w5,optimal,star,33,raw,False,0.0427,,6,1024
+coh05w5,optimal,star,33,cdr,False,0.0402,0.9397,6,1024
+coh05w5,optimal,star,33,cdr,True,0.0129,0.9822,6,1024
+coh05w5,optimal,star,33,zne,False,0.0283,,6,1024
+coh05w5,optimal,all_to_all,90,raw,False,0.0851,,6,1024
+coh05w5,optimal,all_to_all,90,cdr,False,0.0691,0.8301,6,1024
+coh05w5,optimal,all_to_all,90,cdr,True,0.0216,0.9681,6,1024
+coh05w5,optimal,all_to_all,90,zne,False,0.2421,,6,1024
+coh05w5,adverse,all_to_all,87,raw,False,0.0763,,6,1024
+coh05w5,adverse,all_to_all,87,cdr,False,0.0623,0.7431,6,1024
+coh05w5,adverse,all_to_all,87,cdr,True,0.0124,0.9753,6,1024
+coh05w5,adverse,all_to_all,87,zne,False,0.1986,,6,1024

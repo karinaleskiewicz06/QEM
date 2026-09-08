@@ -1,0 +1,75 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{amsmath,amssymb,booktabs,geometry}
+\geometry{margin=2.5cm}
+\newcommand{\expv}[1][]{\langle O\rangle}
+\title{Twirling w formalizmie macierzy procesu $\chi$\\
+\large materiał uzupełniający do raportu QEM}
+\author{Karina Leśkiewicz \\ \small KN AXION, Politechnika Wrocławska}
+\date{\today}
+\begin{document}
+\maketitle
+\section*{Wyprowadzenie działania twirlingu w formalizmie $\chi$}
+
+Dowolny kanał kwantowy $\mathcal{E}$ działający na $n$ kubitach można zapisać w~bazie operatorów
+Pauliego $\{P_\alpha\}$ jako
+\begin{equation}
+  \mathcal{E}(\rho) \;=\; \sum_{\alpha\beta} \chi_{\alpha\beta}\, P_\alpha \rho\, P_\beta^{\dagger},
+  \label{eq:chi-def}
+\end{equation}
+gdzie $\chi$ (macierz procesu) jest hermitowska i~dodatnio półokreślona. Interpretacja jej elementów
+jest kluczowa:
+\begin{itemize}
+  \item elementy \textbf{diagonalne} $\chi_{\alpha\alpha}$ to prawdopodobieństwa, z~jakimi kanał
+        stosuje błąd Pauliego $P_\alpha$ --- składowa \emph{stochastyczna};
+  \item elementy \textbf{pozadiagonalne} $\chi_{\alpha\beta}$, $\alpha\neq\beta$, opisują
+        \emph{interferencję} między różnymi ścieżkami błędu --- składową \emph{koherentną},
+        odpowiedzialną za kumulację amplitudową.
+\end{itemize}
+Błąd czysto unitarny (np.\ systematyczne przekręcenie $U_\theta = e^{-i\theta P/2}$) ma znaczące
+elementy pozadiagonalne; kanał depolaryzujący ma wyłącznie diagonalę.
+
+\paragraph{Twirl Pauliego.} Otoczmy kanał losową bramką Pauliego $P_k$ wybraną jednostajnie
+z~$n$-kubitowej grupy Pauliego i~uśrednijmy po tym wyborze:
+\begin{equation}
+  \mathcal{E}_{\text{tw}}(\rho) \;=\; \frac{1}{4^n}\sum_k
+  P_k^{\dagger}\,\mathcal{E}\bigl(P_k \rho P_k^{\dagger}\bigr)\,P_k .
+\end{equation}
+Podstawiając~\eqref{eq:chi-def} i~korzystając z~tego, że operatory Pauliego albo komutują, albo
+antykomutują ($P_k P_\alpha = (-1)^{\langle k,\alpha\rangle} P_\alpha P_k$ dla pewnej funkcji
+symplektycznej $\langle\cdot,\cdot\rangle$ o~wartościach w~$\{0,1\}$), otrzymujemy
+\begin{equation}
+  \mathcal{E}_{\text{tw}}(\rho) \;=\; \sum_{\alpha\beta}
+  \underbrace{\Bigl[\frac{1}{4^n}\sum_k (-1)^{\langle k,\alpha\rangle + \langle k,\beta\rangle}\Bigr]}
+  _{\textstyle =\;\delta_{\alpha\beta}}
+  \chi_{\alpha\beta}\, P_\alpha \rho\, P_\beta^{\dagger} .
+\end{equation}
+Czynnik w~nawiasie jest średnią znaków po całej grupie Pauliego. Dla $\alpha=\beta$ wykładnik jest
+parzysty i~wszystkie wyrazy równe $+1$, więc średnia wynosi 1. Dla $\alpha\neq\beta$ istnieje
+element grupy komutujący z~jednym operatorem, a~antykomutujący z~drugim, wobec czego znaki
+$+1$ i~$-1$ występują dokładnie po równo i~średnia znika (ortogonalność charakterów). W~rezultacie
+\begin{equation}
+  \boxed{\;\mathcal{E}_{\text{tw}}(\rho) \;=\; \sum_{\alpha} \chi_{\alpha\alpha}\,
+  P_\alpha \rho\, P_\alpha^{\dagger}\;}
+\end{equation}
+--- kanał po twirlingu jest \emph{kanałem Pauliego}: zachowuje diagonalę $\chi$ (a~więc i~całkowitą
+wierność procesu), lecz \textbf{zeruje wszystkie elementy pozadiagonalne}. Błąd koherentny zostaje
+zamieniony na stochastyczny o~tej samej sile.
+
+\paragraph{Realizacja praktyczna (randomized compiling).} Bezpośrednie wykonanie powyższego
+uśrednienia wymagałoby dodatkowych bramek. W~randomized compiling~\cite{wallman2016,hashim2021}
+wykorzystuje się fakt, że bramki Cliffordowskie przekształcają operatory Pauliego w~operatory
+Pauliego: bramkę dwukubitową $G$ otacza się losową bramką $A$ przed nią i~\emph{kompensatorem}
+\begin{equation}
+  B \;=\; G\,A\,G^{\dagger},
+\end{equation}
+tak że $B\,G\,A = G$ z~dokładnością do fazy globalnej --- działanie idealne pozostaje niezmienione,
+a~uśrednienie po $M$ losowaniach realizuje twirl. Ponieważ $A$ i~$B$ są pojedynczymi bramkami
+jednokubitowymi, narzut jest niewielki: w~naszych obwodach wynosi $8$--$13\%$ dodatkowych bramek
+jednokubitowych przy zmianie głębokości nieprzekraczającej $5\%$.
+
+% =====================================================================================
+
+\end{document}

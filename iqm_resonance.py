@@ -8,8 +8,11 @@ stays provider-agnostic.
 ⚠️ ENVIRONMENT. ``qiskit-iqm`` must be installed where you run hardware (it failed
 to build on py3.13 in Month 1 — use a py3.11 venv). Auth via the Resonance API
 token. Set:
-    export IQM_RESONANCE_URL="<per-device Resonance endpoint>"
+    export IQM_RESONANCE_URL="https://resonance.iqm.tech"   # BASE url (device via quantum_computer=)
     export IQM_TOKEN="<Resonance API token>"
+⚠️ The old CoCoS host (cocos.resonance.meetiqm.com / resonance.meetiqm.com) is DEPRECATED and no
+longer resolves (DNS failure) — use https://resonance.iqm.tech. A token issued for the old API may
+need reissuing for the new endpoint.
 
 Design: transpile against the **backend's live coupling map** (real connectivity,
 not the idealized grid), pin qubits with the hand-given HARDWARE_PLACEMENTS
@@ -21,6 +24,7 @@ module does NOT run automatically — the runners call ``submit`` only under
 from __future__ import annotations
 
 import os
+import time
 
 from qiskit import QuantumCircuit, transpile
 
@@ -48,11 +52,18 @@ def get_backend(device: str, url: str | None = None, token: str | None = None):
     backend carries the device's real coupling map / target used for transpilation.
     """
     IQMProvider = _require_qiskit_iqm()
-    url = url or os.environ.get("IQM_RESONANCE_URL", "")
+    url = (url or os.environ.get("IQM_RESONANCE_URL", "")).rstrip("/")
     if not url:
-        raise SystemExit("set IQM_RESONANCE_URL (per-device Resonance endpoint) to submit.")
-    # URL must be the BASE server URL (no /garnet suffix); the device is chosen via
-    # the quantum_computer parameter. The IQM client auto-reads IQM_TOKEN from the
+        raise SystemExit("set IQM_RESONANCE_URL to the Resonance BASE url "
+                         "(https://resonance.iqm.tech — the old cocos.resonance.meetiqm.com / "
+                         "resonance.meetiqm.com CoCoS host is DEPRECATED and no longer resolves) "
+                         "to submit.")
+    # iqm-client >= ~34 requires the BASE server URL (no /garnet suffix); the device is
+    # chosen via quantum_computer=. Be forgiving: strip a trailing /<device> if the user
+    # included it (older per-device URL style) so either form works.
+    if url.endswith("/" + device):
+        url = url[: -(len(device) + 1)]
+    # The IQM client auto-reads IQM_TOKEN from the
     # environment, and passing token= AND having IQM_TOKEN set is a hard error
     # ("must not mix sources"), so only pass an explicit token when it is not in env.
     if token and not os.environ.get("IQM_TOKEN"):
@@ -69,17 +80,53 @@ def backend_coupling_map(backend) -> list[list[int]]:
 MAX_CIRCUITS_PER_JOB = 100  # IQM Resonance declines jobs above this.
 
 
-def run_circuits(backend, circuits, shots, max_per_job: int = MAX_CIRCUITS_PER_JOB) -> list[dict]:
+def run_circuits(backend, circuits, shots, max_per_job: int = MAX_CIRCUITS_PER_JOB,
+                 compilation_options=None) -> list[dict]:
     """Run circuits in sub-jobs of <= max_per_job and return a flat list of counts.
 
     IQM Resonance caps a single job at 100 circuits, so large batches (e.g. 100 eval
     points x 3 ZNE scales = 300) must be chunked. Counts are returned in submission
     order, so downstream index math is unchanged.
+
+    ``compilation_options`` (optional): an ``iqm.iqm_client.CircuitCompilationOptions``
+    instance, forwarded to ``backend.run(..., circuit_compilation_options=...)``. This
+    is where IQM Resonance server-side features (e.g. circuit/readout twirling,
+    dynamical decoupling) are enabled. When ``None`` the backend default is used, so
+    existing callers are unaffected. Build the object in your py3.11 env; introspect
+    available fields with:
+        from iqm.iqm_client import CircuitCompilationOptions
+        import dataclasses; print([f.name for f in dataclasses.fields(CircuitCompilationOptions)])
     """
     counts: list[dict] = []
     for i in range(0, len(circuits), max_per_job):
         chunk = circuits[i:i + max_per_job]
-        result = backend.run(chunk, shots=shots).result()
+        kwargs = {"shots": shots}
+        if compilation_options is not None:
+            kwargs["circuit_compilation_options"] = compilation_options
+        job = backend.run(chunk, **kwargs)  # SUBMIT once (charged once)
+        # Retry only the RESULT FETCH on transient network errors — never call backend.run again
+        # (that would re-submit a NEW job and double-charge). job.result() re-polls the SAME job_id,
+        # so a dropped connection during wait/poll is recovered without re-running the circuits.
+        # Generous retry (~30 min of coverage) so a long IQM QUEUE wait plus a transient network
+        # drop / laptop sleep does not lose an already-submitted job. job.result() re-polls the SAME
+        # job_id, so this never re-submits. If the process is merely suspended (sleep), the loop
+        # resumes on wake and succeeds once DNS is back. Run under `caffeinate -i` to avoid sleep.
+        last_exc = None
+        for attempt in range(20):
+            try:
+                result = job.result()
+                break
+            except Exception as exc:  # transient network drop (DNS/ConnectionReset/ProtocolError)
+                last_exc = exc
+                time.sleep(min(2 ** attempt * 5, 120))
+        else:
+            jid = getattr(job, "job_id", lambda: "?")
+            jid = jid() if callable(jid) else jid
+            raise RuntimeError(
+                f"result fetch failed after 20 retries for job {jid} — the job may still be running "
+                f"SERVER-SIDE (check the IQM Resonance dashboard; results persist and can be "
+                f"retrieved by this job_id). Circuits already submitted; re-run with --resume to skip "
+                f"finished points: {last_exc}") from last_exc
         counts.extend(result.get_counts(j) for j in range(len(chunk)))
     return counts
 

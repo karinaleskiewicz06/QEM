@@ -1,0 +1,4 @@
+placement,pattern,transpiled_cz,abs_ideal,abs_lam1,abs_lam3,abs_lam5,retention_R,err_raw,err_zne,n_unphysical,verdict
+optimal,star,33,0.3116,0.2045,0.1151,0.0838,0.4097,0.1121,0.0628,0,sygnał zachowany
+optimal,all_to_all,90,0.2104,0.0557,0.0186,0.0083,0.1491,0.1547,0.1105,0,KOLAPS — liczby ZNE niewiarygodne
+adverse,all_to_all,87,0.2104,0.0732,0.0139,0.014,0.1907,0.1372,0.0598,0,ryzyko graniczne

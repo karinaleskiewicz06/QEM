@@ -39,3 +39,6 @@ two_curves_mirror_fidelity_sim.csv
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+
+# GSD planning docs (kept local — commit_docs=false)
+.planning/

@@ -1,0 +1,5 @@
+device,placement,pattern,transpiled_cz,per_pattern_weights,err_raw,err_cdr,acc_raw,acc_cdr,f1_raw,f1_cdr,err_zne,cdr_a,cdr_b,cdr_r2,dd,n_train,shots,effective_shots,source
+odra,optimal,star,12,True,0.0745,0.0267,0.7,0.69,0.6999,0.6897,0.0226,1.2139,-0.0375,0.9583,False,100,8192,827392,hardware
+odra,optimal,linear,27,True,0.1496,0.0712,0.72,0.68,0.7106,0.6768,0.0895,1.7027,-0.0647,0.8085,False,100,8192,827392,hardware
+odra,optimal,circular,36,True,0.1863,0.105,0.69,0.71,0.6784,0.7076,0.1416,2.247,-0.07,0.7916,False,100,8192,827392,hardware
+odra,optimal,all_to_all,54,True,0.2776,0.2198,0.68,0.68,0.6604,0.6637,0.2188,2.0271,-0.053,0.5983,False,100,8192,827392,hardware

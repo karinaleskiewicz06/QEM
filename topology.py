@@ -144,7 +144,12 @@ HARDWARE_PLACEMENTS: dict[str, dict[str, list[int] | None]] = {
     #   optimal = compact plus, hub=QB3(idx3) + spokes 0,2,4,8 (all distance 1)
     #   adverse = dispersed across the device (min-pair spread 15)
     "garnet": {"optimal": [3, 0, 2, 4, 8], "adverse": [0, 16, 12, 5, 18]},
-    "emerald": {"optimal": None, "adverse": None},
+    # Emerald: CANDIDATES from derive_placements() on the idealized 54q map (2026-09-05) —
+    #   optimal = compact cluster hub=10 (star 12 CZ, all_to_all 57 CZ)
+    #   adverse = dispersed farthest-point set (star 75 CZ, all_to_all 129 CZ — highest routing)
+    # PENDING live-hardware validation via the smoke-test before the full run; if the smoke fails
+    # (a dead qubit / missing edge on the live map), re-derive from backend_coupling_map('emerald').
+    "emerald": {"optimal": [10, 1, 9, 11, 19], "adverse": [0, 53, 6, 30, 45]},
     # code-block (4 data qubits) placements for the [[4,2,2]] arm:
     "garnet_qec": {"optimal": None, "adverse": None},
     "emerald_qec": {"optimal": None, "adverse": None},
