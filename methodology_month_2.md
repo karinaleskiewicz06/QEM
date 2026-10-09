@@ -28,7 +28,10 @@ the *control* and the dry-run gate, never the headline.
 **Credentials / environment**
 - **ODRA** (Month 1): `iqm-client` + `IQM_SERVER_URL`, `IQM_TOKEN`.
 - **Garnet / Emerald** (this month): **IQM Resonance via `qiskit-iqm`**. Env:
-  `IQM_RESONANCE_URL` (per-device endpoint) + `IQM_TOKEN`. ⚠️ `qiskit-iqm` must be installed
+  `IQM_RESONANCE_URL=https://resonance.iqm.tech` (BASE url; device chosen via `quantum_computer=`)
+  + `IQM_TOKEN`. ⚠️ The old CoCoS host `cocos.resonance.meetiqm.com` / `resonance.meetiqm.com` is
+  **DEPRECATED and no longer resolves** (DNS failure) — use `resonance.iqm.tech`; a token for the
+  old API may need reissuing. ⚠️ `qiskit-iqm` must be installed
   in the run environment (it failed on py3.13 in Month 1 — resolve there, e.g. a py3.11 venv).
 - Placements on real devices are **hand-given** by you: fill `topology.HARDWARE_PLACEMENTS`
   with real physical-qubit lists after inspecting each backend; hardware transpile uses the
@@ -289,3 +292,299 @@ Cross-topology ladders (≥2 topologies) with drift bands; optimal-vs-adverse wi
 mean-value/fidelity; topo-distance↔SWAP↔degradation correlation; ZNE-vs-CDR-vs-[[4,2,2]] on the
 shots-to-target axis; encoded-vs-physical (incl. a clean negative if that's the result);
 publication figures + final report + reproducible release.
+
+---
+
+## 9. Circuit twirling pod routingiem — pilot + docelowa metodologia (potencjalnie kluczowy wątek)
+
+**Cel.** Scharakteryzować, jak *randomized compiling* (Pauli twirling) tłumi **koherentny**
+błąd routingu i przywraca skuteczność ZNE/CDR — **rozdzielone po koszcie routingu i topologii**,
+i **ilościowo powiązane** z niezależnie zmierzoną frakcją koherentną urządzenia. Wyprowadzenie
+matematyczne twirlingu: patrz `raport_month_2.tex`, sekcja „Circuit twirling".
+
+**Kontekst (sim + realny sygnał).** Sim z wstrzykniętym koherentnym błędem (`twirl_zne_scope.py`,
+`twirl_cdr_scope.py`): twirl+ZNE poprawia ⟨O⟩-błąd ~2.2×; **twirl+CDR przywraca r² 0.81→0.99**
+(błąd 0.109→0.015). Realny sygnał zakotwiczający: `garnet_cdr` r² spada **0.99→0.69 przy 96 CZ**
+— sygnatura błędu koherentnego łamiącego liniowość CDR. Hipoteza: twirling to odwróci.
+
+**IQM Resonance nie ma twirlingu serwerowego** (iqm-client 34.x: tylko DD) → twirling
+**client-side**: każda natywna bramka CZ owinięta losową Paulią `A` + kompensacją `B=CZ·A·CZ†`,
+M losowych instancji, uśrednienie counts. Zwalidowane (ideał zachowany). Narzędzie:
+`run_garnet_twirl.py` (dry-run domyślny).
+
+### 9a. PILOT (krok 1, ~135 cr) — bramka decyzyjna
+Zanim inwestujemy w pełną wersję, tani test rozstrzyga „czy w ogóle warto":
+- **Drabina 3 punktów CZ:** `optimal:star` (~12 CZ), `optimal:all_to_all` (~57), `adverse:all_to_all` (~96).
+- **Ramię:** CDR (r² to najostrzejszy sygnał; jego kolaps obserwowany w realu).
+- **Twirl on/off** w **tym samym oknie** (jedyna różnica = twirling).
+- Parametry (**Wariant 2, literaturowo-minimalny**): eval-points 3–4, shots **2048**,
+  **n_train 10** (standard sprzętowy CDR, Czarnik i in.), **M_twirl 8** (zakres zbieżności RC 5–10,
+  Hashim i in. używali 20). Reżim literaturowy: RC M~20 / shots~8192 / n_train~10 — pilot świadomie
+  okrojony na shotach i M (patrz `raport_month_2.tex`, sekcja twirling, ref hashim2021/czarnik2021).
+- **Koszt:** ~368 cr (E3) lub ~491 cr (E4).
+- **Metryki:** `err`, `cdr_r2` per punkt.
+- **Kryterium przejścia do pełnej wersji:** zysk rośnie z CZ — przy 96 CZ `r²(on) >> r²(off)`
+  (≈0.69→~0.9), przy 12 CZ różnica mała. Jak tak → pełna wersja §9b; jak nie → Garnet ma mało
+  koherencji (też wynik, ustalony za ~400 cr zamiast ~1100).
+- Komenda (E3, ~368 cr): `python run_garnet_twirl.py --submit --arms cdr --points optimal:star optimal:all_to_all adverse:all_to_all --eval-points 3 --shots 2048 --n-train 10 --n-twirl 8`
+  (E4, ~491 cr: `--eval-points 4`).
+- Uwaga: pilot poniżej reżimu literaturowego na shotach/M → **liczby kierunkowe, nie publikowalne**;
+  do paperu reżim pełnej wersji §9b (M20/shots8192).
+
+### 9b. DOCELOWA METODOLOGIA (pełna, po pozytywnym pilocie)
+1. **Pełna drabina routingu:** 2 placement × 4 pattern (CZ 12→96) + idealnie **Emerald**
+   (cross-topology). Rozdziela wkład placement vs pattern do CZ.
+2. **Trzy ramiona:** raw + ZNE + CDR, twirl on/off każde → czy twirling **przesuwa crossover
+   ZNE↔CDR (~39 CZ)**? (bezpośrednie spięcie z Core Value / rozdz. porównania metod).
+3. **Niezależny pomiar frakcji koherentnej — unitarity randomized benchmarking** (do napisania:
+   `run_garnet_urb.py`). Zamienia claim z „twirl pomógł" na „twirl pomógł DOKŁADNIE tyle, ile
+   przewiduje zmierzona frakcja koherentna X%" — ilościowe potwierdzenie mechanizmu. **Najważniejszy
+   upgrade.**
+4. **Pasma driftu:** ≥2 okna kalibracji (standard BRKD-01) → słupki błędu z driftu.
+5. **Wysoka statystyka:** 15–30 eval-points, 4096 shots, **M_twirl 20** (RC standard), n_train 40.
+6. **Sweep M** (2,4,8,16,32) — zbieżność estymatora twirla; **ablacja DD** (`dd_mode`) — twirl vs
+   DD vs oba (komplementarne kanały: bramki koherentne vs dephasing bezczynności; domyka gap #7).
+
+**Metryki (pełne):** err(⟨O⟩), cdr_r2, crossover-CZ (twirl on vs off), przewidziany-vs-zmierzony
+zysk twirlingu (z URB), wszystko z pasmami driftu.
+
+**Szacowany koszt pełnej wersji:** ~1000–1500 kredytów (M=20 × drabina × 3 ramiona × 2 okna +
+URB) → uruchamiać TYLKO po pozytywnym pilocie 9a.
+
+**Dlaczego to może być kluczowy wątek pracy:** to jedyna kompozycja, która **działa** na prawdziwym
+klasyfikatorze (w przeciwieństwie do detekcja+ZNE), z **ilościowo przewidywalnym** mechanizmem
+(URB→frakcja koherentna→zysk), rozdzielona po **osi routingu i topologii** spójnej z całym paperem.
+
+### 9c. WERSJA WYKONAWCZA (b) — utwardzenie twirl+CDR na VQC + pasma driftu
+
+Skonsolidowana metodologia po pilocie (9a, POZYTYWNY) i URB (§9b pkt 3, WYKONANE). Odróżnia się
+od §9b tym, że **redukuje zakres do potwierdzonego, taniego, pewnego wyniku**: twirl+CDR na VQC z
+oknami driftu. Trzy ustalenia zawężają plan:
+- **Pilot potwierdził twirl+CDR** (r² OFF→ON: 0.957→0.986 / 0.820→0.939 / 0.837→0.909 przy 12/57/96 CZ;
+  err spada wszędzie; zysk rośnie z CZ).
+- **ZNE porzucone (H4):** twirl pomaga CDR (fit liniowy, wrażliwy na koherencję), NIE ZNE
+  (ekstrapolacja, odporna). W symulacji twirl+ZNE pomaga (6/6), ale na Garnecie koherencja bramki
+  jest mała → narzut twirla dominuje dla ZNE. Ramię ZNE **wyłączone** z kampanii (b).
+- **URB:** frakcja koherentna CZ na Garnecie modest (u=0.843, p=0.908, u−p²≈0.019) i **drift-swamped**
+  (drift u ≈0.09 >> sygnał 0.019) → zysk twirla jest na poziomie **obwodu** (routing/idle/crosstalk),
+  nie izolowanej bramki. Stąd: drift MUSI być zmierzony (okna), a „predicted==measured" (H3) jest
+  celem osobnym (punkt (a), cycle benchmarking) — **nie** blokuje (b).
+
+**Claim (b):** *Circuit twirling przywraca jakość dopasowania liniowego CDR (r²) i obniża ⟨O⟩-błąd
+klasyfikatora VQC, a efekt rośnie z narzutem routingu — istotnie ponad pasmo driftu kalibracji.*
+
+**Obiekt:** prawdziwy VQC (`trained_models_hard`, offset 0.1, 5q, 3 warstwy, wagi per-pattern),
+obserwabl mean-Z, metryka pierwotna ⟨O⟩-błąd vs zamrożony ideał, **r² dopasowania CDR = najostrzejszy
+sygnał koherencji**.
+
+**Drabina routingu (oś główna):** 3 punkty minimum — `optimal:star` (~12 CZ), `optimal:all_to_all`
+(~57), `adverse:all_to_all` (~96); opcjonalnie `adverse:star` (~36) i `optimal:circular` (~39) dla
+gładszego trendu.
+
+**Ramiona (jedna kampania pokrywa BRKD-01 + flagowy twirl).** `--arms raw cdr zne --twirl-arms cdr`:
+- **raw** (twirl OFF) — nieskorygowany ⟨O⟩-błąd = baseline breakdown, drift-banded.
+- **zne** (twirl OFF) — ZNE-skorygowany błąd, drift-banded.
+- **cdr** (twirl OFF **i** ON, matched) — CDR-skorygowany błąd + r² + **flagowy zysk twirla**.
+Tylko CDR dostaje ramię ON (H4: twirl pomaga fitowi CDR, nie ekstrapolacji ZNE) → raw+ZNE dokładają
+~3% kosztu, a dają **pasma driftu regionu breakdown (BRKD-01) w tej samej kampanii** — nie trzeba
+osobnego 2. okna `garnet_full`. Procedura CDR per punkt/okno: near-Clifford treningi (ta sama
+struktura/routing) → wartości idealne dokładnie (stabilizator) → zaszumione (OFF: M kopii matched;
+ON: średnia M twirlowanych) → `fit_cdr`→(a,b,r²) → `apply_cdr` na targecie.
+
+**Twirl:** **logiczny** (pilot zadziałał; pewny) z uczciwą adnotacją, że natywny RC to przyszły
+refinement (layout-preservation niewalidowalny bez backendu; opcjonalny test 1-obwodowy przed pełną
+kampanią).
+
+**DWA CONFOUNDY I ICH KONTROLE (rdzeń rygoru — złapane w `--sim` przed wydaniem kredytów).**
+
+1. **Confound próbkowania (usunięty).** Ramię ON uśrednia M randomizacji → M× więcej shotów niż OFF
+   (1×). Samo to podnosi r² i obniża err — **niezależnie od koherencji**. Dowód: w `--sim` pod
+   **depolaryzacją** (szum niekoherentny, twirl nie ma czego usuwać) niezrównane M=10 dało ON≫OFF
+   (r² 0.72→0.87), a przy równym próbkowaniu M=1 dało ON≈OFF (a nawet gorzej). Cały „zysk" był
+   próbkowaniem. **Kontrola: `--match-shots` (domyślnie ON)** — OFF uśrednia M identycznych,
+   **nietwirlowanych** kopii → OFF i ON mają to samo próbkowanie; różnica ON−OFF izoluje **wyłącznie
+   supresję błędu koherentnego**.
+2. **Kara narzutu bramek (czyni claim konserwatywnym).** Twirlowany obwód ma dodatkowe bramki-owijki
+   Pauliego → odrobinę więcej szumu **niekoherentnego**. Twirl walczy więc z własnym narzutem →
+   zmierzone ON−OFF to **dolne ograniczenie** rzeczywistego zysku koherentnego. W `--sim` (depol,
+   matched) ON jest ≈ lub lekko < OFF — widać tę karę.
+
+**KOTWICA NULL (zmierzona — 3 sim-okna, matched, depol, per-okno twirl-seed).** Wynik:
+
+| punkt | null Δr² (mean±std) | pojedyncze |
+|---|---|---|
+| cz=33 optimal:star | **−0.002 ± 0.002** | −0.004, −0.002, −0.001 |
+| cz=87 adverse:a2a | **−0.016 ± 0.042** | −0.050, +0.031, −0.027 |
+| cz=90 optimal:a2a | **−0.022 ± 0.017** | −0.004, −0.037, −0.026 |
+| **trend** | **−0.030 ± 0.020 / 100 CZ** | „within drift" |
+
+Trzy wnioski: (i) null Δr² ≈ **0 lub lekko UJEMNY** — pod matched+depol twirl nie pomaga, a nawet
+lekko szkodzi (kara narzutu #3); kontrola matched zapadła zysk z niezrównanych +0.10–0.15 do ~0.
+(ii) null **trend płaski/ujemny** → pod szumem niekoherentnym NIE ma „zysk rośnie z routingiem";
+dodatni trend na sprzęcie jest więc **diagnostyczny dla koherencji**. (iii) floor ma realną szerokość
+przy wysokim CZ (**~±0.02–0.04**) → to kwantyfikuje próg.
+
+> **Reguła decyzji.** Zysk twirla na sprzęcie jest realny (koherentny) tylko gdy **hardware Δr² > 0
+> ORAZ > null-floor** (mean+std pod symulowanym szumem NIEKOHERENTNYM: ~**+0.02–0.04** przy 87–90 CZ),
+> **i** trend Δr² vs CZ jest **dodatni** (null trend jest płaski/ujemny). Uwaga na znak: werdykt
+> agregatora `|Δr²|>std` mierzy istotność MAGNITUDY — dla sprzętu czytamy dodatkowo ZNAK (Δr²>0).
+
+Framing pracy: *„pod symulowanym szumem niekoherentnym zrównany twirl daje floor ≈0/lekko ujemny bez
+trendu; na sprzęcie Δr² przekracza floor i ROŚNIE z routingiem → zysk jest specyficzny dla błędu
+KOHERENTNEGO, nie artefaktem próbkowania, fitu ani narzutu."* Sim-null raportujemy jako pasmo OBOK
+sprzętu na figurze głównej. **Uwaga do pilota:** pozytyw twirl+CDR (+0.03/+0.12/+0.07) był
+**niezrównany** → część to próbkowanie; kampania (b) MUSI go przemierzyć matched i porównać z null.
+
+**Model błędu (dwa poziomy).**
+- *Wewnątrz-okna*: szum shotów + rozrzut po eval-points + skończona wariancja M randomizacji.
+- *Między-oknami*: drift kalibracji.
+- **Paired ON−OFF kasuje common-mode drift** (oba mierzone w TYM SAMYM oknie) → pasmo na Δ (paired,
+  między-oknowe std) to właściwa statystyka efektu twirla. Absolutne `r²(OFF)`/`r²(ON)` też dostają
+  pasma driftu, ale te są zdominowane przez drift.
+
+**Protokół okien.**
+- Okno = jeden cykl kalibracji IQM. Okna MUSZĄ obejmować **różne cykle** (godziny/następny dzień) —
+  inaczej drift≈0 i pasma są sztucznie wąskie (bezużyteczne).
+- **≥2 okna** (minimum na std), **3 rekomendowane** (std z n=2 to bardzo słaby estymator).
+- **Niezależny seed twirla per okno** (zaimplementowane: seed = args.seed ⊕ hash(window_id)) → każde
+  okno losuje INNY zestaw M dressingów → między-oknowe std łapie **drift + wariancję randomizacji**
+  (uczciwe, szersze pasma). Konstrukcja CDR + transpile na stałym `args.seed` → śledzimy drift TEGO
+  SAMEGO estymatora, nie resampling treningu. Eval-targets stałe między oknami.
+- OFF i ON w tym samym oknie (paired).
+
+**Parametry (config matched).**
+
+| Parametr | Wartość | Uzasadnienie |
+|---|---|---|
+| match-shots | **ON** | usuwa confound próbkowania (rdzeń) |
+| M_twirl | **6** | matched 2×6=12 ≈ koszt starego niezrównanego M=10; w zakresie zbieżności RC 5–10 (Hashim) |
+| n_train | 10 | standard CDR (Czarnik) |
+| shots | 1024 | shots = główna dźwignia kosztu; 1024 utrzymuje wielookienność |
+| eval-points | 4 | rozrzut wewnątrz-okna |
+| okna | 3 (min 2) | ≥2 na std (BRKD-01) |
+| twirl-seed | per okno | drift + wariancja randomizacji w pasmach |
+| CDR/transpile seed | 42 (stały) | ten sam estymator śledzony |
+
+**Metryki + figura główna:** `Δr² = r²(ON)−r²(OFF)` (paired) vs CZ z pasmami między-oknowymi,
+**z nałożonym sim-null Δr²≈0**; ⟨O⟩-błąd analogicznie. Dwa testy:
+- *Istotność*: `|mean(Δr²)| > między-oknowe std`? Z n=2–3 okien raportujemy też **wszystkie
+  pojedyncze Δ per okno** (pokazuje spójność wprost, nie tylko słaby t z n−1 dof).
+- *Trend (kluczowy, spina z Core Value)*: nachylenie `Δr²` vs CZ per okno → mean±std nachylenia;
+  dodatnie = „zysk rośnie z routingiem".
+- *Cross-check*: `r²(OFF)` vs niezależny `garnet_cdr` (0.99→0.69) → okno reprezentatywne, nie
+  outlier kalibracji.
+
+**Koszt (dry-run, dokładny; 3 pkt CZ; config matched).** Matched M=6 kosztuje ~tyle co stare
+niezrównane M=10 (OFF 6 + ON 6 = 12 jednostek vs 1+10=11), ale jest rygorystyczne.
+
+| Config (matched, per okno) | ~cr/okno | 2 okna | 3 okna |
+|---|---|---|---|
+| M5/n10/E4/1024 (10 jedn.) | ~275 | ~550 | ~825 |
+| **Rekom.** M6/n10/E4/1024 (12 jedn.) | ~330 | ~660 | ~990 |
+| M6/n10/E5/1024 | ~412 | ~824 | — |
+
+Rekomendacja: **matched M6/n10/E4/1024 × 3 okna ≈ 990 cr** (× 2 ≈ 660 jeśli budżet ciasny).
+
+**Zagrożenia dla trafności (pełna lista, z kierunkiem i statusem).** Kolumna *kierunek*: czy dany
+efekt ZAWYŻA (na naszą korzyść — groźny) czy ZANIŻA (przeciw nam — bezpieczny, konserwatywny) mierzony
+zysk. Status: **naprawione** / **konserwatywne** (działa przeciw nam → nie może wygenerować fałszywego
+pozytywu) / **otwarte** (realne ograniczenie, spisane uczciwie).
+
+*A. Trafność wewnętrzna (czy ON−OFF mierzy naprawdę supresję błędu koherentnego?)*
+1. **Confound próbkowania** (ON dostaje M× shotów). Kierunek: ZAWYŻA. Status: **naprawione**
+   (`--match-shots`) — potwierdzone w sim: matched zapadł Δr² z ~0.10–0.15 do ~0.005–0.03.
+2. **Resztkowy floor null** (matched pod depol wciąż daje mały Δr² z szumu estymatora r²). Kierunek:
+   ZAWYŻA. Status: **naprawione regułą decyzji** — sprzęt musi przekroczyć zmierzony null-floor
+   (mean+std z sim-okien), nie tylko 0.
+3. **Kara narzutu bramek** (twirl dokłada owijki Pauliego → więcej szumu niekoherentnego + dłuższy
+   obwód → więcej dekoherencji T1/T2). Kierunek: ZANIŻA. Status: **konserwatywne** — zmierzone Δ to
+   dolne ograniczenie prawdziwego zysku koherentnego.
+4. **Twirl logiczny, nie natywny** — SWAP-y wstawione przez routing pozostają NIEotwirlowane; owijamy
+   tylko logiczne cx. Kierunek: ZANIŻA (mniej pokrycia → mniej usuniętej koherencji). Status:
+   **otwarte co do MAGNITUDY** (native RC dałby więcej), ale bezpieczne co do ZNAKU. Natywny twirl =
+   przyszły refinement / punkt (a).
+5. **Paired kasuje drift tylko przy współczesności OFF/ON** — runner submituje batch OFF, potem batch
+   ON (nie interleaved) → drift wewnątrz okna między batchami skaża parę. Kierunek: dowolny (szum).
+   Status: **otwarte, mitygowane** — okno = stabilny cykl kalibracji (drift wewnątrz-okna mały);
+   pełna mitygacja = interleaving OFF/ON w jednym jobie (możliwy refinement runnera).
+6. **r² jako proxy koherencji** — r² miesza nieliniowość koherentną z (usuniętym matchem) szumem
+   shotów i z ewentualną nieliniowością kanału niezwiązaną z koherencją. Kierunek: dowolny. Status:
+   **otwarte** — bezpośredni pomiar koherencji to URB (zrobione, poziom bramki, drift-swamped) /
+   cycle benchmarking (punkt a); (b) pokazuje zysk SPÓJNY z koherencją, nie mierzy jej wprost.
+
+*B. Trafność zewnętrzna (czy wnioski się uogólniają?)*
+7. **Jedno urządzenie (Garnet)** dla studium driftu — magnituda driftu i frakcja koherentna są
+   device-specific. Emerald dokłada oś topologii, ale **nie** niezależnej replikacji driftu. Status:
+   **otwarte** (zakres pracy: Garnet-resolved).
+8. **Jeden VQC / jedno zadanie / jedna obserwabla** (two_curves, mean-Z, model hard). Sygnatura
+   koherencji i zysk twirla mogą zależeć od struktury obwodu. Status: **otwarte** — uogólnienie na
+   inne obwody nieustalone.
+9. **CZ-count jako oś kosztu routingu** — różne placementy o podobnym CZ mają różny crosstalk/idle;
+   CZ to niedoskonałe jednowymiarowe podsumowanie „kosztu". Status: **otwarte** (uzupełnia je URB/
+   cycle-benchmarking na poziomie warstwy).
+
+*C. Trafność statystyczna*
+10. **n=2–3 okna → std z 1–2 dof** — bardzo słaby estymator; unikamy twardych p-value, raportujemy
+    WSZYSTKIE pojedyncze Δ per okno (spójność wprost). Status: **otwarte, mitygowane** (3 okna > 2).
+11. **Trend z 3 punktów CZ** — nachylenie wrażliwe na jeden punkt; claim „rośnie z routingiem" jest
+    **kierunkowy**, nie precyzyjny. Status: **otwarte** — więcej punktów CZ = przyszłe zagęszczenie.
+12. **Null-floor też szumny** (z kilku sim-okien) → reguła decyzji dziedziczy jego niepewność. Status:
+    **mitygowane** — sim-okna są darmowe, więc floor można zagęścić dowolnie (więcej seedów/E).
+
+*D. Trafność konstruktu*
+13. **„Frakcja koherentna" nie jest w (b) mierzona wprost** — wnioskujemy supresję z Δr² > null.
+    „predicted==measured" (H3) jest **świadomie poza zakresem (b)** → wymaga cycle benchmarking
+    (punkt a). (b) dowodzi, że twirl POMAGA w sposób spójny z koherencją; (a) domyka ILE.
+
+**Bilans:** wszystkie groźne kierunki (ZAWYŻAjące — #1, #2) są NAPRAWIONE; pozostałe realne
+ograniczenia albo działają PRZECIW nam (#3, #4 — konserwatywne, nie mogą sfabrykować pozytywu), albo
+są uczciwie spisanym zawężeniem ZAKRESU (#6–#9, #13 → domyka je punkt (a)/Emerald), albo słabością
+statystyczną łagodzoną przez raportowanie surowych per-okno Δ (#10–#12).
+
+**Deliverable:** główna figura twirlingu do raportu (`r²(OFF)`/`r²(ON)` vs transpiled CZ ze słupkami
+driftu, Δr² zaznaczone) + tabela per CZ (r² OFF/ON ± std, err OFF/ON ± std). Domyka główny wynik
+twirlingu na VQC; H3 (predicted==measured) pozostaje dla punktu (a).
+
+**Komendy (per okno — użytkownik, venv py3.11, IQM_RESONANCE_URL + IQM_TOKEN):**
+```
+# okno 1 (combined: raw+ZNE breakdown + CDR flagship, matched, ~340 cr) — --match-shots DOMYŚLNY
+python run_garnet_twirl.py --submit --arms raw cdr zne --twirl-arms cdr \
+  --points optimal:star optimal:all_to_all adverse:all_to_all \
+  --eval-points 4 --shots 1024 --n-train 10 --n-twirl 6 \
+  --window-id w1 --out garnet_twirl_w1.csv
+# okno 2 (inny cykl kalibracji — godziny/następny dzień, NIE od razu) — identycznie, --window-id w2 --out ...w2.csv
+# okno 3 (opcjonalne, lepszy estymator std) — --window-id w3 --out ...w3.csv
+python aggregate_twirl_windows.py garnet_twirl_w*.csv   # → paired Δr² ± między-oknowe std + werdykt + trend; raw/ZNE/CDR pasma breakdown
+# sim-null floor (za darmo, kotwica decyzji) — kilka sim-okien pod depol:
+#   for w in n1 n2 n3; do python run_garnet_twirl.py --sim --arms cdr --twirl-arms cdr \
+#     --points optimal:star optimal:all_to_all adverse:all_to_all --eval-points 4 --shots 1024 \
+#     --n-train 10 --n-twirl 6 --window-id $w --out null_$w.csv; done
+#   python aggregate_twirl_windows.py null_n*.csv   # → null Δr² mean±std = próg, który sprzęt musi przekroczyć
+```
+
+### 9d. EMERALD cross-topology (TOPO-02) — dwie opcje do decyzji budżetowej
+
+Emerald (54q, klasycznie niesymulowalny: 2^54) to **jedyny punkt QPU-only** i 3. topologia (po ODRA
+star, Garnet lattice) → sedno „cross-topology" z Core Value. **Bez twirla** (`--twirl-arms` puste) —
+brak `--sim` na Emeraldzie → twirl nienadwalidowany; twirl zostaje na Garnecie. Feasibility metod:
+ideały treningowe CDR są Cliffordowskie (symulowalne), ideał VQC = 5q statevector (trywialny), ZNE
+nie potrzebuje ideału → **raw/ZNE/CDR działają**; niesymulowalny jest tylko device-noisy-sim
+baseline → stąd **smoke-test** (1 obwód) zamiast walidacji sim. **1 okno** (bez driftu — drift na
+Garnecie). Koszt realny ≈ estymata ×1.5 (Emerald 0.75 vs Garnet 0.50 cr/s).
+
+| Opcja | Ramiona | Co daje | ~Real cr |
+|---|---|---|---|
+| **LEAN** | raw + zne | cross-topology breakdown + ZNE-decay na 3. topologii; zasila Spearman err–CZ i figurę frontier; TOPO-02 minimum | ~40 |
+| **FULL** (rekom.) | raw + cdr + zne | + crossover ZNE↔CDR na Emeraldzie → korelacja „przesunięcie crossover z topologią" (spina Core Value) | ~150 |
+
+Oba: 4 punkty (optimal/adverse × star/all_to_all), E4, shots 2048. Skoro tanio — można podbić
+eval-points/patterny. Komendy:
+```
+# smoke (kilka cr)
+python run_garnet_twirl.py --submit --device emerald --arms raw --twirl-arms \
+  --points optimal:star --eval-points 1 --shots 256 --window-id em_smoke --out em_smoke.csv
+# FULL
+python run_garnet_twirl.py --submit --device emerald --arms raw cdr zne --twirl-arms \
+  --points optimal:star adverse:star optimal:all_to_all adverse:all_to_all \
+  --eval-points 4 --shots 2048 --n-train 10 --window-id em1 --out emerald_xtopo.csv
+```
