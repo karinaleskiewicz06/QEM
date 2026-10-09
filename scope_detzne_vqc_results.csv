@@ -1,0 +1,5 @@
+pattern,cz,err_raw,err_check,err_zne,err_checkzne,acceptance,sane
+star,12,0.0548,0.137,0.0308,0.1235,0.5931,True
+linear,27,0.0794,0.1761,0.0593,0.1658,0.4898,False
+circular,36,0.1235,0.2048,0.0812,0.202,0.5046,False
+all_to_all,54,0.1675,0.2473,0.103,0.2235,0.5026,False

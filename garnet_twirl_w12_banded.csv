@@ -1,0 +1,28 @@
+placement,pattern,transpiled_cz,arm,twirl,n_windows,err_mean,err_std,r2_mean,r2_std,d_r2_mean,d_r2_std,d_err_mean,d_err_std,r2_significant,per_window_d_r2
+optimal,star,12,cdr,False,2,0.0406,0.011,0.9796,0.0069,,,,,,
+optimal,star,12,cdr,True,2,0.0291,0.0042,0.9853,0.0025,,,,,,
+optimal,star,12,cdr,DELTA(ON-OFF),2,,,,,0.0058,0.0093,-0.0115,0.0068,within-drift,w1:-0.001; w2:+0.012
+optimal,star,12,raw,False,2,0.0631,0.0204,,,,,,,,
+optimal,star,12,raw,True,0,,,,,,,,,,
+optimal,star,12,raw,DELTA(ON-OFF),0,,,,,,,,,,
+optimal,star,12,zne,False,2,0.0304,0.0093,,,,,,,,
+optimal,star,12,zne,True,0,,,,,,,,,,
+optimal,star,12,zne,DELTA(ON-OFF),0,,,,,,,,,,
+optimal,all_to_all,57,cdr,False,2,0.0661,0.0151,0.8506,0.0299,,,,,,
+optimal,all_to_all,57,cdr,True,2,0.0398,0.005,0.9175,0.0027,,,,,,
+optimal,all_to_all,57,cdr,DELTA(ON-OFF),2,,,,,0.0669,0.0326,-0.0262,0.0101,yes,w1:+0.090; w2:+0.044
+optimal,all_to_all,57,raw,False,2,0.1225,0.0052,,,,,,,,
+optimal,all_to_all,57,raw,True,0,,,,,,,,,,
+optimal,all_to_all,57,raw,DELTA(ON-OFF),0,,,,,,,,,,
+optimal,all_to_all,57,zne,False,2,0.0854,0.0103,,,,,,,,
+optimal,all_to_all,57,zne,True,0,,,,,,,,,,
+optimal,all_to_all,57,zne,DELTA(ON-OFF),0,,,,,,,,,,
+adverse,all_to_all,96,cdr,False,2,0.0687,0.0212,0.7874,0.083,,,,,,
+adverse,all_to_all,96,cdr,True,2,0.0289,0.0037,0.9039,0.0268,,,,,,
+adverse,all_to_all,96,cdr,DELTA(ON-OFF),2,,,,,0.1164,0.1098,-0.0398,0.0249,yes,w1:+0.039; w2:+0.194
+adverse,all_to_all,96,raw,False,2,0.12,0.0388,,,,,,,,
+adverse,all_to_all,96,raw,True,0,,,,,,,,,,
+adverse,all_to_all,96,raw,DELTA(ON-OFF),0,,,,,,,,,,
+adverse,all_to_all,96,zne,False,2,0.1099,0.0153,,,,,,,,
+adverse,all_to_all,96,zne,True,0,,,,,,,,,,
+adverse,all_to_all,96,zne,DELTA(ON-OFF),0,,,,,,,,,,

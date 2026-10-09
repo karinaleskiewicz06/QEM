@@ -1,0 +1,2 @@
+device,placement,pattern,transpiled_cz,per_pattern_weights,err_raw,err_cdr,acc_raw,acc_cdr,f1_raw,f1_cdr,err_zne,cdr_a,cdr_b,cdr_r2,dd,n_train,shots,effective_shots,source
+odra,optimal,star,52,True,0.2986,0.2339,0.72,0.74,0.7126,0.7348,,2.9218,-0.0379,0.4444,False,100,8192,827392,hardware

@@ -1,0 +1,4 @@
+bin,n,mean_abs_margin,acc_raw,acc_zne,recovery,observable,offset,shots,patterns
+near,60,0.137,0.4333,0.4,-0.0333,hub,0.1,4096,all_to_all+circular
+mid,60,0.3822,0.6167,0.6,-0.0167,hub,0.1,4096,all_to_all+circular
+far,60,0.6176,0.6167,0.65,0.0333,hub,0.1,4096,all_to_all+circular

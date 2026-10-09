@@ -1,0 +1,13 @@
+placement,pattern,transpiled_cz,arm,twirl,err,cdr_r2,n_twirl,shots
+optimal,star,12,cdr,False,0.0399,0.9567,1,1024
+optimal,star,12,cdr,True,0.0236,0.9858,6,1024
+optimal,star,12,zne,False,0.0829,,1,1024
+optimal,star,12,zne,True,0.0479,,6,1024
+optimal,all_to_all,57,cdr,False,0.0514,0.8201,1,1024
+optimal,all_to_all,57,cdr,True,0.0258,0.9389,6,1024
+optimal,all_to_all,57,zne,False,0.0532,,1,1024
+optimal,all_to_all,57,zne,True,0.0934,,6,1024
+adverse,all_to_all,96,cdr,False,0.0689,0.8374,1,1024
+adverse,all_to_all,96,cdr,True,0.0561,0.909,6,1024
+adverse,all_to_all,96,zne,False,0.0484,,1,1024
+adverse,all_to_all,96,zne,True,0.1184,,6,1024
