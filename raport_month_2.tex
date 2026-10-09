@@ -29,6 +29,19 @@
 \thispagestyle{empty}
 
 % =====================================================================
+% UWAGA ROBOCZA (usunąć przed finalnym wysłaniem):
+% Lista otwartych "kwiatków"/luk merytorycznych jest w project_review_gaps.md
+% i MUSI zostać w całości zweryfikowana i domknięta przed wysłaniem pracy.
+% =====================================================================
+\begin{center}
+\fbox{\parbox{0.92\textwidth}{\color{red}\small\textbf{NOTATKA ROBOCZA (usunąć przed wysłaniem):}
+przed złożeniem pracy należy w~całości sprawdzić i~domknąć listę otwartych luk
+merytorycznych w~pliku \texttt{project\_review\_gaps.md} (m.in. crossover metod,
+koszt cross-topology Emeralda, korelacja SWAP$\leftrightarrow$degradacja, pasma driftu,
+oraz niewykorzystane elementy gałęzi logicznej \texttt{[[4,2,2]]}).}}
+\end{center}
+
+% =====================================================================
 \section{Wprowadzenie: druga metoda mitygacji --- Clifford Data Regression}
 \label{sec:cdr-intro}
 % =====================================================================
@@ -310,6 +323,144 @@ błąd co ZNE, lecz ${\sim}67{\times}$ drożej.}
 \end{enumerate}
 
 % =====================================================================
+\section{Circuit twirling: tłumienie błędów koherentnych (wyprowadzenie)}
+% =====================================================================
+
+\paragraph{Motywacja.} Błąd bramki opisuje kanał kwantowy (odwzorowanie CPTP)
+$\mathcal{E}$. Rozróżniamy dwa reżimy. Błąd \emph{koherentny} jest sam unitarny,
+$\mathcal{E}(\rho)=V\rho V^\dagger$ (np.\ systematyczna nad-rotacja
+$V=e^{-i\theta Z/2}$): jest odwracalny, dodaje się w~\emph{amplitudzie}
+(po $N$ bramkach prawdopodobieństwo błędu $\sim(N\theta)^2$) i~\emph{systematycznie
+przesuwa} $\langle O\rangle$. Błąd \emph{stochastyczny} to mieszanina Pauliego
+$\mathcal{E}(\rho)=\sum_k p_k P_k\rho P_k$: dodaje się w~\emph{prawdopodobieństwie}
+($\sim Np$). Kluczowe: ZNE zakłada gładkie skalowanie szumu, a~CDR liniową relację
+$\langle O\rangle_{\text{ideal}}\!\approx\!a\langle O\rangle_{\text{noisy}}+b$ ---
+błędy koherentne łamią oba założenia.
+
+\paragraph{Macierz procesu $\chi$.} Dowolny kanał zapisujemy w~bazie Pauliego~\cite{nielsen2010}:
+\begin{equation}
+\mathcal{E}(\rho)=\sum_{a,b}\chi_{ab}\,P_a\,\rho\,P_b .
+\end{equation}
+Dla kanału unitarnego z~$V=\sum_a c_a P_a$ mamy $\chi_{ab}=c_a c_b^{*}$ (iloczyn
+zewnętrzny wektora współczynników). Diagonala $\chi_{aa}=|c_a|^2$ to stochastyczne
+prawdopodobieństwa błędów Pauliego; elementy \emph{poza-diagonalne} $\chi_{ab}$
+($a\neq b$) kodują część \emph{koherentną}. Przykład: $V=e^{-i\theta Z/2}
+=\cos\tfrac\theta2\,I-i\sin\tfrac\theta2\,Z$ daje
+$\chi_{II}=\cos^2\tfrac\theta2$, $\chi_{ZZ}=\sin^2\tfrac\theta2$ oraz
+niezerowe $\chi_{IZ}=\chi_{ZI}^{*}=i\cos\tfrac\theta2\sin\tfrac\theta2$.
+
+\paragraph{Twirl Pauliego zeruje poza-diagonalę.} Twirlowany kanał to średnia po
+grupie Pauliego~\cite{emerson2007,wallman2016}:
+\begin{equation}
+\mathcal{E}_T(\rho)=\frac{1}{4^n}\sum_k P_k^\dagger\,\mathcal{E}(P_k\rho P_k)\,P_k .
+\end{equation}
+Korzystając z~$P_kP_aP_k=(-1)^{\langle a,k\rangle}P_a$ (gdzie $\langle a,k\rangle\in\{0,1\}$
+to symplektyczny iloczyn: $0$ dla komutacji, $1$ dla antykomutacji):
+\begin{equation}
+\mathcal{E}_T(\rho)=\sum_{a,b}\chi_{ab}
+\underbrace{\Big[\tfrac{1}{4^n}\textstyle\sum_k(-1)^{\langle a\oplus b,\,k\rangle}\Big]}_{=\;\delta_{ab}}
+P_a\rho P_b=\sum_a\chi_{aa}\,P_a\rho P_a .
+\end{equation}
+Suma wewnętrzna to ortogonalność charakterów: znika, chyba że $a=b$. Intuicyjnie ---
+pole $\chi_{aa}$ mnoży się przez $(\pm1)^2\!=\!+1$ (zawsze przeżywa), pole
+$\chi_{ab}$ ($a\neq b$) przez naprzemienne $\pm1$, które sumują się do zera. Zatem
+twirl \textbf{kasuje część koherentną}, zostawiając czysto stochastyczny kanał
+Pauliego. Nad-rotacja $\theta$ staje się losowym $Z$-flipem o~prawdopodobieństwie
+$\sin^2\tfrac\theta2$, a~akumulacja błędu spada z~$\sim(N\theta)^2$ do~$\sim N\theta^2/4$.
+
+\paragraph{Randomized compiling (implementacja).} Kanału nie uśrednia się wprost ---
+\emph{randomizujemy obwód}~\cite{wallman2016}: każdą \emph{Cliffordowską} bramkę 2-kubitową
+$G$ zastępujemy $B\,G\,A$ z~losową Paulią $A$ i~kompensacją $B=GAG^\dagger$; wtedy
+$BGA=G$ (ideał zachowany), a~szum na $G$ jest twirlowany. $B$ jest Paulią
+\emph{tylko dlatego, że $G$ jest Cliffordem}. Bramki jednokubitowe (rotacje $R_x$,
+non-Clifford) \emph{wchłaniają} losowe Pauli do warstwy jednokubitowej --- bez
+dodatkowej głębi --- i~\emph{nie} są twirlowane bezpośrednio (dla non-Clifforda
+$GAG^\dagger$ nie jest Paulią). Uśrednienie $\langle O\rangle$ po $M$ losowych
+instancjach realizuje kanał twirlowany. Reżim eksperymentalny (odniesienie): RC na
+sprzęcie nadprzewodzącym stosuje $M\!\sim\!20$ randomizacji ($5$–$10$ wystarcza do
+zbieżności) i $\sim\!8192$ shotów na obwód~\cite{hashim2021}; CDR typowo $\sim\!10$
+obwodów treningowych near-Clifford~\cite{czarnik2021}. Nasza kampania celuje w ten
+reżim w pełnej wersji (metodologia §9b); pilot używa świadomie okrojonych
+$M\!=\!8$, shots $2048$.
+
+\paragraph{Konsekwencja dla ZNE i CDR.} Po twirlingu szum jest Pauliego, więc
+$\langle O\rangle(\lambda)$ maleje monotonicznie (poprawna ekstrapolacja ZNE), a~relacja
+$\langle O\rangle_{\text{ideal}}$–$\langle O\rangle_{\text{noisy}}$ jest liniowa
+(poprawny fit CDR). W~symulacji z~wstrzykniętą nad-rotacją $\theta=0{,}15$~rad/CX
+twirl+ZNE poprawia $\langle O\rangle$-błąd $\sim2{,}2\times$ względem samego ZNE, a~twirl+CDR
+przywraca $r^2$ dopasowania z~$0{,}81$ do~$0{,}99$ (błąd $0{,}109\!\to\!0{,}015$).
+To sugeruje, że obserwowany \emph{spadek} $r^2$ CDR z~kosztem 2q na sprzęcie
+(rozdz.~o~porównaniu metod) jest sygnaturą błędu koherentnego, którą twirling
+powinien odwrócić --- hipotezę tę zweryfikowaliśmy bezpośrednio na Garnecie (poniżej).
+
+\paragraph{Pilot na sprzęcie (Garnet).} IQM Resonance nie wystawia twirlingu serwerowo (tylko
+dynamical decoupling), więc realizujemy go \emph{client-side}: losowe Pauli wokół każdej bramki
+dwukubitowej, uśredniane po $M$ instancjach. Drabina trzech punktów kosztu routingu (12/57/96
+transpiled CZ na modelu \texttt{two\_curves} offset $0{,}1$), $n_{\text{train}}=10$, $M=6$, $3$
+punkty ewaluacji, $1024$ shoty. Dla CDR (najostrzejsza metryka --- jakość dopasowania $r^2$):
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+transpiled CZ & $r^2$ (bez twirl) & $r^2$ (twirl) & $\Delta r^2$ \\
+\midrule
+12 (optimal, star)       & 0{,}957 & 0{,}986 & $+0{,}029$ \\
+57 (optimal, all-to-all) & 0{,}820 & 0{,}939 & $+0{,}119$ \\
+96 (adverse, all-to-all) & 0{,}837 & 0{,}909 & $+0{,}072$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+$r^2$ bez twirlingu spada z~kosztem routingu (sygnatura błędu koherentnego łamiącego liniowość
+CDR), a~twirling przywraca je na~każdym punkcie, z~zyskiem rosnącym przy wysokim CZ --- co
+potwierdza mechanizm na~prawdziwym sprzęcie; błąd $\langle O\rangle$ CDR maleje po~twirlingu na
+każdym punkcie (np.\ $0{,}069\!\to\!0{,}056$ przy 96 CZ). Dla ZNE wynik jest \emph{mieszany}
+(twirling pomaga przy 12 CZ: $0{,}083\!\to\!0{,}048$, ale szkodzi przy 57/96 CZ), co przypisujemy
+osłabieniu twirlingu logicznego pod foldingiem ZNE oraz ograniczonej statystyce pilota --- wątek
+do rozstrzygnięcia w~wersji pełnej (twirling natywny, unitarity RB, pasma driftu; metodologia §9).
+
+\paragraph{Hipotezy.} Wyniki (sim + pilot sprzętowy) prowadzą do następujących hipotez, które
+wersja pełna ma zweryfikować ilościowo:
+\begin{itemize}
+\item[\textbf{H1}] Narzut routingu (liczba CZ) akumuluje \emph{koherentny} błąd, który łamie
+  liniowość dopasowania CDR --- $r^2$ CDR maleje z~kosztem 2q. \emph{(Wsparte: $r^2$ spada
+  $0{,}98\!\to\!0{,}49$ z~kosztem; pilot $0{,}96\!\to\!0{,}82$--$0{,}84$.)}
+\item[\textbf{H2}] Circuit twirling zamienia błąd koherentny w~stochastyczny i~\emph{przywraca}
+  liniowość CDR ($r^2$ rośnie), z~zyskiem rosnącym z~kosztem CZ. \emph{(Potwierdzone na Garnecie:
+  $\Delta r^2 = +0{,}03$/$+0{,}12$/$+0{,}07$ przy 12/57/96 CZ.)}
+\item[\textbf{H3}] Zysk twirlingu jest proporcjonalny do \emph{frakcji koherentnej} szumu ---
+  przewidywalny z~unitarity $u$ (mierzonej przez URB). \emph{(Do sprawdzenia: predicted$=$measured.)}
+\item[\textbf{H4}] CDR jest bardziej wrażliwe na koherencję niż ZNE (dopasowanie liniowe pęka;
+  ekstrapolacja ZNE jest odporniejsza) $\Rightarrow$ twirling pomaga CDR bardziej niż ZNE.
+  \emph{(Wsparte: pilot CDR jednoznaczny, ZNE mieszany.)}
+\item[\textbf{H5}] twirling$+$ZNE składa się, gdy frakcja koherentna jest wysoka (sim: 6/6 seedów
+  poprawy); na sprzęcie opłaca się tam, gdzie koherencja dominuje.
+\end{itemize}
+
+\paragraph{Decyzja: kampania twirlingu skupia się na CDR (nie ZNE).} Podkreślamy, że
+\emph{nie} rezygnujemy z~ZNE jako metody --- ZNE pozostaje na~osi porównania metod
+(crossover ZNE/CDR). Rezygnujemy z~\emph{kombinacji} twirling$+$ZNE jako osobnego wyniku,
+z~trzech spójnych powodów: (i)~ekstrapolacja ZNE jest z~natury \emph{odporna} na~błąd
+koherentny (nie opiera się na~dopasowaniu liniowym, w~przeciwieństwie do~CDR, którego fit
+liniowy koherencja łamie --- H4), więc twirling ma tam mało do~zyskania; (ii)~pomiar URB$+$RB
+wskazuje, że frakcja koherentna \emph{na~poziomie bramki} jest mała i~utopiona w~drifcie
+($u-p^2\approx0{,}02$ przy drifcie $\approx0{,}09$), a~sim pokazuje zysk twirling$+$ZNE tylko
+przy \emph{dużej} koherencji --- czego Garnet nie ma; (iii)~na~sprzęcie twirling$+$ZNE
+\emph{szkodził} przy wysokim koszcie 2q (narzut twirlingu $>$ zysk, gdy koherencji mało).
+Wniosek: twirling wnosi wartość tam, gdzie metoda jest \emph{wrażliwa na~koherencję} (CDR), a~nie
+tam, gdzie jest na~nią odporna (ZNE). Kampania pełna (§9b) mierzy więc twirling$+$CDR z~pasmami
+driftu oraz koherencję \emph{na~poziomie obwodu} (właściwy predyktor), pomijając kosztowne
+gate-URB (drift zaciera sygnał).
+
+\paragraph{Plan weryfikacji i koszt (wersja pełna, §9b).} (1) \textbf{Unitarity RB} na krawędziach
+Garneta (opt.\ i~adverse) $\to$ zmierzona frakcja koherentna $u$ [$\sim$150 cr];
+(2) \textbf{twirling natywny} zamiast logicznego; (3) pełna drabina CZ, $M{=}10$--$20$ randomizacji,
+$n_{\text{train}}{=}10$, wyższe shoty, $5$--$8$ punktów ewaluacji [$\sim$600--900 cr];
+(4) \textbf{pasma driftu} ($\ge 2$ okna kalibracji) na~kluczowym punkcie [$\sim$200 cr];
+(5) \textbf{test H3}: czy zysk twirlingu zgadza się z~przewidywaniem z~$u$. Łącznie
+$\sim$1000--1300 kredytów (pełny reżim literaturowy $M{=}20$/shots$=$8192 na~całej drabinie
+przekroczyłby budżet, więc skalujemy). Wynik: sprzętowa, ilościowo przewidywalna charakteryzacja
+tego, kiedy twirling odzyskuje skuteczność mitygacji pod narzutem routingu.
+
+% =====================================================================
 \begin{thebibliography}{99}
 % =====================================================================
 
@@ -317,6 +468,26 @@ błąd co ZNE, lecz ${\sim}67{\times}$ drożej.}
 \bibitem{cai2023}
 Z. Cai, R. Babbush, S. C. Benjamin, S. Endo, W. J. Huggins, Y. Li, J. R. McClean,
 T. E. O'Brien, \emph{Quantum Error Mitigation}, arXiv:2210.00921 (2023).
+
+% --- Circuit twirling / randomized compiling ---
+\bibitem{wallman2016}
+J. J. Wallman, J. Emerson, \emph{Noise tailoring for scalable quantum computation
+via randomized compiling}, Phys. Rev. A \textbf{94}, 052325 (2016); arXiv:1512.01098.
+
+\bibitem{hashim2021}
+A. Hashim, R. K. Naik, A. Morvan, J.-L. Ville, B. Mitchell, J. M. Kreikebaum, M. Davis,
+E. Smith, C. Iancu, K. P. O'Brien, I. Hincks, J. J. Wallman, J. Emerson, I. Siddiqi,
+\emph{Randomized Compiling for Scalable Quantum Computing on a Noisy Superconducting
+Quantum Processor}, Phys. Rev. X \textbf{11}, 041039 (2021); arXiv:2010.00215.
+
+\bibitem{emerson2007}
+J. Emerson, M. Silva, O. Moussa, C. Ryan, M. Laforest, J. Baugh, D. G. Cory,
+R. Laflamme, \emph{Symmetrized characterization of noisy quantum processes},
+Science \textbf{317}, 1893 (2007); arXiv:0707.0685.
+
+\bibitem{nielsen2010}
+M. A. Nielsen, I. L. Chuang, \emph{Quantum Computation and Quantum Information},
+Cambridge University Press (2010) --- reprezentacja $\chi$ (macierz procesu).
 
 \bibitem{temme2017}
 K. Temme, S. Bravyi, J. M. Gambetta, \emph{Error mitigation for short-depth quantum
