@@ -1,0 +1,27 @@
+{
+  "dataset": "two_curves",
+  "n_samples": 300,
+  "n_features": 8,
+  "degree": 8,
+  "offset": 0.1,
+  "noise": 0.01,
+  "feature_range": [
+    -3.141592653589793,
+    3.141592653589793
+  ],
+  "n_qubits": 5,
+  "n_layers": 6,
+  "entanglement": "star",
+  "entangling_gate": "cx",
+  "readout": "mean",
+  "observable": "(1/n) sum_i Z_i (mean-Z)",
+  "num_weights": 100,
+  "transpiled_cz_odra": 24,
+  "transpiled_depth_odra": 61,
+  "routing_overhead_cz": 0,
+  "train_acc": 0.7777777777777778,
+  "test_acc": 0.7166666666666667,
+  "seed": 42,
+  "weights_file": "two_curves_d8_q5_deg8_star_mean_L6_weights.npy",
+  "note": "O\u015a G\u0141\u0118BOKO\u015aCI: kontrola dla tezy o narzucie routingu. Zero bramek SWAP."
+}

@@ -16,7 +16,6 @@
 \usetikzlibrary{positioning,decorations.pathreplacing}
 \hypersetup{colorlinks=true, linkcolor=NavyBlue, citecolor=NavyBlue, urlcolor=NavyBlue,
             linktoc=all, pdfborder={0 0 0}}
-\newcommand{\todo}[1]{\textcolor{red}{[\textbf{TODO:} #1]}}
 \newcommand{\expv}{\langle O\rangle}
 
 \begin{document}
@@ -33,7 +32,7 @@ na sprzęcie nadprzewodzącym\par}
 
 \vspace{3cm}
 {\Large Karina Leskiewicz\par}
-\vspace{0.4cm}
+
 
 
 \vfill
@@ -393,7 +392,7 @@ testowym.
 \paragraph{Kodowanie danych i~jego uzasadnienie.} Cechy wprowadzamy metodą \emph{data
 re-uploading}: ten sam wektor cech kodujemy w~kątach obrotów $R_y(x)$ wielokrotnie -- w~każdej
 z~$L$ warstw ansatzu, przeplatając go warstwami parametrów trenowalnych (Rys.~\ref{fig:ansatz}).
-Wybór ten jest optymalny w~świetle wyniku Schulda, Swekego i~Meyera~\cite{schuld2021}, którzy
+Wybór ten jest konieczny w~świetle wyniku Schulda, Swekego i~Meyera~\cite{schuld2021}, którzy
 wykazali, że model wariacyjny z~kodowaniem kątowym realizuje \emph{skończony szereg Fouriera}
 zmiennej wejściowej:
 \begin{equation}
@@ -425,7 +424,7 @@ występuje w~czterech wariantach (Rys.~\ref{fig:ansatz}), które różnią się 
 par splątanych, a~tym samym -- po transpilacji -- kosztem routingu. To właśnie ten wybór, wraz ze
 strategią rozmieszczenia, generuje drabinę 12--114~bramek CZ.
 
-\begin{figure}[htbp]
+\begin{figure}[!ht]
 \centering
 % #1 = etykieta wariantu, #2 = szerokosc bloku entangling, #3 = zawartosc CZ
 \newcommand{\ansatzcirc}[3]{%
@@ -647,7 +646,7 @@ transwersalnie tylko operacje Cliffordowskie, a~ciągłe obroty do nich nie nale
 weryfikacji przewyższył zysk z~post-selekcji, zgodnie z~wcześniejszymi obserwacjami dla układów
 pięciokubitowych~\cite{vuillot2018,linke2017}. 
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Zestawienie metod: naprawiany rodzaj błędu, zakładany model i~warunki załamania.}
 \label{tab:metody}
 \begin{tabular}{lp{2.7cm}p{3.2cm}p{4.6cm}}
@@ -752,7 +751,7 @@ statystycznych, zbieramy je jawnie w~Tabeli~\ref{tab:zalozenia}. Kolumna ,,okna'
 niezależnych cykli kalibracyjnych: wartość 1 oznacza, że wynik nie ma pasma dryfu i~należy go czytać
 jako pojedynczą realizację.
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Założenia pomiarowe poszczególnych kampanii. ,,Pomiary'' to liczba powtórzeń obwodu;
 ,,punkty ew.'' -- liczba różnych wektorów cech; ,,powt.'' -- niezależne powtórzenia całego pomiaru.}
 \label{tab:zalozenia}
@@ -793,14 +792,14 @@ i~\emph{nie zawiera} twirlingu: urządzenie 54-kubitowe jest klasycznie niesymul
 się dla niego zbudować kontroli zerowej wymaganej przez powyższą regułę decyzji.
 
 % =====================================================================================
-\section{Walidacja potoku i~punkt wyjścia: ODRA}\label{sec:miesiac1}
+\section{Walidacja pipelinu i~punkt wyjścia: ODRA}\label{sec:miesiac1}
 
 Pomiary na urządzeniu ODRA (IQM Spark, topologia gwiazdy) stanowią punkt wyjścia całego badania:
-ustalają konwencje pomiarowe, weryfikują zgodność potoku ,,symulacja $\leftrightarrow$ sprzęt''
+ustalają konwencje pomiarowe, weryfikują zgodność pipelinu ,,symulacja $\leftrightarrow$ sprzęt''
 i~dostarczają pierwszej obserwacji motywującej oś routingu. Drabina obejmuje 12--54~CZ, przy
 \textbf{4096 pomiarach na obwód, 30 punktach ewaluacyjnych i~3 powtórzeniach}.
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Miesiąc 1, ODRA: błąd $\varepsilon$ bez mitygacji i po ZNE (ekstrapolacja Richardsona) wzdłuż
 drabiny routingu. Zysk ZNE maleje monotonicznie z kosztem routingu.}
 \label{tab:m1}
@@ -844,7 +843,7 @@ Pierwsze pytanie brzmi, czy załamanie CDR pod narzutem routingu jest własnośc
 urządzenia, czy zjawiskiem ogólnym. Odpowiedź daje zestawienie trzech topologii na wspólnej osi
 kosztu (Tabela~\ref{tab:xtopo}, Rysunek~\ref{fig:xtopo}).
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Jakość dopasowania CDR ($r^2$) wzdłuż drabiny routingu na trzech topologiach; w~nawiasach
 liczba bramek CZ po transpilacji. Wartości dla Garneta uśredniono po trzech oknach kalibracyjnych.
 Drabina Garneta obejmuje trzy punkty, a~nie cztery, ponieważ kampania twirlingowa na tym urządzeniu
@@ -862,7 +861,7 @@ Emerald (krata, 54q) & 0{,}962 (21) & 0{,}961 (63) & 0{,}873 (69) & 0{,}683 (114
 \end{tabular}
 \end{table}
 
-\begin{figure}[h]\centering
+\begin{figure}[!ht]\centering
   \includegraphics[width=0.75\textwidth]{fig1_cross_topology.png}
   \caption{Jakość dopasowania CDR ($r^2$) w funkcji liczby bramek CZ po transpilacji, dla trzech
   topologii nadprzewodzących. Obszar zacieniony oznacza region załamania ($r^2<0{,}8$), w którym
@@ -904,13 +903,13 @@ CDR. Aby wykazać, że tym czymś jest błąd \emph{koherentny}, przeprowadzono 
 symulacyjny, w którym znamy naturę szumu, a protokół pomiarowy jest identyczny jak na sprzęcie
 (te same parametry, ta sama kontrola zrównana na liczbie pomiarów, te same okna).
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Symulacja towarzysząca: zysk twirlingu $\Delta r^2 = r^2(\text{ON}) - r^2(\text{OFF})$ przy
 kontroli zrównanej na liczbie pomiarów, w trzech reżimach szumu. Niepewności to odchylenia
 standardowe między oknami. Pod szumem niekoherentnym twirling nie przynosi zysku; pod szumem
 koherentnym zysk rośnie z~kosztem routingu i skaluje się z~amplitudą koherencji.}
 \label{tab:mechanizm}
-\begin{tabular}{lcccc}
+\small\begin{tabular}{lcccc}
 \toprule
 Reżim szumu & 33 CZ & 87 CZ & 90 CZ & trend (na 100 CZ) \\
 \midrule
@@ -947,7 +946,7 @@ z~poziomu \emph{obwodu} -- z~kumulacji na łańcuchach SWAP, okresach bezczynno�
 a nie z pojedynczej operacji. Ilościowe domknięcie tej ścieżki (przewidziany $=$ zmierzony zysk)
 wymagałoby \emph{cycle benchmarkingu} na poziomie warstwy i pozostaje zadaniem otwartym.
 
-\begin{figure}[h]\centering
+\begin{figure}[!ht]\centering
   \includegraphics[width=0.72\textwidth]{fig2_companion_sim.png}
   \caption{Symulacja towarzysząca: zysk twirlingu $\Delta r^2$ w funkcji kosztu routingu dla trzech
   reżimów szumu, przy kontroli zrównanej na liczbie pomiarów. Pod szumem niekoherentnym efekt jest
@@ -983,7 +982,7 @@ Jeżeli mechanizmem załamania jest błąd koherentny, to konwersja tego błędu
 przywrócić liniowość CDR -- i to tym silniej, im większy narzut routingu. Hipotezę tę zweryfikowano
 na żywym urządzeniu Garnet.
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Garnet: sparowany zysk twirlingu przy kontroli zrównanej na liczbie pomiarów, z~trzech
 okien kalibracyjnych. Niepewności to odchylenia standardowe między oknami.}
 \label{tab:twirl}
@@ -1008,7 +1007,7 @@ $-0{,}013$) jest większy niż sam efekt. W~konsekwencji \emph{trend względem l
 istotny statystycznie} (Spearman $\rho=+0{,}32$, $p=0{,}41$; $n=9$). Twirling pomaga zatem istotnie w~reżimie pośredniego kosztu routingu, natomiast przy koszcie
 najwyższym dryf kalibracyjny dominuje nad efektem.
 
-\begin{figure}[h]\centering
+\begin{figure}[!ht]\centering
   \includegraphics[width=\textwidth]{fig3_twirl_hardware.png}
   \caption{(a) Zysk twirlingu wobec kosztu routingu z~pasmami dryfu; istotny przy 57~CZ, przy 96~CZ
   zdominowany przez dryf. (b) Ten sam zbiór punktów przedstawiony wobec jakości dopasowania bez
@@ -1096,7 +1095,7 @@ Poprzednie sekcje opisują mechanizm i~jego neutralizację; ta umieszcza je w~ko
 praktycznym: \emph{która metoda opłaca się przy jakim budżecie bramek}. Tabela~\ref{tab:progi}
 zestawia wszystkie trzy podejścia na wspólnej osi kosztu.
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Błąd $\varepsilon$ bez mitygacji, po CDR i po ZNE wzdłuż drabin routingu trzech urządzeń.
 Pogrubiono metodę najlepszą w~danym punkcie.}
 \label{tab:progi}
@@ -1125,7 +1124,7 @@ kalibracyjnym.}
 \end{tabular}
 \end{table}
 
-\begin{figure}[h]\centering
+\begin{figure}[!ht]\centering
   \includegraphics[width=\textwidth]{fig4_method_comparison.png}
   \caption{Błąd $\varepsilon$ bez mitygacji, po CDR i po ZNE wzdłuż drabin routingu trzech urządzeń.
   ZNE wygrywa przy niskim koszcie routingu, CDR przy wyższym; przy 114~CZ (Emerald) żadna metoda nie
@@ -1166,7 +1165,7 @@ mechanizmowi. Oba mechanizmy razem wyjaśniają wszystkie siedem obserwacji. Szc
 punkt Emerald 21~CZ, w~którym zmierzone obciążenie $0{,}0370$ leży praktycznie na przewidzianej
 granicy $0{,}0378$, i~w~którym ZNE faktycznie zaszkodziło.
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Przewidywanie granicy~\eqref{eq:granica} wobec danych. Wartość $V\approx0{,}2$ oszacowano
 analitycznie dla obserwabla średniego~$Z$ na pięciu kubitach; nie dopasowywano żadnego parametru
 do~danych.}
@@ -1212,7 +1211,7 @@ obciążenia zmierzonego bezpośrednio.
 obciążeniu, przy budżetach 96--2048 pomiarów, 12 powtórzeniach i~6 punktach ewaluacyjnych
 (Tabela~\ref{tab:kappa}). Prognoza została potwierdzona.
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Wynik testu pre-rejestrowanej prognozy. Wartość $\kappa$ wyznaczono z~wyrazu wolnego
 dopasowania~\eqref{eq:kappa-fit}, przy $V$ zmierzonym niezależnie z~rozkładu zliczeń. Żaden parametr
 nie był dopasowywany do danych.}
@@ -1256,7 +1255,7 @@ teoria przewiduje $\kappa = 4{,}00$ dokładnie (współczynniki Richardsona $\tf
 Protokół, urządzenie i~analiza pozostały bez zmian; zmienił się wyłącznie zbiór węzłów. Wyniki
 zebrano w~Tabeli~\ref{tab:kappa2}.
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Test ogólności prawa $\kappa$: ta sama procedura, dwa różne zbiory węzłów o~przewidywanych
 wartościach różniących się $3{,}66$-krotnie. Wartości zmierzone pochodzą z~wyrazu wolnego
 dopasowania~\eqref{eq:kappa-fit}; ponownie żaden parametr nie był dopasowywany do danych.}
@@ -1299,7 +1298,7 @@ ekstrapolacja Richardsona degeneruje się do przeskalowania pojedynczego pomiaru
 diagnostykę retencji sygnału, $R=|\expv(\lambda_{\max})|/|\expv(\lambda{=}1)|$, w~symulacji
 odwzorowującej drabinę routingu (Tabela~\ref{tab:retencja}).
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Diagnostyka retencji sygnału ZNE. Przy niskim koszcie routingu sygnał przeżywa składanie
 i~liczby ZNE są wiarygodne; przy wysokim koszcie $\expv$ osiąga podłogę obserwabla już przy
 $\lambda=5$, co plasuje ten reżim w~strefie artefaktu opisanej w~\cite{koster2026}.}
@@ -1348,7 +1347,7 @@ odległość topologiczna ($+0{,}79$, $p=0{,}02$) i liczba SWAP ($+0{,}71$, $p=0
 korelacja z~CZ wynosi $+1{,}00$. Uzasadnia to przyjęcie liczby CZ jako podstawowej osi kosztu, przy
 zastrzeżeniu, że jest to podsumowanie jednowymiarowe.
 
-\begin{figure}[h]\centering
+\begin{figure}[!ht]\centering
   \includegraphics[width=0.72\textwidth]{fig5_correlation_map.png}
   \caption{Mapa korelacji rangowej Spearmana między miarami kosztu routingu a~miarami degradacji
   (Garnet). Liczba punktów podana w~każdej komórce; wiersze CDR opierają się na czterech punktach
@@ -1378,7 +1377,7 @@ z~$0{,}776$ przy 24~CZ do $0{,}215$--$0{,}277$ przy 66--150~CZ.
 Ciekawsze od samego spadku jest to, \emph{z~czym} mirror infidelity koreluje, a~z~czym nie.
 Zestawienie na wspólnych ośmiu punktach drabiny (Tabela~\ref{tab:mirror}) daje obraz jednoznaczny.
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Korelacje rangowe mirror infidelity z~pozostałymi wielkościami, na ośmiu wspólnych
 punktach drabiny Garneta. Gwiazdka oznacza $p<0{,}05$.}
 \label{tab:mirror}
@@ -1503,14 +1502,16 @@ istotną co wybór samej metody mitygacji.
 \section{Odtwarzalność: repozytorium}\label{sec:odtwarzalnosc}
 
 Każda teza pracy daje się odtworzyć z~kodu i~danych zawartych w~repozytorium
-(Tabela~\ref{tab:repo}). Flaga \texttt{--sim}
-uruchamia identyczny potok na symulatorze (bezkosztowo), a~\texttt{--resume} pozwala dokończyć
+(Tabela~\ref{tab:repo}), dostępnym pod adresem
+\begin{center}\url{https://github.com/karinaleskiewicz06/QEM}\end{center}
+w~gałęzi \texttt{month2-topology-port}. Flaga \texttt{--sim}
+uruchamia identyczny pipeline na symulatorze (bezkosztowo), a~\texttt{--resume} pozwala dokończyć
 przerwaną kampanię bez ponownego opłacania już zebranych punktów.
 
-\begin{table}[h]\centering
+\begin{table}[!ht]\centering
 \caption{Mapowanie: teza $\to$ skrypt $\to$ dane.}
 \label{tab:repo}
-\begin{tabular}{p{4.4cm}p{4.6cm}p{5.0cm}}
+\footnotesize\begin{tabular}{p{4.0cm}p{4.6cm}p{5.4cm}}
 \toprule
 Teza / wynik & Skrypt & Dane \\
 \midrule

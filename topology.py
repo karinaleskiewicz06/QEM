@@ -150,6 +150,11 @@ HARDWARE_PLACEMENTS: dict[str, dict[str, list[int] | None]] = {
     # PENDING live-hardware validation via the smoke-test before the full run; if the smoke fails
     # (a dead qubit / missing edge on the live map), re-derive from backend_coupling_map('emerald').
     "emerald": {"optimal": [10, 1, 9, 11, 19], "adverse": [0, 53, 6, 30, 45]},
+    # ODRA (IQM Spark, 5q star): the 5-qubit logical circuit FILLS the device, so there is no
+    # placement freedom at all — the layout is the identity and "adverse" does not exist. The
+    # routing ladder on ODRA therefore comes entirely from the entanglement pattern
+    # (star 12 CZ / linear 27 / circular 36 / all_to_all 54), not from placement.
+    "odra": {"optimal": [0, 1, 2, 3, 4]},
     # code-block (4 data qubits) placements for the [[4,2,2]] arm:
     "garnet_qec": {"optimal": None, "adverse": None},
     "emerald_qec": {"optimal": None, "adverse": None},

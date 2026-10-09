@@ -94,6 +94,9 @@ def expval_meanz(counts, coeffs, wires):
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--device", default="garnet")
+    ap.add_argument("--native-twirl", action="store_true",
+                    help="owijaj bramki PO transpilacji, wiec takze CZ pochodzace ze SWAP-ow "
+                         "(domyslnie owijane sa tylko bramki logiczne -> zysk jest dolnym ograniczeniem)")
     ap.add_argument("--points", nargs="+", default=["optimal:star", "adverse:all_to_all"],
                     help='ladder of "placement:pattern" points spanning low->high CZ')
     ap.add_argument("--models-dir", default="trained_models_hard")
@@ -155,7 +158,12 @@ def main() -> None:
         return c.assign_parameters(dict(zip(wp, weights))), xp
 
     if args.submit:
-        from iqm_resonance import get_backend, transpile_for_backend, run_circuits
+        # ODRA idzie przez iqm-client (wlasny adapter), Garnet/Emerald przez Resonance.
+        # Oba adaptery maja identyczny interfejs, wiec dalszy kod jest provider-agnostyczny.
+        if args.device == "odra":
+            from odra_backend import get_backend, transpile_for_backend, run_circuits
+        else:
+            from iqm_resonance import get_backend, transpile_for_backend, run_circuits
         backend = get_backend(args.device)
         def tpile(c, layout): return transpile_for_backend(c, backend, initial_layout=layout)
         def run(circs): return run_circuits(backend, circs, args.shots)
@@ -220,7 +228,8 @@ def main() -> None:
           f"{len(X)} eval pts | shots {args.shots} | M_twirl {args.n_twirl} | n_train {args.n_train} "
           f"| match_shots {args.match_shots} (OFF averages {off_mult} copy/ies)")
     print(f"  circuits {tot_circuits} ({per_pt}/point) | shots {total_shots} | jobs {jobs}")
-    print(f"  ESTIMATED COST: ~{est:.1f} credits")
+    print("  COST: ODRA access is not metered in Resonance credits" if args.device == "odra"
+          else f"  ESTIMATED COST: ~{est:.1f} credits")
 
     if not (args.submit or args.sim):
         print("\n[DRY-RUN] built + sanity OK, nothing submitted. Add --submit (or --sim) to run.")
@@ -269,14 +278,26 @@ def main() -> None:
             path); readout via perqubit_z_from_counts (clbit/logical order, NOT physical wire)."""
             flat, ksizes = [], []
             for bound, twirl, fold, kcopies in specs:
-                if twirl:
+                if twirl and args.native_twirl:
+                    # NATYWNY: najpierw transpilacja (router wstawia SWAP-y), potem owinięcie
+                    # WSZYSTKICH bramek natywnych. twirl_native emituje wrappery jako bramki `r`
+                    # i nie zmienia łączności, więc powtórna transpilacja nie jest potrzebna.
+                    base = measured(bound, fold)
+                    reps = [twirl_native(base, rng) for _ in range(args.n_twirl)]
+                    pre = True
+                elif twirl:
+                    # LOGICZNY (domyślny): owijane są tylko bramki obwodu logicznego; bramki CZ
+                    # pochodzące ze SWAP-ów pozostają nieowinięte -> zysk jest dolnym ograniczeniem.
                     reps = [twirl_native(bound, rng) for _ in range(args.n_twirl)]
+                    pre = False
                 elif kcopies > 1:
                     reps = [bound] * kcopies
+                    pre = False
                 else:
                     reps = [bound]
+                    pre = False
                 ksizes.append(len(reps))
-                flat.extend(measured(b, fold) for b in reps)
+                flat.extend(reps if pre else [measured(b, fold) for b in reps])
             counts = run(flat)
             vals = [float(np.dot(coeffs, perqubit_z_from_counts(c, n))) for c in counts]
             out, i = [], 0

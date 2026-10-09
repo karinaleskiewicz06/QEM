@@ -10,7 +10,8 @@ PROTOKÓŁ jest celowo IDENTYCZNY z `run_garnet_cdr.py` --- inaczej liczby nie b
 
   * jeden zbiór treningowy bliski Cliffordowi na wzorzec, zbudowany z obwodu-kotwicy w x_mean
     (ta sama struktura i ten sam routing co obwody ewaluacyjne);
-  * wartości idealne obwodów treningowych liczone dokładnie w formalizmie stabilizatorowym;
+  * wartości idealne obwodów treningowych liczone dokładnie statewektorem (obwody są
+    Cliffordowskie, więc przy większej skali wystarczy symulator stabilizatorowy);
   * JEDNO dopasowanie ideal ~ a*noisy + b na wzorzec, r^2 raportowane jako sonda koherencji;
   * zbiór treningowy i obwody ewaluacyjne w tym samym zgłoszeniu, bo dryf jest główną słabością CDR.
 
@@ -60,6 +61,9 @@ def main() -> None:
     ap.add_argument("--n-train", type=int, default=100)
     ap.add_argument("--shots", type=int, default=8192)
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--layers", type=int, default=None,
+                    help="nadpisz liczbe warstw ansatzu (OS GLEBOKOSCI: kontrola dla tezy o "
+                         "narzucie routingu; wymaga wag z train_star_depth.py)")
     ap.add_argument("--max-batch", type=int, default=100,
                     help="obwodów na jedno zgłoszenie (dzielimy wsad na porcje)")
     ap.add_argument("--url", default=os.environ.get("IQM_SERVER_URL", ""))
@@ -71,10 +75,19 @@ def main() -> None:
     args = ap.parse_args()
 
     _, observable, cfg = load_frozen_model(models_dir=args.models_dir)
+    base_layers = cfg["n_layers"]          # warstwy modelu zamrozonego (plik referencyjny)
+    if args.layers is not None:
+        # OS GLEBOKOSCI: ten sam wzorzec, wiecej warstw -> wiecej CZ przy ZEROWYM routingu.
+        cfg = {**cfg, "n_layers": args.layers}
+        print(f"[os glebokosci] n_layers {base_layers} -> {args.layers} "
+              f"(zero narzutu routingu; wagi z train_star_depth.py)")
     n = cfg["n_qubits"]
     md = pathlib.Path(args.models_dir)
+    # Podzbior ewaluacyjny NIE zalezy od liczby warstw -- to podzial zbioru danych, nie model.
+    # Plik referencyjny czytamy wiec zawsze z tagu modelu zamrozonego (base_layers), zeby os
+    # glebokosci ewaluowala sie na DOKLADNIE tych samych punktach co os routingu.
     tag = (f"two_curves_d{cfg['n_features']}_q{n}_deg{cfg['degree']}_"
-           f"{cfg['entanglement']}_{cfg['readout']}_L{cfg['n_layers']}")
+           f"{cfg['entanglement']}_{cfg['readout']}_L{base_layers}")
     ref = np.load(md / f"{tag}_reference.npz")
     X_eval, y_eval = ref["X_eval"][: args.eval_points], ref["y_eval"][: args.eval_points]
     star_weights = np.load(md / cfg["weights_file"])
@@ -127,7 +140,13 @@ def main() -> None:
         ptag = (f"two_curves_d{cfg['n_features']}_q{n}_deg{cfg['degree']}_"
                 f"{pattern}_{cfg['readout']}_L{cfg['n_layers']}")
         wp = md / f"{ptag}_weights.npy"
-        return np.load(wp) if wp.exists() else star_weights
+        if wp.exists():
+            return np.load(wp)
+        if args.layers is not None:
+            # cichy fallback na wagi L=3 dalby obwod o zlej liczbie parametrow -> lepiej padnac
+            raise SystemExit(f"brak wag dla L={cfg['n_layers']}: {wp}\n"
+                             f"uruchom najpierw: python train_star_depth.py --layers {cfg['n_layers']}")
+        return star_weights
 
     rows = []
     for pattern in args.patterns:

@@ -109,7 +109,10 @@ def main() -> None:
     cmap = device_coupling_map(args.device)
 
     if args.submit:
-        from iqm_resonance import get_backend, transpile_for_backend, run_circuits
+        if args.device == "odra":
+            from odra_backend import get_backend, transpile_for_backend, run_circuits
+        else:
+            from iqm_resonance import get_backend, transpile_for_backend, run_circuits
         backend = get_backend(args.device)
         def tpile(c, layout): return transpile_for_backend(c, backend, initial_layout=layout)
         def run(circs, shots): return run_circuits(backend, circs, shots)
@@ -141,8 +144,10 @@ def main() -> None:
         print(f"     {_n:<14} B={_b:.4f} -> S* ~ {kappa*0.2/_b**2:.0f}")
     print(f"\nPLAN: {args.device} | punkty {args.points} | budżety {args.budgets} | "
           f"reps {args.reps} | eval {len(X)}")
-    print(f"  obwodów {circ} | pomiarów {tot_shots} | jobów {jobs} | "
-          f"~{tot_shots*0.0002 + jobs*0.33:.1f} kredytów")
+    # ODRA nie jest rozliczana kredytami Resonance -- nie strasz uzytkownika cena, ktorej nie ma
+    _cost = ("dostep niemierzony kredytami" if args.device == "odra"
+             else f"~{tot_shots*0.0002 + jobs*0.33:.1f} kredytow")
+    print(f"  obwodów {circ} | pomiarów {tot_shots} | jobów {jobs} | {_cost}")
     if not (args.submit or args.sim):
         print("\n[DRY-RUN] nic nie wysłano. Dodaj --sim (za darmo) albo --submit.")
         return
