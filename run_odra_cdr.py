@@ -47,7 +47,8 @@ from noisy_sim import (
     execute_expectation, DeviceCalibration,
 )
 from shots_to_target import cdr_effective_shots
-from zne_dryrun import native_transpile, fold_global, extrapolate, SCALE_FACTORS
+from zne_dryrun import native_transpile, fold_global, SCALE_FACTORS
+from qem.zne import diagnose_point
 from run_hardware import qiskit_to_iqm, perqubit_z_iqm, submit_batch, fetch_counts
 from topology import device_coupling_map
 
@@ -77,6 +78,27 @@ def _record(natives, counts, vals, tags) -> None:
                                 reduction=REDUCTION, **tag)
 
 
+def _zne_summary(pts: list[dict]) -> dict:
+    """Mean <O> per scale, flag counts and collapse diagnostics over the eval points.
+
+    Columns are always present so the CSV shape does not depend on ``--zne``.
+    """
+    keys = ([f"mean_lam{s}" for s in SCALE_FACTORS]
+            + ["fallback_used", "unphysical", "retention_norm", "snr_lmax", "w_neg"])
+    if not pts:
+        return dict.fromkeys(keys, "")
+    out = {f"mean_lam{s}": round(float(np.mean([p[f"ev_lam{s}"] for p in pts])), 4)
+           for s in SCALE_FACTORS}
+    out.update({
+        "fallback_used": sum(p["fallback_used"] for p in pts),
+        "unphysical": sum(p["unphysical"] for p in pts),
+        "retention_norm": round(float(np.nanmean([p["retention_norm"] for p in pts])), 4),
+        "snr_lmax": round(float(np.mean([p["snr_lmax"] for p in pts])), 3),
+        "w_neg": round(float(np.mean([p["w_neg"] for p in pts])), 5),
+    })
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -102,6 +124,9 @@ def main() -> None:
     ap.add_argument("--sim", action="store_true", help="walidacja na symulatorze (bez kredytów)")
     ap.add_argument("--zne", action="store_true",
                     help="dodaj ramię ZNE w TYM SAMYM wsadzie (raw/CDR/ZNE w jednych warunkach)")
+    ap.add_argument("--legacy-clamp", action="store_true",
+                    help="ZNE: stary cichy fallback na fit liniowy przy |E|>1.25; domyslnie "
+                         "estymata zostaje, a wiersz dostaje flagi unphysical / fallback_used")
     ap.add_argument("--out", default="odra_cdr_results.csv")
     args = ap.parse_args()
     require_locked_environment(allow_mismatch=args.allow_env_mismatch)
@@ -164,7 +189,8 @@ def main() -> None:
         REDUCTION = "expval_z_sum"
         print("\n[--sim] pełny potok na symulatorze (bez kredytów)\n")
 
-    def run_natives(natives: list, tags: list | None = None) -> list[float]:
+    def run_natives(natives: list, tags: list | None = None,
+                    return_counts: bool = False) -> list[float]:
         """Wykonaj natywne obwody i zwróć ⟨O⟩ dla każdego (kolejność zachowana).
 
         Gdy ``RECORDER`` jest aktywny (P0), każdy obwód trafia razem ze swoimi surowymi
@@ -181,8 +207,9 @@ def main() -> None:
                      for c in natives]
             vals = [v for v, _ in pairs]
             _record(natives, [cnt for _, cnt in pairs], vals, tags)
-            return vals
+            return (vals, [cnt for _, cnt in pairs]) if return_counts else vals
         vals: list[float] = []
+        all_counts: list[dict] = []
         for s in range(0, len(natives), args.max_batch):
             chunk = natives[s: s + args.max_batch]
             job = submit_batch(client, [qiskit_to_iqm(c) for c in chunk], args.shots, dd_on=False)
@@ -194,7 +221,8 @@ def main() -> None:
             _record(chunk, counts, chunk_vals,
                     tags[s: s + args.max_batch] if tags else None)
             vals += chunk_vals
-        return vals
+            all_counts += counts
+        return (vals, all_counts) if return_counts else vals
 
     def weights_for(pattern: str) -> np.ndarray:
         ptag = (f"two_curves_d{cfg['n_features']}_q{n}_deg{cfg['degree']}_"
@@ -249,11 +277,12 @@ def main() -> None:
             tags += [{"circuit_id": f"{pattern}/eval{i:03d}/lam{s_}", "pattern": pattern,
                       "arm": "zne", "role": "eval", "point_index": i, "scale": int(s_),
                       "transpiled_cz": n2q} for i in range(len(eval_circs))]
-        vals = run_natives(natives, tags)
+        vals, counts = run_natives(natives, tags, return_counts=True)
 
         a, b, r2 = fit_cdr(vals[: len(train)], ideal_train)
         base = len(train)
         err_raw, err_cdr, err_zne, pred_raw, pred_cdr = [], [], [], [], []
+        zne_pts = []
         for e, ideal in enumerate(ideal_eval):
             raw = vals[base + e]
             cdr_val = apply_cdr(raw, a, b)
@@ -261,9 +290,16 @@ def main() -> None:
             err_cdr.append(abs(cdr_val - ideal)); pred_cdr.append(np.sign(cdr_val))
             if args.zne:
                 # skala 1 to `raw`; kolejne bloki po len(X_eval) wartości na skalę
-                sv = [raw] + [vals[base + len(X_eval) * (1 + k) + e]
-                              for k in range(len(extra_scales))]
-                err_zne.append(abs(extrapolate(SCALE_FACTORS, sv, "richardson") - ideal))
+                idx = [base + e] + [base + len(X_eval) * (1 + k) + e
+                                    for k in range(len(extra_scales))]
+                sv = [vals[i] for i in idx]
+                d = diagnose_point(SCALE_FACTORS, sv, ideal=ideal,
+                                   legacy_clamp=args.legacy_clamp,
+                                   bound=float(np.sum(np.abs(coeffs))),
+                                   counts_per_scale=[counts[i] for i in idx], coeffs=coeffs,
+                                   bit_order="iqm" if args.submit else "qiskit")
+                zne_pts.append(d)
+                err_zne.append(abs(d["zne"] - ideal))
 
         row = {
             "device": "odra", "placement": "optimal", "pattern": pattern,
@@ -276,6 +312,8 @@ def main() -> None:
             "f1_cdr": round(macro_f1(y_eval, pred_cdr), 4),
             "err_zne": round(float(np.mean(err_zne)), 4) if err_zne else "",
             "cdr_a": round(a, 4), "cdr_b": round(b, 4), "cdr_r2": round(r2, 4),
+            # P3: ZNE flags and collapse diagnostics (empty without --zne)
+            **_zne_summary(zne_pts),
             "dd": False,
             "n_train": args.n_train, "shots": args.shots,
             "effective_shots": int(cdr_effective_shots(args.shots, args.n_train)),

@@ -126,6 +126,22 @@ so any run without an explicit `--scales` raised `UnboundLocalError`. The archiv
 campaigns worked only because `--scales` was always passed. Fixed in P0, with a
 regression test.
 
+**ZNE estimates were silently clamped.** `zne_dryrun.extrapolate` replaced every
+Richardson (or exponential) estimate with `|E| > 1.25` by the linear fit, without a
+record. Every archived ZNE error -- the twirl campaigns, `odra_full_100pt.csv`, the κ
+campaigns -- went through it, and since only means were stored, how often it fired is
+unrecoverable. It hides overshoots, which is what Koster & Mauerer's checklist asks to
+see, and at small budgets it changes the estimator's variance, which is what κ
+measures. Since P3 the campaign runners keep the raw estimate and write
+`unphysical` / `fallback_used`; `--legacy-clamp` reproduces the old numbers.
+
+**`R > 0.3` was a decision rule.** `zne_signal_retention.py` labelled a rung "safe" from
+`R = |<O>(λ_max)| / |<O>(1)|`. When the signal is already on the floor at λ = 1, R is a
+ratio of two floors (the 39-CZ ODRA rung: R = 0.81 / 0.67 at `|<O>(1)| = 0.04`). R
+stays as a column; normalised retention, SNR(λ_max), W_neg and the garbage-folding
+control replace it. The same script also wrote by default over the archived
+`zne_signal_retention.csv` in the root; it now writes to `results_sim/`.
+
 ## 7. Excluded runs
 
 **2026-10-12, ODRA native twirl.** Jobs reached the device, then the server answered with

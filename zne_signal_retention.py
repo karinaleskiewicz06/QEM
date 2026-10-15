@@ -11,11 +11,18 @@ sprzętowy kampanii w ogóle wpada w strefę zagrożenia. Raportuje też <O> na 
 ekstrapolacji, żeby pokazać, czy Richardson wychodzi poza zakres fizyczny [-1, 1].
 
     python zne_signal_retention.py --points optimal:star optimal:all_to_all adverse:all_to_all
+
+P3: R zostaje kolumną, ale przestaje być regułą decyzyjną. Gdy sygnał znika już przy
+lambda=1, R jest ilorazem dwóch wielkości na podłodze i niczego nie rozstrzyga. Obok R
+raportowane są retencja znormalizowana |<O>(1)|/|O_ideal| oraz SNR = |<O>(lambda_max)|/SE.
+Progi dla nich ustala symulacja przed kampanią (sim/calibrate_wneg_null.py), nie ten
+skrypt. Dawny werdykt (R<0.15 / R<0.30): --legacy-verdict.
 """
 from __future__ import annotations
 
 import argparse
 import csv
+import pathlib
 
 import numpy as np
 from qiskit import transpile
@@ -27,6 +34,7 @@ from noisy_sim import (
     make_noisy_simulator, DeviceCalibration, IQM_BASIS_GATES,
 )
 from zne_dryrun import SCALE_FACTORS, extrapolate, fold_global
+from qem.zne import expval_se, retention_normalized
 from topology import device_coupling_map, hardware_placement
 
 
@@ -40,12 +48,14 @@ def main() -> None:
     ap.add_argument("--shots", type=int, default=1024)
     ap.add_argument("--p2q", type=float, default=0.01)
     ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--out", default="zne_signal_retention.csv")
+    # nowe wyniki do results_sim/: zne_signal_retention.csv w katalogu glownym to archiwum
+    ap.add_argument("--out", default="results_sim/zne_signal_retention.csv")
+    ap.add_argument("--legacy-verdict", action="store_true",
+                    help="dopisz dawny werdykt z progow R<0.15 / R<0.30")
     args = ap.parse_args()
 
     _, observable, cfg = load_frozen_model(models_dir=args.models_dir)
     n = cfg["n_qubits"]
-    import pathlib
     md = pathlib.Path(args.models_dir)
     tag = f"two_curves_d{cfg['n_features']}_q{n}_deg{cfg['degree']}_star_{cfg['readout']}_L{cfg['n_layers']}"
     X = np.load(md / f"{tag}_reference.npz")["X_eval"][: args.eval_points]
@@ -71,7 +81,7 @@ def main() -> None:
         circ_w = c.assign_parameters(dict(zip(wpar, weights)))
 
         per_scale = {s: [] for s in SCALE_FACTORS}
-        ideals, extraps = [], []
+        ideals, extraps, ses = [], [], []
         n2q = None
         for x in X:
             target = circ_w.assign_parameters(dict(zip(xp, x)))
@@ -87,6 +97,8 @@ def main() -> None:
                 counts = sim.run(tc, shots=args.shots).result().get_counts()
                 v = float(np.dot(coeffs, perqubit_z_from_counts(counts, n)))
                 vals.append(v); per_scale[s].append(v)
+                if s == max(SCALE_FACTORS):
+                    ses.append(expval_se(counts, coeffs))
             extraps.append(extrapolate(SCALE_FACTORS, vals, "richardson"))
 
         m = {s: float(np.mean(np.abs(per_scale[s]))) for s in SCALE_FACTORS}
@@ -96,24 +108,31 @@ def main() -> None:
         n_unphys = sum(1 for e in extraps if abs(e) > 1.0)
         err_raw = float(np.mean([abs(i - v) for i, v in zip(ideals, per_scale[1])]))
         err_zne = float(np.mean([abs(i - e) for i, e in zip(ideals, extraps)]))
-        verdict = ("KOLAPS — liczby ZNE niewiarygodne" if R < 0.15 else
-                   "ryzyko graniczne" if R < 0.30 else "sygnał zachowany")
+        ret_norm = float(np.nanmean([retention_normalized(v, i)
+                                     for v, i in zip(per_scale[1], ideals)]))
+        snr = float(np.mean([abs(v) / se for v, se in zip(per_scale[smax], ses)]))
+        verdict = (("KOLAPS — liczby ZNE niewiarygodne" if R < 0.15 else
+                    "ryzyko graniczne" if R < 0.30 else "sygnał zachowany")
+                   if args.legacy_verdict else "")
         print(f"  {placement:>8}:{pattern:<11} cz={n2q:>3} | |O| ideal={mi:.3f} "
               f"lam1={m[1]:.3f} lam3={m[3]:.3f} lam5={m[5]:.3f}")
-        print(f"      retencja R=|O(5)|/|O(1)| = {R:.3f} -> {verdict} | "
+        print(f"      R=|O(5)|/|O(1)| = {R:.3f} | retencja/ideal = {ret_norm:.3f} | "
+              f"SNR(lam_max) = {snr:.1f}" + (f" -> {verdict}" if verdict else "") + " | "
               f"err_raw={err_raw:.4f} err_zne={err_zne:.4f} | poza [-1,1]: {n_unphys}/{len(extraps)}")
         rows.append({"placement": placement, "pattern": pattern, "transpiled_cz": n2q,
                      "abs_ideal": round(mi, 4), "abs_lam1": round(m[1], 4),
                      "abs_lam3": round(m[3], 4), "abs_lam5": round(m[5], 4),
-                     "retention_R": round(R, 4), "err_raw": round(err_raw, 4),
+                     "retention_R": round(R, 4), "retention_norm": round(ret_norm, 4),
+                     "snr_lmax": round(snr, 3), "err_raw": round(err_raw, 4),
                      "err_zne": round(err_zne, 4), "n_unphysical": n_unphys, "verdict": verdict})
 
+    pathlib.Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     with open(args.out, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
     print(f"\nzapisano {args.out}")
-    print("ODCZYT: R < 0.15 => sygnał skolapsował na największej skali; ekstrapolacja Richardsona")
-    print("degeneruje się do przeskalowania jednego pomiaru (arXiv:2607.09360) i raportowana")
-    print("poprawa ZNE jest artefaktem. R > 0.30 => reżim bezpieczny.")
+    print("ODCZYT: niski SNR przy lambda_max i niska retencja/ideal => Richardson degeneruje się")
+    print("do przeskalowania jednego pomiaru (arXiv:2607.09360). Rozstrzyga kontrola garbage-")
+    print("folding i W_neg (sim/calibrate_wneg_null.py), nie samo R.")
 
 
 if __name__ == "__main__":

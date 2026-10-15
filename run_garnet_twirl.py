@@ -39,11 +39,12 @@ from noisy_sim import (
     IQM_BASIS_GATES,
 )
 from cdr import near_clifford_training_circuits, clifford_ideal_expval, fit_cdr, apply_cdr
-from zne_dryrun import SCALE_FACTORS, extrapolate, fold_global
+from zne_dryrun import SCALE_FACTORS, fold_global
 from topology import device_coupling_map, hardware_placement, star_coupling_map
 
 from qem.env_check import require_locked_environment, add_env_argument
 from qem.provenance import RunRecorder
+from qem.zne import diagnose_point
 
 PAULIS = ["I", "X", "Y", "Z"]
 
@@ -165,6 +166,10 @@ def main() -> None:
                          "(default: <device>_twirl)")
     ap.add_argument("--no-provenance", action="store_true",
                     help="skip manifest and counts.jsonl (legacy CSV-only behaviour)")
+    ap.add_argument("--legacy-clamp", action="store_true",
+                    help="ZNE: stare zachowanie -- Richardson z |E|>1.25 po cichu zastepowany "
+                         "fitem liniowym. Domyslnie estymata zostaje, a wiersz dostaje flagi "
+                         "unphysical / fallback_used (Koster & Mauerer, arXiv:2607.09360)")
     add_env_argument(ap)
     ap.add_argument("--out", default="garnet_twirl_results.csv")
     ap.add_argument("--resume", action="store_true",
@@ -305,11 +310,23 @@ def main() -> None:
         print("\n[--sim] running full pipeline on noisy simulator (no credits)\n")
     fieldnames = (["window", "placement", "pattern", "transpiled_cz", "arm", "twirl",
                    "err", "cdr_r2", "n_avg", "shots"]
-                  + [f"abs_lam{s}" for s in SCALE_FACTORS] + ["retention_R"])
+                  + [f"abs_lam{s}" for s in SCALE_FACTORS] + ["retention_R"]
+                  # P3: <O> per scale (signed), flags and collapse diagnostics, averaged
+                  # over eval points; per-point values go to the *_zne_points.csv sidecar
+                  + [f"mean_lam{s}" for s in SCALE_FACTORS]
+                  + ["fallback_used", "unphysical", "retention_norm", "snr_lmax",
+                     "w_neg", "w_neg_marg"])
+    zne_points_path = pathlib.Path(args.out).with_name(pathlib.Path(args.out).stem
+                                                       + "_zne_points.csv")
+    zne_points_new = not zne_points_path.exists()
     done = set()
     if args.resume and os.path.exists(args.out):
         with open(args.out, newline="") as f:
-            for r in csv.DictReader(f):
+            rd = csv.DictReader(f)
+            if rd.fieldnames and list(rd.fieldnames) != fieldnames:
+                raise SystemExit(f"{args.out} has a different header (written before P3?); "
+                                 "--resume would misalign columns. Use a new --out.")
+            for r in rd:
                 done.add((r["placement"], r["pattern"]))
         print(f"[resume] {len(done)} point(s) already in {args.out}: {sorted(done)}")
     _new = not (os.path.exists(args.out) and os.path.getsize(args.out) > 0)
@@ -332,7 +349,7 @@ def main() -> None:
             c.measure_all()
             return tpile(c, layout)
 
-        def eval_groups(specs):
+        def eval_groups(specs, return_counts=False):
             """Batched executor. specs = list of (bound, twirl, fold, kcopies). Each spec expands to
             kcopies circuits (M native-r-twirled if twirl, else kcopies identical untwirled), ALL
             flattened and submitted in ONE run() (which chunks <=100/job) -> ~13x fewer QPU jobs than
@@ -375,10 +392,11 @@ def main() -> None:
                         f"{GROUP_TAG}/s{lab['spec_index']}/c{lab['copy_index']}",
                         cnt, native=native, t_1q=T_1Q, t_2q=T_2Q,
                         expval=val, coeffs=list(map(float, coeffs)), **lab)
-            out, i = [], 0
+            out, grouped, i = [], [], 0
             for k in ksizes:
-                out.append(float(np.mean(vals[i:i + k]))); i += k
-            return out
+                out.append(float(np.mean(vals[i:i + k])))
+                grouped.append(counts[i:i + k]); i += k
+            return (out, grouped) if return_counts else out
 
         n2q = sum(1 for i in measured(circ_w.assign_parameters(dict(zip(xp, X[0])))).data
                   if i.operation.name in ("cz", "cx"))
@@ -408,11 +426,28 @@ def main() -> None:
                         errs.append(abs(ideal - apply_cdr(tv, a, b)))
                 elif arm == "zne":
                     specs = [(target, twirl, s, off_copies) for target in targets for s in SCALE_FACTORS]
-                    vals = eval_groups(specs)
+                    vals, grouped = eval_groups(specs, return_counts=True)
                     ns = len(SCALE_FACTORS)
+                    bound = float(np.sum(np.abs(coeffs)))
+                    pts = []
                     for xi, ideal in enumerate(ideals):
                         zv = vals[xi * ns:(xi + 1) * ns]
-                        errs.append(abs(ideal - extrapolate(SCALE_FACTORS, zv, "richardson")))
+                        # copies of one scale are pooled: W_neg and SNR see what the
+                        # averaged estimator sees
+                        d = diagnose_point(SCALE_FACTORS, zv, ideal=ideal,
+                                           legacy_clamp=args.legacy_clamp, bound=bound,
+                                           counts_per_scale=grouped[xi * ns:(xi + 1) * ns],
+                                           coeffs=coeffs)
+                        errs.append(abs(ideal - d["zne"]))
+                        pts.append(d)
+                    with open(zne_points_path, "a", newline="") as fz:
+                        head = {"window": args.window_id, "placement": placement,
+                                "pattern": pattern, "transpiled_cz": n2q, "twirl": twirl,
+                                "legacy_clamp": args.legacy_clamp}
+                        wz = csv.DictWriter(fz, fieldnames=[*head, "point_index", *pts[0]])
+                        if zne_points_new:
+                            wz.writeheader(); zne_points_new = False
+                        wz.writerows({**head, "point_index": i, **d} for i, d in enumerate(pts))
                     # Signal-retention diagnostic (Köster & Mauerer, arXiv:2607.09360): if <O> has
                     # collapsed toward the observable floor (0 for mean-Z) at the largest folding
                     # scale, Richardson degenerates into a rescaling of a single measurement and the
@@ -422,6 +457,18 @@ def main() -> None:
                                  for k in range(ns)]
                     zne_diag = {f"abs_lam{SCALE_FACTORS[k]}": round(per_scale[k], 4) for k in range(ns)}
                     zne_diag["retention_R"] = round(per_scale[-1] / per_scale[0], 4) if per_scale[0] > 0 else ""
+                    # R is kept as a column only. It is no longer a decision rule: at a
+                    # point whose signal is gone at scale 1 it is a ratio of two floors.
+                    zne_diag.update({f"mean_lam{SCALE_FACTORS[k]}":
+                                     round(float(np.mean([p[f"ev_lam{SCALE_FACTORS[k]}"] for p in pts])), 4)
+                                     for k in range(ns)})
+                    zne_diag.update({
+                        "fallback_used": sum(p["fallback_used"] for p in pts),
+                        "unphysical": sum(p["unphysical"] for p in pts),
+                        "retention_norm": round(float(np.nanmean([p["retention_norm"] for p in pts])), 4),
+                        "snr_lmax": round(float(np.mean([p["snr_lmax"] for p in pts])), 3),
+                        "w_neg": round(float(np.mean([p["w_neg"] for p in pts])), 5),
+                        "w_neg_marg": round(float(np.mean([p["w_neg_marg"] for p in pts])), 5)})
                 else:  # raw: uncorrected ⟨O⟩-error (breakdown baseline, drift-banded across windows)
                     vals = eval_groups([(t, twirl, 1, off_copies) for t in targets])
                     errs = [abs(ideal - v) for ideal, v in zip(ideals, vals)]

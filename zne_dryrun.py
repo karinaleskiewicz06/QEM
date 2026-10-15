@@ -100,13 +100,25 @@ def _clamped(value: float, fallback: float) -> float:
     return value
 
 
-def extrapolate(scales, values, kind: str) -> float:
+def extrapolate(scales, values, kind: str, *, on_unphysical: str = "clamp",
+                bound: float = 1.0):
     """Zero-noise extrapolation. kind in {linear, richardson, exponential}.
 
-    Non-linear fits are clamped to a physically plausible range; a blow-up
-    (|estimate| > 1.25 or non-finite) is itself a breakdown indicator and we
-    fall back to the linear estimate so one bad point does not corrupt the mean.
+    ``on_unphysical="clamp"`` (the default, kept so archived scripts reproduce): a
+    non-linear fit that blows up (|estimate| > 1.25 or non-finite) is replaced by
+    the linear estimate, **silently**, and a float is returned.
+
+    ``on_unphysical="flag"``: no replacement. Returns a
+    :class:`qem.zne.ZNEEstimate` carrying the raw estimate and the flags
+    ``unphysical`` (outside ``[-bound, bound]``) and ``fallback_used``. The campaign
+    runners use this unless ``--legacy-clamp`` is given; the silent fallback hid
+    exactly the overshoots Koster & Mauerer (arXiv:2607.09360) ask to be reported.
     """
+    if on_unphysical == "flag":
+        from qem.zne import extrapolate_flagged
+        return extrapolate_flagged(scales, values, kind, bound=bound)
+    if on_unphysical != "clamp":
+        raise ValueError(f"on_unphysical must be 'clamp' or 'flag'; got {on_unphysical!r}")
     x = np.asarray(scales, float)
     y = np.asarray(values, float)
     linear = float(np.polyval(np.polyfit(x, y, 1), 0.0))
