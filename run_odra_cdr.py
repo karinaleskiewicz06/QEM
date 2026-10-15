@@ -56,6 +56,8 @@ PATTERNS = ("star", "linear", "circular", "all_to_all")
 
 RECORDER = None          # P0: ustawiany w main(); None wylacza zapis surowych danych
 T_1Q, T_2Q = 20e-9, 60e-9
+COEFFS = None            # wspolczynniki obserwabli; ustawiane w main()
+REDUCTION = "dot_perqubit"   # sciezka sprzetowa; symulator przestawia na expval_z_sum
 
 
 def _record(natives, counts, vals, tags) -> None:
@@ -70,7 +72,9 @@ def _record(natives, counts, vals, tags) -> None:
         tag = (tags[i] if tags and i < len(tags) else {}) or {}
         cid = tag.pop("circuit_id", f"{tag.get('point', 'p?')}/c{i}")
         RECORDER.record_circuit(cid, counts[i] if counts else {}, native=native,
-                                t_1q=T_1Q, t_2q=T_2Q, expval=float(val), **tag)
+                                t_1q=T_1Q, t_2q=T_2Q, expval=float(val),
+                                coeffs=list(map(float, COEFFS)),
+                                reduction=REDUCTION, **tag)
 
 
 def main() -> None:
@@ -102,7 +106,7 @@ def main() -> None:
     args = ap.parse_args()
     require_locked_environment(allow_mismatch=args.allow_env_mismatch)
 
-    global RECORDER
+    global RECORDER, COEFFS, REDUCTION
     if not args.no_provenance:
         RECORDER = RunRecorder.open(args.campaign or "odra_cdr", window_id=args.window_id,
                                     args=vars(args), seed=args.seed, device="odra",
@@ -127,6 +131,7 @@ def main() -> None:
     X_eval, y_eval = ref["X_eval"][: args.eval_points], ref["y_eval"][: args.eval_points]
     star_weights = np.load(md / cfg["weights_file"])
     coeffs = observable_coeffs(observable, n)
+    COEFFS = coeffs
     x_mean = X_eval.mean(axis=0)
 
     # ZNE dokłada obwody złożone (fold) w skalach >1; skala 1 to te same obwody, co ramię raw
@@ -153,6 +158,10 @@ def main() -> None:
         cmap = device_coupling_map("odra")
         _cal = DeviceCalibration(num_qubits=n, coupling_map=cmap, p_2q=0.01)
         _sim = make_noisy_simulator(_cal)
+        # execute_expectation redukuje przez expval_z_from_counts, a sciezka
+        # sprzetowa przez np.dot(coeffs, perqubit_z): roznia sie kolejnoscia
+        # sumowania, wiec rebuild musi wiedziec, ktora odtwarzac.
+        REDUCTION = "expval_z_sum"
         print("\n[--sim] pełny potok na symulatorze (bez kredytów)\n")
 
     def run_natives(natives: list, tags: list | None = None) -> list[float]:
@@ -165,9 +174,13 @@ def main() -> None:
         if not args.submit:
             # pre_transpiled=True: obwody są już w bazie {r, cz} i nie wolno ich
             # przekompilować --- zniknęłaby struktura routingu, którą badamy
-            vals = [execute_expectation(c, observable, _sim, shots=args.shots, cal=_cal,
-                                        pre_transpiled=True) for c in natives]
-            _record(natives, None, vals, tags)
+            # return_counts=True: bez surowych zliczen rekord w counts.jsonl nie da sie
+            # odtworzyc, a to jest caly sens archiwum (P0).
+            pairs = [execute_expectation(c, observable, _sim, shots=args.shots, cal=_cal,
+                                         pre_transpiled=True, return_counts=True)
+                     for c in natives]
+            vals = [v for v, _ in pairs]
+            _record(natives, [cnt for _, cnt in pairs], vals, tags)
             return vals
         vals: list[float] = []
         for s in range(0, len(natives), args.max_batch):

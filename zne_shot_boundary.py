@@ -78,6 +78,7 @@ def per_shot_variance_from_counts(counts, coeffs, n):
 
 RECORDER = None          # P0: manifest + counts.jsonl; None = stare zachowanie
 _REC_SEQ = [0]
+COEFFS = None            # wspolczynniki obserwabli; ustawiane w main()
 
 
 def _record(circs, counts, shots) -> None:
@@ -93,7 +94,9 @@ def _record(circs, counts, shots) -> None:
         i = _REC_SEQ[0]; _REC_SEQ[0] += 1
         RECORDER.record_circuit(f"kappa/c{i:05d}", cnt, native=c,
                                 t_1q=T_1Q, t_2q=T_2Q, with_qasm=False,
-                                arm="zne", shots_requested=int(shots))
+                                arm="zne", shots_requested=int(shots),
+                                coeffs=None if COEFFS is None else list(map(float, COEFFS)),
+                                reduction="dot_perqubit")
 T_1Q, T_2Q = 20e-9, 60e-9
 
 def main() -> None:
@@ -126,7 +129,7 @@ def main() -> None:
     args = ap.parse_args()
     require_locked_environment(allow_mismatch=args.allow_env_mismatch)
 
-    global RECORDER
+    global RECORDER, COEFFS
     if not args.no_provenance:
         RECORDER = RunRecorder.open(args.campaign, window_id=args.window_id,
                                     args=vars(args), seed=getattr(args, 'seed', None),
@@ -146,6 +149,7 @@ def main() -> None:
     tag = f"two_curves_d{cfg['n_features']}_q{n}_deg{cfg['degree']}_star_{cfg['readout']}_L{cfg['n_layers']}"
     X = np.load(md / f"{tag}_reference.npz")["X_eval"][: args.eval_points]
     coeffs = observable_coeffs(observable, n)
+    COEFFS = coeffs
     obs_op = readout_observable(n, cfg["readout"])
     cmap = device_coupling_map(args.device)
 

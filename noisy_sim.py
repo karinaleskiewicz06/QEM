@@ -439,6 +439,30 @@ def perqubit_z_from_counts(counts: dict[str, int], n: int) -> np.ndarray:
     return z / total
 
 
+def counts_on_wires(counts: dict[str, int], wires: list[int],
+                    device_width: int) -> dict[str, int]:
+    """Re-key device-width counts onto the logical qubits that sit on ``wires``.
+
+    An embedded circuit is measured across the whole device, so its raw keys are
+    device-width bitstrings indexed by physical wire. Archiving those would make a
+    record unreadable without the placement. This projects each key onto the logical
+    register -- logical qubit ``q`` takes the bit of wire ``wires[q]`` -- and sums the
+    shots that collapse onto the same logical string.
+
+    Bit order follows the rest of this module: qubit ``q`` is character ``-1 - q``.
+    """
+    out: dict[str, int] = {}
+    n = len(wires)
+    for bits, c in counts.items():
+        s = str(bits).replace(" ", "")
+        chars = ["0"] * n
+        for q in range(n):
+            chars[n - 1 - q] = s[device_width - 1 - wires[q]]
+        key = "".join(chars)
+        out[key] = out.get(key, 0) + int(c)
+    return out
+
+
 def perqubit_z_on_wires(
     counts: dict[str, int], wires: list[int], device_width: int
 ) -> np.ndarray:
@@ -508,7 +532,8 @@ def execute_expectation(
     pre_transpiled: bool = False,
     rem: bool = False,
     initial_layout: list[int] | None = None,
-) -> float:
+    return_counts: bool = False,
+) -> float | tuple[float, dict[str, int]]:
     """Run a (Z/I-observable) circuit on the noisy sim and return ⟨O⟩ from counts.
 
     This is the executor shape a ZNE loop calls. ``circuit`` must have all
@@ -525,6 +550,13 @@ def execute_expectation(
     (``cal.num_qubits > n``, the optimal/adverse placement of W2). Readout is then
     taken from each logical qubit's *final* physical wire. When the device size
     matches the circuit, behaviour is exactly the Month-1 same-size path.
+
+    ``return_counts=True`` additionally returns the raw counts dict, so a caller can
+    archive the measurement rather than only its reduction (P0 provenance). The counts
+    come back in the *logical* convention: for an embedded circuit they are re-keyed
+    from physical wires onto logical qubits, so the record is interpretable without
+    knowing the placement. The default is False and the return type is unchanged for
+    every existing caller.
     """
     n = circuit.num_qubits
     cal = cal or DeviceCalibration()
@@ -558,8 +590,10 @@ def execute_expectation(
         counts = sim.run(meas, shots=shots).result().get_counts()
         if rem:
             zq = rem_correct_z(perqubit_z_from_counts(counts, n), cal.p_ro)
-            return float(np.dot(coeffs, zq))
-        return expval_z_from_counts(counts, coeffs)
+            value = float(np.dot(coeffs, zq))
+        else:
+            value = expval_z_from_counts(counts, coeffs)
+        return (value, counts) if return_counts else value
 
     # embedded: n-qubit logical circuit placed on a larger device; read the
     # logical qubits off their post-routing wires.
@@ -570,7 +604,10 @@ def execute_expectation(
     zq = perqubit_z_on_wires(counts, wires, device_width)
     if rem:
         zq = rem_correct_z(zq, np.asarray(cal.p_ro)[wires])
-    return float(np.dot(coeffs, zq))
+    value = float(np.dot(coeffs, zq))
+    if not return_counts:
+        return value
+    return value, counts_on_wires(counts, wires, device_width)
 
 
 def expectation_error(noisy_ev: float, ideal_ev: float) -> float:

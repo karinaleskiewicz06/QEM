@@ -37,26 +37,62 @@ def iter_records(counts_path: pathlib.Path | str) -> Iterator[dict[str, Any]]:
 
 
 def perqubit_z(counts: dict[str, int], n: int) -> np.ndarray:
-    """Per-qubit <Z> from a counts dict, in logical (clbit) order.
-
-    Mirrors ``noisy_sim.perqubit_z_from_counts``: bitstrings are little-endian, so
-    qubit ``q`` is character ``-1 - q`` of the whitespace-stripped key.
-    """
+    """Per-qubit <Z> in logical order. Mirrors ``noisy_sim.perqubit_z_from_counts``."""
     total = sum(counts.values())
-    z = np.zeros(n, dtype=float)
-    for bits, c in counts.items():
-        s = str(bits).replace(" ", "")
+    z = np.zeros(n)
+    for bitstr, c in counts.items():
+        bits = str(bitstr).replace(" ", "")[-n:].zfill(n)
         for q in range(n):
-            z[q] += (1 - 2 * int(s[len(s) - 1 - q])) * c
+            bit = int(bits[n - 1 - q])
+            z[q] += (1.0 - 2.0 * bit) * c
     return z / total
 
 
+def expval_dot_perqubit(counts: dict[str, int], coeffs) -> float:
+    """``np.dot(coeffs, perqubit_z(...))`` -- the reduction run_garnet_twirl uses."""
+    return float(np.dot(coeffs, perqubit_z(counts, len(coeffs))))
+
+
+def expval_z_sum(counts: dict[str, int], coeffs) -> float:
+    """Mirrors ``noisy_sim.expval_z_from_counts``: accumulate per bitstring.
+
+    This is *not* interchangeable with :func:`expval_dot_perqubit`. Both compute the
+    same quantity, but they sum in a different order, so they differ in the last bits
+    of the mantissa. Since the rebuild check is exact, each record has to be replayed
+    with the reduction that produced it -- hence the ``reduction`` field.
+    """
+    n = len(coeffs)
+    total = sum(counts.values())
+    acc = 0.0
+    for bitstr, c in counts.items():
+        bits = str(bitstr).replace(" ", "")[-n:].zfill(n)
+        val = 0.0
+        for q in range(n):
+            bit = int(bits[n - 1 - q])
+            val += coeffs[q] * (1.0 - 2.0 * bit)
+        acc += val * c
+    return acc / total
+
+
+REDUCTIONS = {"dot_perqubit": expval_dot_perqubit, "expval_z_sum": expval_z_sum}
+
+
 def expval_from_record(rec: dict[str, Any]) -> float | None:
-    """Recompute <O> for one record, or None when it carries no coefficients."""
+    """Recompute <O> for one record, or None when it cannot be replayed.
+
+    A record is replayable when it carries the observable coefficients and non-empty
+    counts. ``reduction`` selects how to sum them; it defaults to ``dot_perqubit``
+    for records written before the field existed.
+    """
     coeffs = rec.get("coeffs")
-    if not coeffs:
+    counts = rec.get("counts")
+    if not coeffs or not counts:
         return None
-    return float(np.dot(coeffs, perqubit_z(rec["counts"], len(coeffs))))
+    fn = REDUCTIONS.get(rec.get("reduction", "dot_perqubit"))
+    if fn is None:
+        raise ValueError(f"unknown reduction {rec.get('reduction')!r} "
+                         f"in {rec.get('circuit_id')}")
+    return fn(counts, coeffs)
 
 
 def rebuild(run_dir: pathlib.Path | str) -> dict[str, Any]:
@@ -129,10 +165,16 @@ def main() -> int:
 
     res = rebuild(args.run_dir)
     n_rec, n_grp = len(res["records"]), len(res["groups"])
+    replayable = sum(1 for r in res["records"] if r["expval_rebuilt"] is not None)
     checked = sum(1 for r in res["records"] if r["expval_rebuilt"] is not None
                   and r["expval_stored"] is not None)
-    print(f"records: {n_rec}   groups: {n_grp}   exactly reproduced: "
-          f"{checked - len(res['mismatches'])}/{checked}")
+    print(f"records: {n_rec}   groups: {n_grp}   replayable: {replayable}/{n_rec}")
+    if checked:
+        print(f"verified against the stored value: "
+              f"{checked - len(res['mismatches'])}/{checked} exact")
+    else:
+        print("no record carried a stored value to verify against "
+              "(replayable, but nothing to cross-check)")
 
     if res["mismatches"]:
         print(f"\n{len(res['mismatches'])} record(s) did not reproduce:")

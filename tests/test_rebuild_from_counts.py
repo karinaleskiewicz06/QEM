@@ -72,6 +72,75 @@ def test_missing_counts_file_is_reported_clearly(tmp_path: pathlib.Path):
         rebuild(tmp_path)
 
 
+def test_the_two_reductions_differ_and_each_is_replayed_exactly():
+    """Both reductions compute <O>, but they sum in a different order.
+
+    run_garnet_twirl reduces with np.dot(coeffs, perqubit_z(...)); execute_expectation
+    (the --sim path of run_odra_cdr) accumulates per bitstring. Since the rebuild check
+    is exact, replaying a record with the wrong one has to fail -- otherwise the
+    `reduction` field would be pointless.
+    """
+    from analysis.rebuild_from_counts import expval_dot_perqubit, expval_z_sum
+    coeffs = [0.2] * 5
+    counts = {"00000": 601, "00001": 423, "10010": 7, "11111": 193, "01010": 61}
+    a, b = expval_dot_perqubit(counts, coeffs), expval_z_sum(counts, coeffs)
+    assert a == pytest.approx(b, abs=1e-12), "they must agree numerically"
+    # ...and they must still be distinguishable at the bit level for at least one
+    # input, which is exactly why the reduction is recorded per circuit.
+    found = a != b
+    for extra in range(2, 40):
+        c = dict(counts, **{f"{extra:05b}": extra * 13})
+        if expval_dot_perqubit(c, coeffs) != expval_z_sum(c, coeffs):
+            found = True
+            break
+    assert found, "if the two reductions never differ, the reduction field is dead code"
+
+
+def test_unknown_reduction_is_rejected_loudly(tmp_path: pathlib.Path):
+    from analysis.rebuild_from_counts import expval_from_record
+    with pytest.raises(ValueError, match="unknown reduction"):
+        expval_from_record({"circuit_id": "x", "coeffs": [1.0],
+                            "counts": {"0": 1}, "reduction": "nonsense"})
+
+
+@pytest.mark.slow
+@pytest.mark.parametrize("runner,campaign,extra", [
+    ("run_garnet_twirl.py", "p0acc_twirl",
+     ["--arms", "cdr", "--twirl-arms", "cdr", "--points", "optimal:star",
+      "--n-train", "3", "--n-twirl", "2"]),
+    ("run_odra_cdr.py", "p0acc_cdr", ["--n-train", "3"]),
+])
+def test_runner_window_rebuilds_exactly(tmp_path: pathlib.Path, runner, campaign, extra):
+    """P0 acceptance, per runner: every recorded value re-derives from counts alone."""
+    repo = pathlib.Path(__file__).resolve().parent.parent
+    cmd = [sys.executable, runner, "--sim",
+           "--eval-points", "2", "--shots", "256",
+           "--window-id", "acc", "--campaign", campaign,
+           "--out", str(tmp_path / "res.csv"), *extra]
+    if runner == "run_garnet_twirl.py":
+        # run_odra_cdr is ODRA-only and takes no --device
+        cmd += ["--device", "odra", "--calibration", "calibrations/odra_20260803.json"]
+    env = {**__import__("os").environ, "KMP_DUPLICATE_LIB_OK": "TRUE",
+           "OMP_NUM_THREADS": "1"}
+    proc = subprocess.run(cmd, cwd=repo, capture_output=True, text=True, env=env,
+                          timeout=900)
+    assert proc.returncode == 0, proc.stderr[-2000:]
+
+    run_dir = repo / "runs" / campaign / "acc"
+    try:
+        res = rebuild(run_dir)
+        checked = [r for r in res["records"] if r["expval_rebuilt"] is not None
+                   and r["expval_stored"] is not None]
+        assert checked, f"{runner}: no record could be cross-checked"
+        assert res["mismatches"] == [], (
+            f"{runner}: {len(res['mismatches'])} of {len(checked)} values did not "
+            f"reproduce bit-for-bit: {res['mismatches'][:3]}")
+        manifest = json.loads((run_dir / "manifest.json").read_text())
+        assert manifest["finished_utc"] and manifest["environment"]["packages"]["qiskit"]
+    finally:
+        __import__("shutil").rmtree(run_dir.parent, ignore_errors=True)
+
+
 @pytest.mark.slow
 def test_simulated_window_rebuilds_exactly(tmp_path: pathlib.Path):
     """End-to-end: run a small --sim window, then re-derive every value from counts.
