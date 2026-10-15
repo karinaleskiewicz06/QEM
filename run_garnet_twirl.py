@@ -42,7 +42,16 @@ from cdr import near_clifford_training_circuits, clifford_ideal_expval, fit_cdr,
 from zne_dryrun import SCALE_FACTORS, extrapolate, fold_global
 from topology import device_coupling_map, hardware_placement, star_coupling_map
 
+from qem.env_check import require_locked_environment, add_env_argument
+from qem.provenance import RunRecorder
+
 PAULIS = ["I", "X", "Y", "Z"]
+
+# P0 provenance: set in main(). RECORDER is None when --no-provenance is passed, which
+# keeps the legacy behaviour of writing only the CSV.
+RECORDER = None
+GROUP_TAG = "unset"
+T_1Q, T_2Q = 20e-9, 60e-9        # IQM PRX / CZ durations; overridden from a calibration
 
 
 def _pauli_char(P: Pauli, q: int) -> str:
@@ -151,12 +160,26 @@ def main() -> None:
     ap.add_argument("--window-id", default="w1",
                     help="drift-window tag stamped on every row; run once per calibration window "
                          "(different times), then combine with aggregate_twirl_windows.py")
+    ap.add_argument("--campaign", default=None,
+                    help="name of the runs/<campaign>/<window_id>/ directory "
+                         "(default: <device>_twirl)")
+    ap.add_argument("--no-provenance", action="store_true",
+                    help="skip manifest and counts.jsonl (legacy CSV-only behaviour)")
+    add_env_argument(ap)
     ap.add_argument("--out", default="garnet_twirl_results.csv")
     ap.add_argument("--resume", action="store_true",
                     help="skip (placement,pattern) points already present in --out and APPEND the "
                          "rest — so a network drop mid-run does not re-submit (or re-pay for) the "
                          "points already collected. Results are written per-point (crash-safe).")
     args = ap.parse_args()
+    require_locked_environment(allow_mismatch=args.allow_env_mismatch)
+
+    global RECORDER, GROUP_TAG
+    if not args.no_provenance:
+        RECORDER = RunRecorder.open(
+            args.campaign or f"{args.device}_twirl", window_id=args.window_id,
+            args=vars(args), seed=args.seed, device=args.device, submitted=args.submit)
+        print(f"[provenance] {RECORDER.dir}")
 
     points = [tuple(p.split(":")) for p in args.points]
     _, observable, cfg = load_frozen_model(models_dir=args.models_dir)
@@ -295,6 +318,7 @@ def main() -> None:
     if _new:
         writer.writeheader(); fout.flush()
     for placement, pattern in points:
+        GROUP_TAG = f"{placement}_{pattern}"
         if (placement, pattern) in done:
             print(f"  [skip] {placement}:{pattern} — already in {args.out}")
             continue
@@ -316,8 +340,8 @@ def main() -> None:
             spec's ⟨O⟩ is the mean over its own kcopies (twirl average / shot-matched OFF baseline).
             Twirl is LOGICAL (wrap logical cx), then measured()->transpile_for_backend (pilot-proven
             path); readout via perqubit_z_from_counts (clbit/logical order, NOT physical wire)."""
-            flat, ksizes = [], []
-            for bound, twirl, fold, kcopies in specs:
+            flat, ksizes, labels = [], [], []
+            for si, (bound, twirl, fold, kcopies) in enumerate(specs):
                 if twirl and args.native_twirl:
                     # NATYWNY: najpierw transpilacja (router wstawia SWAP-y), potem owinięcie
                     # WSZYSTKICH bramek natywnych. twirl_native emituje wrappery jako bramki `r`
@@ -338,8 +362,19 @@ def main() -> None:
                     pre = False
                 ksizes.append(len(reps))
                 flat.extend(reps if pre else [measured(b, fold) for b in reps])
+                labels.extend({"spec_index": si, "twirl": bool(twirl), "fold": int(fold),
+                               "copy_index": r, "n_copies": len(reps),
+                               "twirl_kind": ("native" if args.native_twirl else "logical")
+                                             if twirl else None}
+                              for r in range(len(reps)))
             counts = run(flat)
             vals = [float(np.dot(coeffs, perqubit_z_from_counts(c, n))) for c in counts]
+            if RECORDER is not None:                       # P0: archive the raw record
+                for native, cnt, val, lab in zip(flat, counts, vals, labels):
+                    RECORDER.record_circuit(
+                        f"{GROUP_TAG}/s{lab['spec_index']}/c{lab['copy_index']}",
+                        cnt, native=native, t_1q=T_1Q, t_2q=T_2Q,
+                        expval=val, coeffs=list(map(float, coeffs)), **lab)
             out, i = [], 0
             for k in ksizes:
                 out.append(float(np.mean(vals[i:i + k]))); i += k
@@ -403,6 +438,9 @@ def main() -> None:
         print(f"  [saved] {placement}:{pattern} -> {args.out}")
 
     fout.close()
+    if RECORDER is not None:
+        RECORDER.close()
+        print(f"[provenance] manifest + counts.jsonl -> {RECORDER.dir}")
     print(f"\nwrote/updated {args.out}")
     print("READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.")
 

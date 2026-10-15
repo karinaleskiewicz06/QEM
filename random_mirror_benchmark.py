@@ -29,6 +29,8 @@ from noisy_sim import (
     load_iqm_calibration,
 )
 from topology import placement
+from qem.env_check import require_locked_environment, add_env_argument
+from qem.provenance import RunRecorder
 
 N_QUBITS = 5
 
@@ -62,6 +64,10 @@ def _calibration_for(device, path):
     return DeviceCalibration() if device in ("odra", "star") else synthesize_lattice_calibration(device)
 
 
+
+RECORDER = None          # P0: manifest + counts.jsonl; None = stare zachowanie
+T_1Q, T_2Q = 20e-9, 60e-9
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--device", default="odra")
@@ -71,7 +77,21 @@ def main() -> None:
     ap.add_argument("--calibration", default="")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--out", default="random_mirror_results.csv")
+    ap.add_argument("--campaign", default='mirror',
+                    help="katalog runs/<campaign>/<window_id>/")
+    ap.add_argument("--window-id", default="w1")
+    ap.add_argument("--no-provenance", action="store_true",
+                    help="pomin manifest i counts.jsonl")
+    add_env_argument(ap)
     args = ap.parse_args()
+    require_locked_environment(allow_mismatch=args.allow_env_mismatch)
+
+    global RECORDER
+    if not args.no_provenance:
+        RECORDER = RunRecorder.open(args.campaign, window_id=args.window_id,
+                                    args=vars(args), seed=getattr(args, 'seed', None),
+                                    device=getattr(args, "device", None), submitted=getattr(args, "submit", False))
+        print(f"[provenance] {RECORDER.dir}")
 
     cal = _calibration_for(args.device, args.calibration)
     layout = None if cal.num_qubits == N_QUBITS else placement(args.device, N_QUBITS, args.placement)
@@ -89,6 +109,11 @@ def main() -> None:
         wires = logical_final_wires(native, N_QUBITS) if layout is not None else list(range(N_QUBITS))
         native.measure_all()
         counts = sim.run(native, shots=args.shots).result().get_counts()
+        if RECORDER is not None:
+            RECORDER.record_circuit(f"mirror/L{layers:02d}", counts, native=native,
+                                    t_1q=T_1Q, t_2q=T_2Q, with_qasm=False,
+                                    arm="mirror", layers=int(layers),
+                                    transpiled_cz=int(n2q), wires=list(wires))
         surv = _survival_on_wires(counts, wires, native.num_qubits)
         rows.append({"device": args.device, "placement": args.placement, "layers": layers,
                      "transpiled_cz": n2q, "survival": round(surv, 4), "shots": args.shots})
@@ -99,6 +124,9 @@ def main() -> None:
         w.writeheader()
         w.writerows(rows)
     print(f"\nwrote {args.out}")
+    if RECORDER is not None:
+        RECORDER.close()
+        print(f"[provenance] manifest + counts.jsonl -> {RECORDER.dir}")
 
 
 if __name__ == "__main__":

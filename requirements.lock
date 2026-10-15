@@ -1,0 +1,35 @@
+# Pinned environment for the ODRA campaign (P0).
+#
+# These are the versions actually installed on the machine that ran the hardware
+# campaigns, not a target environment. The distinction matters: the transpiler is
+# version-sensitive and the routing ladder differs between releases. On 2.4.1 the
+# fixed-layout path gives 12/30/39/57 CZ, which reproduces the twirl campaign; on
+# 2.5.2 the same path gives 12/27/36/54 and does not. See DATA_NOTES.md.
+#
+# qem/env_check.py refuses to run when the live environment disagrees with this
+# file, unless --allow-env-mismatch is passed.
+
+python==3.13.9
+
+qiskit==2.4.1
+qiskit-aer==0.17.2
+qiskit-machine-learning==0.9.0
+qiskit-ibm-runtime==0.47.0
+iqm-client==35.0.0
+
+numpy==2.5.1
+scipy==1.16.3
+pandas==2.3.3
+matplotlib==3.10.6
+scikit-learn==1.7.2
+statsmodels==0.14.5
+torch==2.12.0
+
+# Installed from VCS; the version string (0.1) does not identify the revision, so the
+# commit is pinned here as well.
+qml_benchmarks==0.1
+# qml_benchmarks @ git+https://github.com/XanaduAI/qml-benchmarks.git@95e5a07e8e9e75ba7e24e67fb32b030112a1309a
+
+# Not installed in this environment. Garnet and Emerald submission paths therefore
+# cannot run here; the campaign targets ODRA only, which uses iqm-client directly.
+# qiskit-iqm

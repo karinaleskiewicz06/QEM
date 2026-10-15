@@ -53,6 +53,8 @@ from zne_dryrun import (
     fold_global,
     native_transpile,
 )
+from qem.env_check import require_locked_environment, add_env_argument
+from qem.provenance import RunRecorder
 
 # logical qubit index -> physical ODRA label (hub QB3 = logical 0)
 PHYS = ["QB3", "QB1", "QB2", "QB4", "QB5"]
@@ -198,7 +200,10 @@ def fetch_counts(client, job, timeout_s=1800):
         cmc_batch = client.get_job_measurement_counts(job_id)
         return [counts_of(cmc) for cmc in cmc_batch]
 
-    return _retry(_go, what=f"fetch counts {job_id}"), str(job_id)
+    result = _retry(_go, what=f"fetch counts {job_id}")
+    if RECORDER is not None:                    # P0: powiaz okno z ID jobow
+        RECORDER.add_job(str(job_id))
+    return result, str(job_id)
 
 
 def evaluate(counts_list, ideal_evs, coeffs, p_ro, n, per_circ):
@@ -242,6 +247,10 @@ def evaluate(counts_list, ideal_evs, coeffs, p_ro, n, per_circ):
 # Main                                                                          #
 # --------------------------------------------------------------------------- #
 
+
+RECORDER = None          # P0: manifest + counts.jsonl; None = stare zachowanie
+T_1Q, T_2Q = 20e-9, 60e-9
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     mode = ap.add_mutually_exclusive_group()
@@ -272,7 +281,21 @@ def main() -> None:
                     help="append to --out, skipping (pattern,DD) combos already "
                          "present so a crashed run continues instead of re-spending "
                          "hardware time")
+    ap.add_argument("--campaign", default='odra_month1',
+                    help="katalog runs/<campaign>/<window_id>/")
+    ap.add_argument("--window-id", default="w1")
+    ap.add_argument("--no-provenance", action="store_true",
+                    help="pomin manifest i counts.jsonl")
+    add_env_argument(ap)
     args = ap.parse_args()
+    require_locked_environment(allow_mismatch=args.allow_env_mismatch)
+
+    global RECORDER
+    if not args.no_provenance:
+        RECORDER = RunRecorder.open(args.campaign, window_id=args.window_id,
+                                    args=vars(args), seed=getattr(args, 'seed', None),
+                                    device=getattr(args, "device", "odra"), submitted=getattr(args, "submit", False))
+        print(f"[provenance] {RECORDER.dir}")
 
     # scope
     if args.smoke:
@@ -466,6 +489,9 @@ def main() -> None:
 
     out_f.close()
     print(f"\nwrote {args.out}  (job ids: {jobs_log})")
+    if RECORDER is not None:
+        RECORDER.close()
+        print(f"[provenance] manifest + counts.jsonl -> {RECORDER.dir}")
 
 
 if __name__ == "__main__":

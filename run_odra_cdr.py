@@ -39,6 +39,8 @@ from qiskit.quantum_info import Statevector
 
 from ansatz import HardwareEfficientAnsatz
 from cdr import near_clifford_training_circuits, clifford_ideal_expval, fit_cdr, apply_cdr
+from qem.env_check import require_locked_environment, add_env_argument
+from qem.provenance import RunRecorder
 from metrics import accuracy, macro_f1
 from noisy_sim import (
     load_frozen_model, observable_coeffs, make_noisy_simulator,
@@ -50,6 +52,25 @@ from run_hardware import qiskit_to_iqm, perqubit_z_iqm, submit_batch, fetch_coun
 from topology import device_coupling_map
 
 PATTERNS = ("star", "linear", "circular", "all_to_all")
+
+
+RECORDER = None          # P0: ustawiany w main(); None wylacza zapis surowych danych
+T_1Q, T_2Q = 20e-9, 60e-9
+
+
+def _record(natives, counts, vals, tags) -> None:
+    """Dopisz surowe zliczenia kazdego obwodu do counts.jsonl (jesli RECORDER aktywny).
+
+    Na symulatorze ``execute_expectation`` nie zwraca zliczen, wiec zapisujemy sam
+    obwod i policzone <O>; na sprzecie mamy pelne zliczenia i zapisujemy jedno i drugie.
+    """
+    if RECORDER is None:
+        return
+    for i, (native, val) in enumerate(zip(natives, vals)):
+        tag = (tags[i] if tags and i < len(tags) else {}) or {}
+        cid = tag.pop("circuit_id", f"{tag.get('point', 'p?')}/c{i}")
+        RECORDER.record_circuit(cid, counts[i] if counts else {}, native=native,
+                                t_1q=T_1Q, t_2q=T_2Q, expval=float(val), **tag)
 
 
 def main() -> None:
@@ -67,12 +88,26 @@ def main() -> None:
     ap.add_argument("--max-batch", type=int, default=100,
                     help="obwodów na jedno zgłoszenie (dzielimy wsad na porcje)")
     ap.add_argument("--url", default=os.environ.get("IQM_SERVER_URL", ""))
+    ap.add_argument("--campaign", default=None,
+                    help="katalog runs/<campaign>/<window_id>/ (domyslnie odra_cdr)")
+    ap.add_argument("--window-id", default="w1")
+    ap.add_argument("--no-provenance", action="store_true",
+                    help="pomin manifest i counts.jsonl (stare zachowanie: sam CSV)")
+    add_env_argument(ap)
     ap.add_argument("--submit", action="store_true")
     ap.add_argument("--sim", action="store_true", help="walidacja na symulatorze (bez kredytów)")
     ap.add_argument("--zne", action="store_true",
                     help="dodaj ramię ZNE w TYM SAMYM wsadzie (raw/CDR/ZNE w jednych warunkach)")
     ap.add_argument("--out", default="odra_cdr_results.csv")
     args = ap.parse_args()
+    require_locked_environment(allow_mismatch=args.allow_env_mismatch)
+
+    global RECORDER
+    if not args.no_provenance:
+        RECORDER = RunRecorder.open(args.campaign or "odra_cdr", window_id=args.window_id,
+                                    args=vars(args), seed=args.seed, device="odra",
+                                    submitted=args.submit)
+        print(f"[provenance] {RECORDER.dir}")
 
     _, observable, cfg = load_frozen_model(models_dir=args.models_dir)
     base_layers = cfg["n_layers"]          # warstwy modelu zamrozonego (plik referencyjny)
@@ -120,20 +155,32 @@ def main() -> None:
         _sim = make_noisy_simulator(_cal)
         print("\n[--sim] pełny potok na symulatorze (bez kredytów)\n")
 
-    def run_natives(natives: list) -> list[float]:
-        """Wykonaj natywne obwody i zwróć ⟨O⟩ dla każdego (kolejność zachowana)."""
+    def run_natives(natives: list, tags: list | None = None) -> list[float]:
+        """Wykonaj natywne obwody i zwróć ⟨O⟩ dla każdego (kolejność zachowana).
+
+        Gdy ``RECORDER`` jest aktywny (P0), każdy obwód trafia razem ze swoimi surowymi
+        zliczeniami do ``counts.jsonl``; ``tags`` opisuje rolę obwodu (punkt, indeks
+        treningowy, ramię), żeby wynik dało się odtworzyć bez CSV.
+        """
         if not args.submit:
             # pre_transpiled=True: obwody są już w bazie {r, cz} i nie wolno ich
             # przekompilować --- zniknęłaby struktura routingu, którą badamy
-            return [execute_expectation(c, observable, _sim, shots=args.shots, cal=_cal,
+            vals = [execute_expectation(c, observable, _sim, shots=args.shots, cal=_cal,
                                         pre_transpiled=True) for c in natives]
+            _record(natives, None, vals, tags)
+            return vals
         vals: list[float] = []
         for s in range(0, len(natives), args.max_batch):
             chunk = natives[s: s + args.max_batch]
             job = submit_batch(client, [qiskit_to_iqm(c) for c in chunk], args.shots, dd_on=False)
             counts, jid = fetch_counts(client, job)
             print(f"    zadanie {jid} | {len(counts)}/{len(natives)} obwodów")
-            vals += [float(np.dot(coeffs, perqubit_z_iqm(c, n))) for c in counts]
+            chunk_vals = [float(np.dot(coeffs, perqubit_z_iqm(c, n))) for c in counts]
+            if RECORDER is not None:
+                RECORDER.add_job(jid)
+            _record(chunk, counts, chunk_vals,
+                    tags[s: s + args.max_batch] if tags else None)
+            vals += chunk_vals
         return vals
 
     def weights_for(pattern: str) -> np.ndarray:
@@ -178,7 +225,18 @@ def main() -> None:
         n2q = sum(1 for i in natives[0].data if i.operation.name in ("cz", "cx"))
         print(f"  {pattern:<11} cz={n2q:>3} | {len(natives)} obwodów"
               + (f" (ZNE, skale {SCALE_FACTORS})" if args.zne else ""))
-        vals = run_natives(natives)
+        # etykiety: pozwalaja odtworzyc role kazdego obwodu z samego counts.jsonl
+        tags = [{"circuit_id": f"{pattern}/train{i:03d}", "pattern": pattern,
+                 "arm": "cdr", "role": "train", "train_index": i, "scale": 1,
+                 "transpiled_cz": n2q} for i in range(len(train))]
+        tags += [{"circuit_id": f"{pattern}/eval{i:03d}/lam1", "pattern": pattern,
+                  "arm": "cdr", "role": "eval", "point_index": i, "scale": 1,
+                  "transpiled_cz": n2q} for i in range(len(eval_circs))]
+        for s_ in extra_scales:
+            tags += [{"circuit_id": f"{pattern}/eval{i:03d}/lam{s_}", "pattern": pattern,
+                      "arm": "zne", "role": "eval", "point_index": i, "scale": int(s_),
+                      "transpiled_cz": n2q} for i in range(len(eval_circs))]
+        vals = run_natives(natives, tags)
 
         a, b, r2 = fit_cdr(vals[: len(train)], ideal_train)
         base = len(train)
@@ -219,6 +277,9 @@ def main() -> None:
             w.writeheader(); w.writerows(rows)
 
     print(f"\nzapisano {args.out}")
+    if RECORDER is not None:
+        RECORDER.close()
+        print(f"[provenance] manifest + counts.jsonl -> {RECORDER.dir}")
     print("ODCZYT: r^2 ma spadać z liczbą CZ --- to sprzętowy odpowiednik krzywej ODRY")
     print("z Rysunku 1, zastępujący dotychczasową symulację.")
 

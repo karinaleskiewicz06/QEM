@@ -52,3 +52,9 @@ __pycache__/
 # presentation builds kept locally, not in git
 prezka.pdf
 prezentacja.pdf
+
+# campaign output: manifests and raw counts are large and are archived per campaign,
+# not committed wholesale. runs/legacy_* are the curated exceptions.
+runs/*/
+!runs/legacy_logs/
+!runs/legacy_failed/

@@ -46,6 +46,8 @@ from noisy_sim import (
 )
 from zne_dryrun import SCALE_FACTORS, extrapolate, fold_global
 from topology import device_coupling_map, hardware_placement
+from qem.env_check import require_locked_environment, add_env_argument
+from qem.provenance import RunRecorder
 
 
 def richardson_kappa(lams):
@@ -73,6 +75,27 @@ def per_shot_variance_from_counts(counts, coeffs, n):
     return float(np.dot(w, (vals - mean) ** 2))
 
 
+
+RECORDER = None          # P0: manifest + counts.jsonl; None = stare zachowanie
+_REC_SEQ = [0]
+
+
+def _record(circs, counts, shots) -> None:
+    """Dopisz surowe zliczenia kazdego obwodu kappa-kampanii do counts.jsonl.
+
+    Numeracja jest sekwencyjna w obrebie okna: te obwody roznia sie budzetem i skala
+    foldingu, a nie rola, wiec identyfikator ma byc tylko stabilnym kluczem do
+    zliczen. Skale i budzet odczytuje sie z metadanych, nie z nazwy.
+    """
+    if RECORDER is None:
+        return
+    for c, cnt in zip(circs, counts):
+        i = _REC_SEQ[0]; _REC_SEQ[0] += 1
+        RECORDER.record_circuit(f"kappa/c{i:05d}", cnt, native=c,
+                                t_1q=T_1Q, t_2q=T_2Q, with_qasm=False,
+                                arm="zne", shots_requested=int(shots))
+T_1Q, T_2Q = 20e-9, 60e-9
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -94,9 +117,27 @@ def main() -> None:
     ap.add_argument("--resume", action="store_true",
                     help="pomiń pary (punkt, budżet) już obecne w --out i dopisz resztę; "
                          "zerwanie połączenia nie kasuje opłaconych pomiarów")
+    ap.add_argument("--campaign", default='zne_boundary',
+                    help="katalog runs/<campaign>/<window_id>/")
+    ap.add_argument("--window-id", default="w1")
+    ap.add_argument("--no-provenance", action="store_true",
+                    help="pomin manifest i counts.jsonl")
+    add_env_argument(ap)
     args = ap.parse_args()
+    require_locked_environment(allow_mismatch=args.allow_env_mismatch)
 
-    SCALES = list(args.scales) if args.scales else list(SCALES)
+    global RECORDER
+    if not args.no_provenance:
+        RECORDER = RunRecorder.open(args.campaign, window_id=args.window_id,
+                                    args=vars(args), seed=getattr(args, 'seed', None),
+                                    device=args.device, submitted=args.submit)
+        print(f"[provenance] {RECORDER.dir}")
+
+    # Galaz domyslna odwolywala sie wczesniej do nazwy, ktora nie istnieje na poziomie
+    # modulu, a przypisanie w tej samej linii czynilo ja lokalna -- wiec kazdy przebieg
+    # bez --scales konczyl sie UnboundLocalError. Archiwalne kampanie kappa dzialaly
+    # tylko dlatego, ze --scales podawano zawsze jawnie. Zrodlem jest SCALE_FACTORS.
+    SCALES = list(args.scales) if args.scales else list(SCALE_FACTORS)
     if any(x % 2 == 0 for x in SCALES):
         raise SystemExit(f"skladanie globalne daje tylko nieparzyste skale; podano {SCALES}")
     kappa, coeffs_r = richardson_kappa(SCALES)
@@ -115,7 +156,10 @@ def main() -> None:
             from iqm_resonance import get_backend, transpile_for_backend, run_circuits
         backend = get_backend(args.device)
         def tpile(c, layout): return transpile_for_backend(c, backend, initial_layout=layout)
-        def run(circs, shots): return run_circuits(backend, circs, shots)
+        def run(circs, shots):
+            out = run_circuits(backend, circs, shots)
+            _record(circs, out, shots)
+            return out
     else:
         def tpile(c, layout):
             return transpile(c, basis_gates=IQM_BASIS_GATES, coupling_map=cmap,
@@ -125,7 +169,9 @@ def main() -> None:
             _sim = make_noisy_simulator(
                 DeviceCalibration(num_qubits=ndev, coupling_map=cmap, p_2q=0.01))
             def run(circs, shots):
-                return [_sim.run(c, shots=shots).result().get_counts() for c in circs]
+                out = [_sim.run(c, shots=shots).result().get_counts() for c in circs]
+                _record(circs, out, shots)
+                return out
         else:
             run = None
 
@@ -310,6 +356,9 @@ def main() -> None:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()), extrasaction="ignore")
         w.writeheader(); w.writerows(rows)
     print(f"\nzapisano {args.out}")
+    if RECORDER is not None:
+        RECORDER.close()
+        print(f"[provenance] manifest + counts.jsonl -> {RECORDER.dir}")
     print("ODCZYT: falsyfikowalna jest STAŁA kappa=14.66 --- przejście ma wypaść przy")
     print("S* = kappa*V/B^2 z V i B zmierzonymi w tym samym przebiegu, bez dopasowywania.")
 
