@@ -38,6 +38,7 @@ from qiskit_aer import AerSimulator
 from qiskit_aer.noise import (
     NoiseModel,
     ReadoutError,
+    coherent_unitary_error,
     depolarizing_error,
     thermal_relaxation_error,
 )
@@ -173,6 +174,7 @@ def build_noise_model(
     *,
     idle_t2: np.ndarray | None = None,
     with_idle: bool = True,
+    coherent_theta: float = 0.0,
 ) -> NoiseModel:
     """Assemble an Aer :class:`NoiseModel` for the star from a calibration.
 
@@ -182,6 +184,16 @@ def build_noise_model(
             decoupling (DD), which refocuses low-frequency dephasing so idle
             qubits decohere at the slower Hahn-echo rate.
         with_idle: if False, omit the ``id`` idle channel entirely (ablation).
+        coherent_theta: if non-zero, compose a coherent ``Rz(theta) x Rz(theta)``
+            over-rotation into every ``cz`` error, on top of the calibrated
+            stochastic channels. This yields *nested* noise models — theta=0 and
+            theta>0 differ by exactly one term — which is what makes "excess r2
+            decay over the device null" a meaningful quantity.
+
+            It must be composed here, per qubit pair, rather than registered as
+            an all-qubit error afterwards: Aer silently drops an all-qubit error
+            for a gate that already has qubit-specific errors, so adding it later
+            would leave the model unchanged while appearing to work.
 
     Gate (``r``/``cz``) thermal channels always use ``cal.t2`` — DD protects
     *idle* windows, not the gates themselves. Use :func:`schedule_with_idle`
@@ -208,11 +220,19 @@ def build_noise_model(
         p = cal.p_ro[q]
         nm.add_readout_error(ReadoutError([[1 - p, p], [p, 1 - p]]), [q])
 
+    # optional coherent over-rotation, composed into every cz below
+    coh = None
+    if coherent_theta:
+        rz = np.diag([np.exp(-1j * coherent_theta / 2), np.exp(1j * coherent_theta / 2)])
+        coh = coherent_unitary_error(np.kron(rz, rz))
+
     # two-qubit gate errors (CZ), on both edge orientations
     for a, b in {tuple(sorted(e)) for e in cal.coupling_map}:
         relax_a = thermal_relaxation_error(cal.t1[a], cal.t2[a], cal.t_2q)
         relax_b = thermal_relaxation_error(cal.t1[b], cal.t2[b], cal.t_2q)
         err_2q = depolarizing_error(cal.p_2q, 2).compose(relax_a.tensor(relax_b))
+        if coh is not None:
+            err_2q = coh.compose(err_2q)   # over-rotation first, then stochastic channels
         nm.add_quantum_error(err_2q, ["cz"], [a, b])
         nm.add_quantum_error(err_2q, ["cz"], [b, a])
 

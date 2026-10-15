@@ -62,11 +62,28 @@ def _emit_pauli_r(qc: QuantumCircuit, ch: str, qubit) -> None:
     # "I": nothing
 
 
-def twirl_native(tqc: QuantumCircuit, rng) -> QuantumCircuit:
+def twirl_native(tqc: QuantumCircuit, rng, merge_1q: bool = True) -> QuantumCircuit:
     """Wrap each native 2q gate with A before and B=G·A·G† after, emitting the Pauli
     wrappers directly as native `r` gates so the circuit stays fully native (r/cz) —
     no re-transpilation, physical-qubit connectivity/naming preserved. Validated:
-    ideal (⟨O⟩) unchanged, only r/cz remain, CZ count unchanged."""
+    ideal (⟨O⟩) unchanged, only r/cz remain, CZ count unchanged.
+
+    ``merge_1q`` (default on) then fuses runs of consecutive ``r`` gates via
+    ``Optimize1qGatesDecomposition``. **This matters a lot.** Emitted raw, the Pauli
+    wrappers take the 12-CZ star point from 40 to 92 single-qubit gates (+130%) and
+    double its depth, so the "twirled" arm was really a *much longer circuit* arm —
+    which is why its measured gain came out negative (review F3). Merging brings it
+    to 53 (+32%), leaving the CZ count and the ideal expectation value untouched.
+
+    The pass is run on its own, with no layout or routing stage, so the physical
+    qubit assignment chosen for the OFF arm is preserved exactly.
+
+    A residual +32% remains: Pauli wrappers between adjacent CZ gates have no
+    neighbouring rotation to fuse into. Removing it entirely needs Pauli-frame
+    tracking (absorbing the frame into the preceding 1q layer), which is not
+    implemented here — so this arm still carries some extra 1q error, and a gain
+    measured with it is a *lower* bound.
+    """
     out = QuantumCircuit(*tqc.qregs, *tqc.cregs)
     for ins in tqc.data:
         qi = [tqc.find_bit(q).index for q in ins.qubits]
@@ -79,6 +96,10 @@ def twirl_native(tqc: QuantumCircuit, rng) -> QuantumCircuit:
             _emit_pauli_r(out, _pauli_char(B, 0), qi[0]); _emit_pauli_r(out, _pauli_char(B, 1), qi[1])
         else:
             out.append(ins.operation, qi, [tqc.find_bit(c).index for c in ins.clbits])
+    if merge_1q:
+        from qiskit.transpiler import PassManager
+        from qiskit.transpiler.passes import Optimize1qGatesDecomposition
+        out = PassManager(Optimize1qGatesDecomposition(basis=["r"])).run(out)
     return out
 
 
@@ -117,6 +138,11 @@ def main() -> None:
     ap.add_argument("--submit", action="store_true")
     ap.add_argument("--sim", action="store_true",
                     help="run full pipeline on a NOISY SIMULATOR (no credits) — validation")
+    ap.add_argument("--calibration", default=None,
+                    help="Path to a device calibration JSON (calibrations/odra_*.json). With --sim "
+                         "this replaces the placeholder null by the device's MEASURED noise, and "
+                         "--sim-coh is then added ON TOP of it, so theta=0 / theta>0 are nested "
+                         "models differing by one term (review F6).")
     ap.add_argument("--sim-coh", type=float, default=0.0,
                     help="[--sim only] inject a COHERENT Z over-rotation (rad) on every cz instead of "
                          "depolarizing noise — the POSITIVE control (twirl should help; Δr²>0), "
@@ -176,12 +202,25 @@ def main() -> None:
             # full-pipeline validation on a NOISY simulator (no credits): exercises twirl,
             # fold, readout, CDR, ZNE on every point incl. adverse routing, exactly as hardware.
             ndev = max(max(e) for e in cmap) + 1
-            if args.sim_coh > 0:
-                # POSITIVE control: inject a COHERENT Z over-rotation on every cz (Rz(coh)⊗Rz(coh)).
-                # Pauli twirl converts this coherent rotation into stochastic dephasing -> restores
-                # CDR linearity, so twirl SHOULD help here (unlike the depolarizing null). Same
-                # matched pipeline -> directly brackets the hardware result (depol Δr²≈0 vs coherent
-                # Δr²>0). Coherent error only (no depol) isolates the coherent contribution.
+            if args.calibration:
+                # NESTED controls (review F6). Base layer = the device's own measured calibration
+                # (T1/T2, p_1q, p_2q, readout); the coherent over-rotation is added ON TOP, so
+                # theta=0 and theta>0 differ by exactly one term instead of being two unrelated
+                # noise worlds. This is what makes "excess r2 decay over the null" meaningful.
+                from qiskit_aer import AerSimulator
+                from noisy_sim import load_iqm_calibration, build_noise_model
+                cal = load_iqm_calibration(args.calibration)
+                # NB: the over-rotation is composed into each per-pair cz error inside
+                # build_noise_model. Registering it afterwards as an all-qubit error does
+                # NOT work -- Aer drops it when qubit-specific cz errors already exist.
+                nm = build_noise_model(cal, idle_t2=cal.t2, with_idle=True,
+                                       coherent_theta=args.sim_coh)
+                _sim = AerSimulator(noise_model=nm, coupling_map=cal.coupling_map,
+                                    basis_gates=IQM_BASIS_GATES)
+            elif args.sim_coh > 0:
+                # LEGACY positive control (kept so the night_coh* campaign stays reproducible):
+                # coherent error ONLY, no depolarizing/T1/readout. Not nested with the null --
+                # prefer --calibration for anything new.
                 from qiskit_aer import AerSimulator
                 from qiskit_aer.noise import NoiseModel, coherent_unitary_error
                 rz = np.diag([np.exp(-1j * args.sim_coh / 2), np.exp(1j * args.sim_coh / 2)])
@@ -189,6 +228,7 @@ def main() -> None:
                 nm.add_all_qubit_quantum_error(coherent_unitary_error(np.kron(rz, rz)), ["cz"])
                 _sim = AerSimulator(noise_model=nm)
             else:
+                # LEGACY null: placeholder p_2q, not the device's measured value.
                 from noisy_sim import make_noisy_simulator, DeviceCalibration
                 _sim = make_noisy_simulator(
                     DeviceCalibration(num_qubits=ndev, coupling_map=cmap, p_2q=0.01))

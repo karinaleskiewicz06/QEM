@@ -42,3 +42,10 @@ __pycache__/
 
 # GSD planning docs (kept local — commit_docs=false)
 .planning/
+
+# local tool configuration (not part of the project)
+.claude/
+
+# presentation builds kept locally, not in git
+prezka.pdf
+prezentacja.pdf
