@@ -159,6 +159,16 @@ Dla każdego punktu: stan, problem, doliczenie, kryterium sukcesu. Szacunek czas
 2. **Narzut twirlingu natywnego:** §3, C3, zrobione.
 3. **Nadmiarowe bramki 1q we wszystkich obwodach:** `optimization_level=1` zostawia 2× więcej PRX niż po scaleniu. Ta sama funkcja `merge_prx` obniża głębokość każdego ramienia.
 4. **Rozbieżność liczby CZ:** w Qiskit 2.5.2 linear daje 24 CZ, a w CSV 27; circular 36 w `odra_full_100pt`, a 39 w kampanii twirlingowej. **Poprawka:** przypiąć wersję Qiskit i `seed_transpiler`, zapisywać QASM obwodu transpilowanego razem z ID joba.
+
+   > **Sprostowanie (zweryfikowane na Qiskit 2.4.1, gałąź `paper-odra-campaign`).** To nie jest
+   > dryf wersji, tylko **dwie ścieżki transpilacji w jednym repozytorium**. Na 2.4.1:
+   > ścieżka ze stałym układem `[0,1,2,3,4]` i `seed_transpiler=42` (używana przez
+   > `run_garnet_twirl.py`) daje **12 / 30 / 39 / 57** CZ, co odtwarza drabinę kampanii
+   > twirlingowej; `zne_dryrun.native_transpile` (używany przez `run_odra_cdr.py`, bez
+   > `initial_layout` i bez `seed_transpiler`) daje **12 / 27 / 36 / 54**, co odtwarza
+   > `odra_full_100pt.csv`. Obie liczby wychodzą z tej samej wersji, każda ze swojej ścieżki.
+   > Na 2.5.2 ścieżka ze stałym układem daje 12 / 27 / 36 / 54, więc nie odtwarza 39 — co
+   > czyni 2.4.1 wersją zgodną z danymi kampanii. Szczegóły i pomiary: `DATA_NOTES.md`.
 5. **Brak surowych zliczeń per punkt:** CSV zawierają tylko średnie, więc nie da się policzyć przedziałów ufności. **Poprawka:** zapisywać `counts.json` dla każdego obwodu. Na ODRZE to tylko kilka MB na okno.
 6. **Kolejność ramion:** losowanie blokowe w obrębie okna (dotyczy DD i twirlingu).
 7. **Pre-rejestracja:** przed kampanią C1–C4 zrobić tag w gicie z plikiem hipotez, kryteriów i analizy. Tylko wtedy wolno użyć słowa „pre-registered”.
