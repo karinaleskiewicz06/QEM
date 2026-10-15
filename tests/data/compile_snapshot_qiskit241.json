@@ -1,0 +1,65 @@
+{
+  "generated_on": {
+    "python": "3.13.9",
+    "qiskit": "2.4.1"
+  },
+  "note": "Measured on this repository's pinned environment. Values are a reference point, not an assertion target: the tests check structural properties, because gate counts move between Qiskit releases.",
+  "patterns": {
+    "star": {
+      "fixed_layout_seed42": {
+        "n_cz": 12,
+        "n_prx_before_merge": 40,
+        "n_prx_after_merge": 20,
+        "merge_ratio": 0.5,
+        "max_prx_run_after_merge": 1
+      },
+      "native_transpile_unseeded": {
+        "n_cz_observed": [
+          12
+        ]
+      }
+    },
+    "linear": {
+      "fixed_layout_seed42": {
+        "n_cz": 30,
+        "n_prx_before_merge": 95,
+        "n_prx_after_merge": 60,
+        "merge_ratio": 0.6316,
+        "max_prx_run_after_merge": 1
+      },
+      "native_transpile_unseeded": {
+        "n_cz_observed": [
+          27
+        ]
+      }
+    },
+    "circular": {
+      "fixed_layout_seed42": {
+        "n_cz": 39,
+        "n_prx_before_merge": 121,
+        "n_prx_after_merge": 80,
+        "merge_ratio": 0.6612,
+        "max_prx_run_after_merge": 1
+      },
+      "native_transpile_unseeded": {
+        "n_cz_observed": [
+          36
+        ]
+      }
+    },
+    "all_to_all": {
+      "fixed_layout_seed42": {
+        "n_cz": 57,
+        "n_prx_before_merge": 138,
+        "n_prx_after_merge": 71,
+        "merge_ratio": 0.5145,
+        "max_prx_run_after_merge": 1
+      },
+      "native_transpile_unseeded": {
+        "n_cz_observed": [
+          54
+        ]
+      }
+    }
+  }
+}
