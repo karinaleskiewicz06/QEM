@@ -1,0 +1,206 @@
+[11:41:48] === NOCNA KAMPANIA ODRA -- okno o2 -- start Tue Sep 15 11:41:48 CEST 2026 ===
+[11:41:48] pomijam na zadanie: kappa native
+[11:41:54] interpreter: /opt/homebrew/anaconda3/bin/python3
+interpreter: /opt/homebrew/anaconda3/bin/python3
+importy OK -- komplet 7 modulow
+[11:41:55] kontrola wstepna OK (zmienne srodowiskowe + importy)
+[11:41:55] >>> START trening osi glebokosci (CPU, w tle kroku 1)
+[11:41:55]     trening w tle, PID 99330
+[11:41:55] >>> START twirl  -> odra_twirl_o2.csv
+OŚ GŁĘBOKOŚCI (wzorzec star = zero routingu). Ten sam zbiór, ten sam podział, to samo ziarno
+co kampania główna, więc jedyną zmienną jest liczba warstw.
+
+  L=6   params=100  CZ=24  głębokość=61   -- trenuję (parameter-shift, to potrwa)...
+    epoch   1/60 loss=1.8485
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2176 (544/point) | shots 17825792 | jobs 32
+  COST: ODRA access is not metered in Resonance credits
+
+>>> note your credit balance NOW <<<
+
+    [odra] zadanie 01a0a471-d855-7762-bd39-7cd69f9dc813 | 4 obwodów (4/4)
+   optimal        star cz= 12 | raw twirl=False | err 0.0647 | r2 
+    [odra] zadanie 01a0a472-1728-7cd1-91c0-25966807880d | 100 obwodów (100/264)
+    [odra] zadanie 01a0a477-2895-7362-81cb-40f24932aafa | 100 obwodów (200/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:33<?, ?it/s]
+    epoch  20/60 loss=0.7135
+    [odra] zadanie 01a0a47c-3eb8-7491-970f-341016d23e09 | 64 obwodów (264/264)
+   optimal        star cz= 12 | cdr twirl=False | err 0.0419 | r2 0.9791
+    [odra] zadanie 01a0a47f-8974-70d1-acec-b1948be2da99 | 100 obwodów (100/264)
+    [odra] zadanie 01a0a484-a05b-7db1-ad7c-360285b5eb10 | 100 obwodów (200/264)
+    [odra] zadanie 01a0a489-b49f-7610-ad7f-7d550b95e7f4 | 64 obwodów (264/264)
+   optimal        star cz= 12 | cdr twirl= True | err 0.0202 | r2 0.9897
+    [odra] zadanie 01a0a48d-c943-7b23-9349-61d3a350bff1 | 12 obwodów (12/12)
+   optimal        star cz= 12 | zne twirl=False | err 0.0240 | r2 
+  [saved] optimal:star -> odra_twirl_o2.csv
+    [odra] zadanie 01a0a48e-6f11-7963-957f-7e7f13d27d4e | 4 obwodów (4/4)
+   optimal      linear cz= 30 | raw twirl=False | err 0.0949 | r2 
+    [odra] zadanie 01a0a48e-af0d-7312-a6d4-911ad2cb2b7d | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]    epoch  40/60 loss=0.6221
+Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a0a493-ccf1-7b00-b5a9-c02f89093bd9 | 100 obwodów (200/264)
+    [odra] zadanie 01a0a498-e8cd-70c3-8974-e870976aa0a2 | 64 obwodów (264/264)
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0677 | r2 0.7779
+    [odra] zadanie 01a0a49c-3214-7ec0-9f69-1ccd023bc013 | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a0a4a1-544a-7e11-bd83-92b717169e4c | 100 obwodów (200/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]    epoch  60/60 loss=0.5849
+        train 0.778  test 0.717  -> two_curves_d8_q5_deg8_star_mean_L6_weights.npy
+  L=9   params=145  CZ=36  głębokość=88   -- trenuję (parameter-shift, to potrwa)...
+    epoch   1/60 loss=1.6683
+Progress in queue:   0%|          | 0/1 [03:33<?, ?it/s]
+    [odra] zadanie 01a0a4a6-6f59-7300-a4a3-1739e2fa03a1 | 64 obwodów (264/264)
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0554 | r2 0.9504
+    [odra] zadanie 01a0a4a9-b6bc-7051-a01b-2320c9617e48 | 12 obwodów (12/12)
+   optimal      linear cz= 30 | zne twirl=False | err 0.0599 | r2 
+  [saved] optimal:linear -> odra_twirl_o2.csv
+    [odra] zadanie 01a0a4aa-6118-7f80-b463-6c5b99cc845a | 4 obwodów (4/4)
+   optimal    circular cz= 39 | raw twirl=False | err 0.1937 | r2 
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a0a4aa-a21f-70e1-9a9a-8ddbd062dac9 | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a0a4af-c37d-76a2-93ff-3c594658ff22 | 100 obwodów (200/264)
+    [odra] zadanie 01a0a4b4-e04d-7d62-8e84-36a49a1baf51 | 64 obwodów (264/264)
+   optimal    circular cz= 39 | cdr twirl=False | err 0.1113 | r2 0.8827
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a0a4b8-2c92-73d1-b505-b38087ac3bb8 | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a0a4bd-4bf4-7800-a6c8-c3c413a36643 | 100 obwodów (200/264)
+    [odra] zadanie 01a0a4c2-697b-72f1-949d-9c854999258a | 64 obwodów (264/264)
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0409 | r2 0.9617
+    [odra] zadanie 01a0a4c5-b1f2-7bd2-ba66-1e32bd209a59 | 12 obwodów (12/12)
+   optimal    circular cz= 39 | zne twirl=False | err 0.1561 | r2 
+  [saved] optimal:circular -> odra_twirl_o2.csv
+    [odra] zadanie 01a0a4c6-57b6-7872-92fc-aabdf3b0a3d8 | 4 obwodów (4/4)
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1499 | r2 
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]    epoch  20/60 loss=0.6345
+Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a0a4c6-990e-7442-bca4-56fc4f543dba | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a0a4cb-bc22-7db1-bda6-1009091874e1 | 100 obwodów (200/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:35<?, ?it/s]
+    [odra] zadanie 01a0a4d0-decb-7cd3-9357-4bbbdca0895c | 64 obwodów (264/264)
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0987 | r2 0.6899
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a0a4d4-32ec-7a51-9aa8-8f734e97262c | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a0a4d9-5953-7ba3-9598-f31af2ac2afa | 100 obwodów (200/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:34<?, ?it/s]
+    [odra] zadanie 01a0a4de-7e28-7d80-b968-17f3b13081d9 | 64 obwodów (264/264)
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0128 | r2 0.8196
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:42<?, ?it/s]
+    [odra] zadanie 01a0a4e1-cb1c-7863-8fc3-2c736c7bf66f | 12 obwodów (12/12)
+   optimal  all_to_all cz= 57 | zne twirl=False | err 0.1075 | r2 
+  [saved] optimal:all_to_all -> odra_twirl_o2.csv
+
+wrote/updated odra_twirl_o2.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+[13:44:59] <<< OK    twirl  (123 min)
+[13:44:59] czekam na koniec treningu (PID 99330) przed osia glebokosci...
+    epoch  40/60 loss=0.5544
+    epoch  60/60 loss=0.4807
+        train 0.811  test 0.783  -> two_curves_d8_q5_deg8_star_mean_L9_weights.npy
+  L=13  params=205  CZ=52  głębokość=124  -- trenuję (parameter-shift, to potrwa)...
+    epoch   1/60 loss=1.3638
+    epoch  20/60 loss=0.6434
+    epoch  40/60 loss=0.5309
+    epoch  60/60 loss=0.4433
+        train 0.878  test 0.808  -> two_curves_d8_q5_deg8_star_mean_L13_weights.npy
+
+NASTĘPNY KROK (ODRA, darmowo):
+  python run_odra_cdr.py --submit --patterns star --layers 6 --eval-points 100 --out odra_depth_L6.csv
+  python run_odra_cdr.py --submit --patterns star --layers 9 --eval-points 100 --out odra_depth_L9.csv
+  python run_odra_cdr.py --submit --patterns star --layers 13 --eval-points 100 --out odra_depth_L13.csv
+
+Porównanie: odra_depth_L*.csv (zero routingu) wobec odra_full_100pt.csv (ten sam CZ, ciężki routing).
+[20:19:39] trening zakonczony OK
+[20:19:39] POMIJAM depth -- odra_depth_L6.csv juz kompletny
+[20:19:39] POMIJAM depth -- odra_depth_L9.csv juz kompletny
+[20:19:39] >>> START depth  -> odra_depth_L13.csv
+[os glebokosci] n_layers 3 -> 13 (zero narzutu routingu; wagi z train_star_depth.py)
+PLAN: ODRA (gwiazda, iqm-client) | wzorce ['star'] | 100 pkt ewaluacyjnych | n_train 100 | shots 8192
+  obwodów 200 (200/wzorzec) | zgłoszeń 2 | pomiarów 1638400
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/run_odra_cdr.py", line 226, in <module>
+    main()
+    ~~~~^^
+  File "/Users/karinaleskiewicz/QEM/run_odra_cdr.py", line 113, in main
+    client = IQMClient(args.url)  # token z IQM_TOKEN
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_client/iqm_client.py", line 91, in __init__
+    self._iqm_server_client = _IQMServerClient(
+                              ~~~~~~~~~~~~~~~~^
+        iqm_server_url=iqm_server_url,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        quantum_computer=quantum_computer,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 157, in __init__
+    self._quantum_computer = self._resolve_quantum_computer(quantum_computer)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 525, in _resolve_quantum_computer
+    quantum_computers = self.get_quantum_computers()
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 307, in get_quantum_computers
+    response = self._send_request(requests.get, "quantum-computers")
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 604, in _send_request
+    iqm_server_error.raise_exception(response.status_code)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/station_control/interface/errors.py", line 128, in raise_exception
+    raise error_class(message=self.message, error_code=self.error_code)
+exa.common.errors.iqm_error.AuthenticationError: Missing or invalid authentication credentials
+[20:19:42] <<< BLAD  depth  (0 min) -- ide dalej, szczegoly w overnight_odra_o2.log
+[20:19:42] POMIJAM kappa (SKIP)
+[20:19:42] POMIJAM native (SKIP)
+[20:19:42] 
+[20:19:42] === PODSUMOWANIE ===
+[20:19:42]   OK    odra_twirl_o2.csv (16 wierszy)
+[20:19:42]   OK    odra_depth_L6.csv (1 wierszy)
+[20:19:42]   OK    odra_depth_L9.csv (1 wierszy)
+[20:19:42]   BRAK  odra_depth_L13.csv
+[20:19:42]   OK    odra_kappa_k7.csv (18 wierszy)
+[20:19:42]   BRAK  odra_twirl_native_o2.csv
+[20:19:42] agreguje 2 okien dryfu -> odra_twirl_banded.csv
+2 file(s), 2 window(s): ['o1', 'o2']
+
+  cz= 12  optimal:star        cdr | Δr²=+0.0111±0.0006 (yes) | Δerr=-0.0285±0.0095 | [o1:+0.012; o2:+0.011]
+  cz= 12  optimal:star        raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 12  optimal:star        zne | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 30  optimal:linear      cdr | Δr²=+0.1441±0.0402 (yes) | Δerr=-0.0272±0.0211 | [o1:+0.116; o2:+0.172]
+  cz= 30  optimal:linear      raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 30  optimal:linear      zne | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 39  optimal:circular    cdr | Δr²=+0.1928±0.1610 (yes) | Δerr=-0.0696±0.0012 | [o1:+0.307; o2:+0.079]
+  cz= 39  optimal:circular    raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 39  optimal:circular    zne | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 57  optimal:all_to_all  cdr | Δr²=+0.1603±0.0433 (yes) | Δerr=-0.0638±0.0313 | [o1:+0.191; o2:+0.130]
+  cz= 57  optimal:all_to_all  raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 57  optimal:all_to_all  zne | Δr²=   n/a   () | Δerr=   n/a   | []
+
+  TREND cdr: dΔr²/dCZ = +0.3398±0.1771 per 100 CZ (n=2 windows) -> gain GROWS with routing
+
+wrote odra_twirl_banded.csv
+READ: twirl gain is real where Δr²>0 grows with cz AND r2_significant=yes (gain exceeds inter-window drift).
+[20:19:42]   OK -- pasma dryfu policzone
+[20:19:42] 
+[20:19:42] Zysk z twirlingu: LOGICZNY vs NATYWNY (natywny obejmuje tez SWAP-y)
+  (usrednione po oknach: logiczny {12: 2, 30: 2, 39: 2, 57: 2}, natywny {12: 1, 30: 1, 39: 1, 57: 1})
+    CZ   d_r2 logiczny    d_r2 natywny  przyrost
+    12         +0.0111         -0.0173  -0.0284
+    30         +0.1441         -0.1090  -0.2530
+    39         +0.1928         +0.0360  -0.1569
+    57         +0.1603         -0.1099  -0.2702
+
+  Dodatni przyrost = owijanie SWAP-ow faktycznie dokłada zysku
+  -> obecny wynik w raporcie jest dolnym ograniczeniem, i wiemy juz o ile.
+
+Os glebokosci: r2 BEZ routingu wobec r2 Z routingiem (ten sam koszt CZ)
+    CZ   bez routingu   z routingiem  roznica
+    24         0.8274         0.8085  +0.0189  (porownano z 27 CZ)
+    36         0.7189         0.7916  -0.0727  (porownano z 36 CZ)
+
+  Dodatnia roznica = routing szkodzi BARDZIEJ niz sama liczba bramek
+  -> teza pracy jest specyficzna dla routingu, nie tylko dla kosztu dwukubitowego.
+[20:19:42] 
+[20:19:42] === KONIEC Wed Sep 16 20:19:42 CEST 2026 ===

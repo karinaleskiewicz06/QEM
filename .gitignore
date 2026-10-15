@@ -6,7 +6,9 @@
 trained_models/
 
 # device calibrations (may contain site-specific URLs / raw dumps)
-calibrations/
+calibrations/*
+!calibrations/odra_20260803.json
+!calibrations/odra_raw_20260803.json
 
 # routing sweep / pilot outputs
 routing_ladder.csv
@@ -20,6 +22,7 @@ figures/
 # latex build artifacts
 *.aux
 *.log
+!runs/**/*.log
 *.out
 *.toc
 *.fdb_latexmk

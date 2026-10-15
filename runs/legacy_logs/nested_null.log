@@ -1,0 +1,298 @@
+>>> cal00 w1 Mon Oct 12 09:55:37 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2128 (532/point) | shots 17432576 | jobs 28
+  COST: ODRA access is not metered in Resonance credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 12 | raw twirl=False | err 0.0773 | r2 
+   optimal        star cz= 12 | cdr twirl=False | err 0.0213 | r2 0.9969
+   optimal        star cz= 12 | cdr twirl= True | err 0.0262 | r2 0.9978
+  [saved] optimal:star -> nested_cal00_w1.csv
+   optimal      linear cz= 30 | raw twirl=False | err 0.0964 | r2 
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0344 | r2 0.9928
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0313 | r2 0.997
+  [saved] optimal:linear -> nested_cal00_w1.csv
+   optimal    circular cz= 39 | raw twirl=False | err 0.1566 | r2 
+   optimal    circular cz= 39 | cdr twirl=False | err 0.0424 | r2 0.9888
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0406 | r2 0.9902
+  [saved] optimal:circular -> nested_cal00_w1.csv
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1578 | r2 
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0315 | r2 0.9451
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0345 | r2 0.9587
+  [saved] optimal:all_to_all -> nested_cal00_w1.csv
+
+wrote/updated nested_cal00_w1.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> cal00 w2 Mon Oct 12 09:56:47 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2128 (532/point) | shots 17432576 | jobs 28
+  COST: ODRA access is not metered in Resonance credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 12 | raw twirl=False | err 0.0780 | r2 
+   optimal        star cz= 12 | cdr twirl=False | err 0.0236 | r2 0.9966
+   optimal        star cz= 12 | cdr twirl= True | err 0.0241 | r2 0.9984
+  [saved] optimal:star -> nested_cal00_w2.csv
+   optimal      linear cz= 30 | raw twirl=False | err 0.0911 | r2 
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0351 | r2 0.9926
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0290 | r2 0.9967
+  [saved] optimal:linear -> nested_cal00_w2.csv
+   optimal    circular cz= 39 | raw twirl=False | err 0.1558 | r2 
+   optimal    circular cz= 39 | cdr twirl=False | err 0.0439 | r2 0.993
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0431 | r2 0.9908
+  [saved] optimal:circular -> nested_cal00_w2.csv
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1578 | r2 
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0293 | r2 0.9476
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0362 | r2 0.9385
+  [saved] optimal:all_to_all -> nested_cal00_w2.csv
+
+wrote/updated nested_cal00_w2.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> cal00 w3 Mon Oct 12 09:58:01 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2128 (532/point) | shots 17432576 | jobs 28
+  COST: ODRA access is not metered in Resonance credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 12 | raw twirl=False | err 0.0792 | r2 
+   optimal        star cz= 12 | cdr twirl=False | err 0.0170 | r2 0.9981
+   optimal        star cz= 12 | cdr twirl= True | err 0.0259 | r2 0.9983
+  [saved] optimal:star -> nested_cal00_w3.csv
+   optimal      linear cz= 30 | raw twirl=False | err 0.0917 | r2 
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0291 | r2 0.9946
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0280 | r2 0.9957
+  [saved] optimal:linear -> nested_cal00_w3.csv
+   optimal    circular cz= 39 | raw twirl=False | err 0.1615 | r2 
+   optimal    circular cz= 39 | cdr twirl=False | err 0.0519 | r2 0.9862
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0451 | r2 0.9891
+  [saved] optimal:circular -> nested_cal00_w3.csv
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1529 | r2 
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0314 | r2 0.9348
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0290 | r2 0.9494
+  [saved] optimal:all_to_all -> nested_cal00_w3.csv
+
+wrote/updated nested_cal00_w3.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+3 file(s), 3 window(s): ['cal00w1', 'cal00w2', 'cal00w3']
+
+  cz= 12  optimal:star        cdr | Δr²=+0.0010±0.0008 (yes) | Δerr=+0.0048±0.0042 | [cal00w1:+0.001; cal00w2:+0.002; cal00w3:+0.000]
+  cz= 12  optimal:star        raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 30  optimal:linear      cdr | Δr²=+0.0031±0.0018 (yes) | Δerr=-0.0034±0.0025 | [cal00w1:+0.004; cal00w2:+0.004; cal00w3:+0.001]
+  cz= 30  optimal:linear      raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 39  optimal:circular    cdr | Δr²=+0.0007±0.0026 (within-drift) | Δerr=-0.0031±0.0032 | [cal00w1:+0.001; cal00w2:-0.002; cal00w3:+0.003]
+  cz= 39  optimal:circular    raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 57  optimal:all_to_all  cdr | Δr²=+0.0064±0.0134 (within-drift) | Δerr=+0.0025±0.0047 | [cal00w1:+0.014; cal00w2:-0.009; cal00w3:+0.015]
+  cz= 57  optimal:all_to_all  raw | Δr²=   n/a   () | Δerr=   n/a   | []
+
+  TREND cdr: dΔr²/dCZ = +0.0105±0.0317 per 100 CZ (n=3 windows) -> trend within drift
+
+wrote nested_cal00_banded.csv
+READ: twirl gain is real where Δr²>0 grows with cz AND r2_significant=yes (gain exceeds inter-window drift).
+>>> cal02 w1 Mon Oct 12 09:59:16 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2128 (532/point) | shots 17432576 | jobs 28
+  COST: ODRA access is not metered in Resonance credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 12 | raw twirl=False | err 0.0728 | r2 
+   optimal        star cz= 12 | cdr twirl=False | err 0.0286 | r2 0.9963
+   optimal        star cz= 12 | cdr twirl= True | err 0.0256 | r2 0.9975
+  [saved] optimal:star -> nested_cal02_w1.csv
+   optimal      linear cz= 30 | raw twirl=False | err 0.0957 | r2 
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0373 | r2 0.9635
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0292 | r2 0.9961
+  [saved] optimal:linear -> nested_cal02_w1.csv
+   optimal    circular cz= 39 | raw twirl=False | err 0.1588 | r2 
+   optimal    circular cz= 39 | cdr twirl=False | err 0.0616 | r2 0.969
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0411 | r2 0.9864
+  [saved] optimal:circular -> nested_cal02_w1.csv
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1541 | r2 
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0393 | r2 0.8971
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0236 | r2 0.9457
+  [saved] optimal:all_to_all -> nested_cal02_w1.csv
+
+wrote/updated nested_cal02_w1.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> cal02 w2 Mon Oct 12 10:01:34 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2128 (532/point) | shots 17432576 | jobs 28
+  COST: ODRA access is not metered in Resonance credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 12 | raw twirl=False | err 0.0736 | r2 
+   optimal        star cz= 12 | cdr twirl=False | err 0.0228 | r2 0.9968
+   optimal        star cz= 12 | cdr twirl= True | err 0.0196 | r2 0.9969
+  [saved] optimal:star -> nested_cal02_w2.csv
+   optimal      linear cz= 30 | raw twirl=False | err 0.0955 | r2 
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0352 | r2 0.9644
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0401 | r2 0.997
+  [saved] optimal:linear -> nested_cal02_w2.csv
+   optimal    circular cz= 39 | raw twirl=False | err 0.1578 | r2 
+   optimal    circular cz= 39 | cdr twirl=False | err 0.0649 | r2 0.972
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0503 | r2 0.982
+  [saved] optimal:circular -> nested_cal02_w2.csv
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1509 | r2 
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0290 | r2 0.9213
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0237 | r2 0.9457
+  [saved] optimal:all_to_all -> nested_cal02_w2.csv
+
+wrote/updated nested_cal02_w2.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> cal02 w3 Mon Oct 12 10:03:56 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2128 (532/point) | shots 17432576 | jobs 28
+  COST: ODRA access is not metered in Resonance credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 12 | raw twirl=False | err 0.0712 | r2 
+   optimal        star cz= 12 | cdr twirl=False | err 0.0277 | r2 0.9978
+   optimal        star cz= 12 | cdr twirl= True | err 0.0250 | r2 0.998
+  [saved] optimal:star -> nested_cal02_w3.csv
+   optimal      linear cz= 30 | raw twirl=False | err 0.0972 | r2 
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0433 | r2 0.9713
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0347 | r2 0.9944
+  [saved] optimal:linear -> nested_cal02_w3.csv
+   optimal    circular cz= 39 | raw twirl=False | err 0.1639 | r2 
+   optimal    circular cz= 39 | cdr twirl=False | err 0.0636 | r2 0.9785
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0451 | r2 0.9907
+  [saved] optimal:circular -> nested_cal02_w3.csv
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1573 | r2 
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0365 | r2 0.9178
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0397 | r2 0.9455
+  [saved] optimal:all_to_all -> nested_cal02_w3.csv
+
+wrote/updated nested_cal02_w3.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+3 file(s), 3 window(s): ['cal02w1', 'cal02w2', 'cal02w3']
+
+  cz= 12  optimal:star        cdr | Δr²=+0.0005±0.0006 (within-drift) | Δerr=-0.0030±0.0003 | [cal02w1:+0.001; cal02w2:+0.000; cal02w3:+0.000]
+  cz= 12  optimal:star        raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 30  optimal:linear      cdr | Δr²=+0.0294±0.0055 (yes) | Δerr=-0.0039±0.0077 | [cal02w1:+0.033; cal02w2:+0.033; cal02w3:+0.023]
+  cz= 30  optimal:linear      raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 39  optimal:circular    cdr | Δr²=+0.0132±0.0038 (yes) | Δerr=-0.0179±0.0030 | [cal02w1:+0.017; cal02w2:+0.010; cal02w3:+0.012]
+  cz= 39  optimal:circular    raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 57  optimal:all_to_all  cdr | Δr²=+0.0336±0.0131 (yes) | Δerr=-0.0059±0.0095 | [cal02w1:+0.049; cal02w2:+0.024; cal02w3:+0.028]
+  cz= 57  optimal:all_to_all  raw | Δr²=   n/a   () | Δerr=   n/a   | []
+
+  TREND cdr: dΔr²/dCZ = +0.0637±0.0275 per 100 CZ (n=3 windows) -> gain GROWS with routing
+
+wrote nested_cal02_banded.csv
+READ: twirl gain is real where Δr²>0 grows with cz AND r2_significant=yes (gain exceeds inter-window drift).
+>>> cal05 w1 Mon Oct 12 10:06:14 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2128 (532/point) | shots 17432576 | jobs 28
+  COST: ODRA access is not metered in Resonance credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 12 | raw twirl=False | err 0.0727 | r2 
+   optimal        star cz= 12 | cdr twirl=False | err 0.0518 | r2 0.9967
+   optimal        star cz= 12 | cdr twirl= True | err 0.0259 | r2 0.9977
+  [saved] optimal:star -> nested_cal05_w1.csv
+   optimal      linear cz= 30 | raw twirl=False | err 0.1018 | r2 
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0637 | r2 0.8668
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0462 | r2 0.9842
+  [saved] optimal:linear -> nested_cal05_w1.csv
+   optimal    circular cz= 39 | raw twirl=False | err 0.1616 | r2 
+   optimal    circular cz= 39 | cdr twirl=False | err 0.0899 | r2 0.9284
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0550 | r2 0.9685
+  [saved] optimal:circular -> nested_cal05_w1.csv
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1583 | r2 
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0655 | r2 0.7766
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0159 | r2 0.9448
+  [saved] optimal:all_to_all -> nested_cal05_w1.csv
+
+wrote/updated nested_cal05_w1.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> cal05 w2 Mon Oct 12 10:08:30 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2128 (532/point) | shots 17432576 | jobs 28
+  COST: ODRA access is not metered in Resonance credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 12 | raw twirl=False | err 0.0691 | r2 
+   optimal        star cz= 12 | cdr twirl=False | err 0.0502 | r2 0.9947
+   optimal        star cz= 12 | cdr twirl= True | err 0.0293 | r2 0.9978
+  [saved] optimal:star -> nested_cal05_w2.csv
+   optimal      linear cz= 30 | raw twirl=False | err 0.0986 | r2 
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0618 | r2 0.8599
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0429 | r2 0.9751
+  [saved] optimal:linear -> nested_cal05_w2.csv
+   optimal    circular cz= 39 | raw twirl=False | err 0.1650 | r2 
+   optimal    circular cz= 39 | cdr twirl=False | err 0.0937 | r2 0.9321
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0414 | r2 0.9655
+  [saved] optimal:circular -> nested_cal05_w2.csv
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1655 | r2 
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0661 | r2 0.7927
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0481 | r2 0.9391
+  [saved] optimal:all_to_all -> nested_cal05_w2.csv
+
+wrote/updated nested_cal05_w2.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> cal05 w3 Mon Oct 12 10:10:39 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2128 (532/point) | shots 17432576 | jobs 28
+  COST: ODRA access is not metered in Resonance credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 12 | raw twirl=False | err 0.0696 | r2 
+   optimal        star cz= 12 | cdr twirl=False | err 0.0504 | r2 0.9953
+   optimal        star cz= 12 | cdr twirl= True | err 0.0352 | r2 0.9975
+  [saved] optimal:star -> nested_cal05_w3.csv
+   optimal      linear cz= 30 | raw twirl=False | err 0.0959 | r2 
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0650 | r2 0.8545
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0305 | r2 0.9885
+  [saved] optimal:linear -> nested_cal05_w3.csv
+   optimal    circular cz= 39 | raw twirl=False | err 0.1633 | r2 
+   optimal    circular cz= 39 | cdr twirl=False | err 0.0933 | r2 0.9424
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0605 | r2 0.9818
+  [saved] optimal:circular -> nested_cal05_w3.csv
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1623 | r2 
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0665 | r2 0.7652
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0487 | r2 0.9505
+  [saved] optimal:all_to_all -> nested_cal05_w3.csv
+
+wrote/updated nested_cal05_w3.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+3 file(s), 3 window(s): ['cal05w1', 'cal05w2', 'cal05w3']
+
+  cz= 12  optimal:star        cdr | Δr²=+0.0021±0.0011 (yes) | Δerr=-0.0207±0.0054 | [cal05w1:+0.001; cal05w2:+0.003; cal05w3:+0.002]
+  cz= 12  optimal:star        raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 30  optimal:linear      cdr | Δr²=+0.1222±0.0103 (yes) | Δerr=-0.0236±0.0094 | [cal05w1:+0.117; cal05w2:+0.115; cal05w3:+0.134]
+  cz= 30  optimal:linear      raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 39  optimal:circular    cdr | Δr²=+0.0376±0.0037 (yes) | Δerr=-0.0400±0.0107 | [cal05w1:+0.040; cal05w2:+0.033; cal05w3:+0.039]
+  cz= 39  optimal:circular    raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 57  optimal:all_to_all  cdr | Δr²=+0.1666±0.0195 (yes) | Δerr=-0.0285±0.0183 | [cal05w1:+0.168; cal05w2:+0.146; cal05w3:+0.185]
+  cz= 57  optimal:all_to_all  raw | Δr²=   n/a   () | Δerr=   n/a   | []
+
+  TREND cdr: dΔr²/dCZ = +0.3154±0.0405 per 100 CZ (n=3 windows) -> gain GROWS with routing
+
+wrote nested_cal05_banded.csv
+READ: twirl gain is real where Δr²>0 grows with cz AND r2_significant=yes (gain exceeds inter-window drift).
+=== DONE Mon Oct 12 10:13:06 CEST 2026 ===

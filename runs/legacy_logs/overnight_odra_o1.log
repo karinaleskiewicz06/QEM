@@ -1,0 +1,441 @@
+[21:58:58] === NOCNA KAMPANIA ODRA -- okno o1 -- start Sun Sep 13 21:58:58 CEST 2026 ===
+importy OK
+[21:58:59] kontrola wstepna OK (zmienne srodowiskowe + importy)
+[21:58:59] >>> START trening osi glebokosci (CPU, w tle kroku 1)
+[21:58:59]     trening w tle, PID 89884
+[21:58:59] >>> START twirl  -> odra_twirl_o1.csv
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/train_star_depth.py", line 43, in <module>
+    from qiskit_machine_learning.gradients import ParamShiftEstimatorGradient
+ModuleNotFoundError: No module named 'qiskit_machine_learning'
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2176 (544/point) | shots 17825792 | jobs 32
+  COST: ODRA access is not metered in Resonance credits
+
+>>> note your credit balance NOW <<<
+
+[resume] 0 point(s) already in odra_twirl_o1.csv: []
+    [odra] zadanie 01a09c5a-10d7-73b0-b8b3-7e361fae6d6c | 4 obwodów (4/4)
+   optimal        star cz= 12 | raw twirl=False | err 0.0780 | r2 
+    [odra] zadanie 01a09c5a-9625-7c90-9dac-6ee93813d38e | 100 obwodów (100/264)
+    [odra] zadanie 01a09c5f-acdd-7100-ace9-94acbe02ceb3 | 100 obwodów (200/264)
+    [odra] zadanie 01a09c64-c1b4-78c1-8042-401d65cde6e9 | 64 obwodów (264/264)
+   optimal        star cz= 12 | cdr twirl=False | err 0.0584 | r2 0.9711
+    [odra] zadanie 01a09c68-06e4-7a63-ae84-9db7a518beb6 | 100 obwodów (100/264)
+    [odra] zadanie 01a09c6d-1e09-7bb0-b46b-4f790ad57c85 | 100 obwodów (200/264)
+    [odra] zadanie 01a09c72-33e3-73e1-b8dd-8ac56d225424 | 64 obwodów (264/264)
+   optimal        star cz= 12 | cdr twirl= True | err 0.0232 | r2 0.9826
+    [odra] zadanie 01a09c75-76a3-7ec2-a624-c3d19040bdbf | 12 obwodów (12/12)
+   optimal        star cz= 12 | zne twirl=False | err 0.0279 | r2 
+  [saved] optimal:star -> odra_twirl_o1.csv
+    [odra] zadanie 01a09c76-1bb5-7303-9147-385421c803e7 | 4 obwodów (4/4)
+   optimal      linear cz= 30 | raw twirl=False | err 0.1017 | r2 
+    [odra] zadanie 01a09c76-5d72-7040-86ff-378c775d5cda | 100 obwodów (100/264)
+    [odra] zadanie 01a09c7b-7855-7c12-a458-48047e68d0ed | 100 obwodów (200/264)
+    [odra] zadanie 01a09c80-9639-7832-a994-3d9f3cd4b23a | 64 obwodów (264/264)
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0686 | r2 0.8325
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a09c83-e501-7710-893c-de9f4423f2cd | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a09c88-ffb5-7283-8fe9-c357d6904e6b | 100 obwodów (200/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:33<?, ?it/s]
+    [odra] zadanie 01a09c8e-1bd9-77a0-b076-9f63e1b28a0c | 64 obwodów (264/264)
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0264 | r2 0.9481
+    [odra] zadanie 01a09c91-627c-79c1-a841-4f76d943346e | 12 obwodów (12/12)
+   optimal      linear cz= 30 | zne twirl=False | err 0.0747 | r2 
+  [saved] optimal:linear -> odra_twirl_o1.csv
+    [odra] zadanie 01a09c92-0adf-7d50-80a5-5b162c9089bd | 4 obwodów (4/4)
+   optimal    circular cz= 39 | raw twirl=False | err 0.2023 | r2 
+    [odra] zadanie 01a09c92-4f66-7711-921c-fe67622320fc | 100 obwodów (100/264)
+    [odra] zadanie 01a09c97-6e2c-7d81-9538-a774adfa245a | 100 obwodów (200/264)
+    [odra] zadanie 01a09c9c-8ed8-7af0-9d21-ecadedf44b61 | 64 obwodów (264/264)
+   optimal    circular cz= 39 | cdr twirl=False | err 0.1500 | r2 0.5953
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a09c9f-de4f-73e1-b7a4-937d8b83d02a | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a09ca5-0158-7f13-948d-73d776c0ea7c | 100 obwodów (200/264)
+    [odra] zadanie 01a09caa-2178-75a0-8a08-be7959aedfe5 | 64 obwodów (264/264)
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0813 | r2 0.902
+    [odra] zadanie 01a09cad-6c8c-7bc2-99d6-b514d0233336 | 12 obwodów (12/12)
+   optimal    circular cz= 39 | zne twirl=False | err 0.1731 | r2 
+  [saved] optimal:circular -> odra_twirl_o1.csv
+    [odra] zadanie 01a09cae-13bd-7552-87fe-e25c93416ae6 | 4 obwodów (4/4)
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1645 | r2 
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a09cae-56bd-76c1-a22e-2d152d6cb6d7 | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a09cb3-7b0a-7040-9e87-48e3c95ba475 | 100 obwodów (200/264)
+    [odra] zadanie 01a09cb8-9f41-7111-94de-09c12f618fed | 64 obwodów (264/264)
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.1086 | r2 0.6273
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a09cbb-f5dd-70e3-bc53-2532851bc929 | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a09cc1-18b6-7520-90a8-940ea76447c3 | 100 obwodów (200/264)
+    [odra] zadanie 01a09cc6-3c17-7452-9248-6f7fdcaa7771 | 64 obwodów (264/264)
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0670 | r2 0.8182
+    [odra] zadanie 01a09cc9-8b45-75e0-b1ac-a514b41e9410 | 12 obwodów (12/12)
+   optimal  all_to_all cz= 57 | zne twirl=False | err 0.1379 | r2 
+  [saved] optimal:all_to_all -> odra_twirl_o1.csv
+
+wrote/updated odra_twirl_o1.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+[00:01:32] <<< OK    twirl  (122 min)
+[00:01:32] czekam na koniec treningu (PID 89884) przed osia glebokosci...
+[00:01:32] trening BLAD -- os glebokosci zostanie pominieta
+[00:01:32] >>> START depth  -> odra_depth_L6.csv
+[os glebokosci] n_layers 3 -> 6 (zero narzutu routingu; wagi z train_star_depth.py)
+PLAN: ODRA (gwiazda, iqm-client) | wzorce ['star'] | 100 pkt ewaluacyjnych | n_train 100 | shots 8192
+  obwodów 200 (200/wzorzec) | zgłoszeń 2 | pomiarów 1638400
+
+>>> ODRA: dostęp niemierzony kredytami Resonance <<<
+
+brak wag dla L=6: trained_models_hard/two_curves_d8_q5_deg8_star_mean_L6_weights.npy
+uruchom najpierw: python train_star_depth.py --layers 6
+[00:01:33] <<< BLAD  depth  (0 min) -- ide dalej, szczegoly w overnight_odra_o1.log
+[00:01:33] >>> START depth  -> odra_depth_L9.csv
+[os glebokosci] n_layers 3 -> 9 (zero narzutu routingu; wagi z train_star_depth.py)
+PLAN: ODRA (gwiazda, iqm-client) | wzorce ['star'] | 100 pkt ewaluacyjnych | n_train 100 | shots 8192
+  obwodów 200 (200/wzorzec) | zgłoszeń 2 | pomiarów 1638400
+
+>>> ODRA: dostęp niemierzony kredytami Resonance <<<
+
+brak wag dla L=9: trained_models_hard/two_curves_d8_q5_deg8_star_mean_L9_weights.npy
+uruchom najpierw: python train_star_depth.py --layers 9
+[00:01:35] <<< BLAD  depth  (0 min) -- ide dalej, szczegoly w overnight_odra_o1.log
+[00:01:35] >>> START depth  -> odra_depth_L13.csv
+[os glebokosci] n_layers 3 -> 13 (zero narzutu routingu; wagi z train_star_depth.py)
+PLAN: ODRA (gwiazda, iqm-client) | wzorce ['star'] | 100 pkt ewaluacyjnych | n_train 100 | shots 8192
+  obwodów 200 (200/wzorzec) | zgłoszeń 2 | pomiarów 1638400
+
+>>> ODRA: dostęp niemierzony kredytami Resonance <<<
+
+brak wag dla L=13: trained_models_hard/two_curves_d8_q5_deg8_star_mean_L13_weights.npy
+uruchom najpierw: python train_star_depth.py --layers 13
+[00:01:36] <<< BLAD  depth  (0 min) -- ide dalej, szczegoly w overnight_odra_o1.log
+[00:01:36] >>> START kappa  -> odra_kappa_k7.csv
+PROGNOZA (pre-rejestrowana): kappa = 44.562, wsp. Richardsona [2.188, -2.188, 1.312, -0.312]
+  skale [1, 3, 5, 7] | S* = kappa*V/B^2 ; przy V~0.2 i~B zmierzonym na Garnecie:
+     optimal:star   B=0.0567 -> S* ~ 2772
+     adverse:star   B=0.1003 -> S* ~ 886
+
+PLAN: odra | punkty ['optimal:star', 'optimal:all_to_all'] | budżety [256, 512, 1024, 1536, 2048, 3072, 4096, 6144, 8192] | reps 5 | eval 4
+  obwodów 1800 | pomiarów 2150400 | jobów 36 | dostep niemierzony kredytami
+
+=== optimal:star  cz=12 ===
+     S     B_rms    V(cnt)    V(rep)    MSE raw    MSE zne   Delta MSE      wynik
+    [odra] zadanie 01a09cca-509b-7902-a3c2-ad906325037a | 20 obwodów (20/20)
+    [odra] zadanie 01a09cca-6148-79a2-824e-b3ac123e9f7c | 80 obwodów (80/80)
+   256    0.0910    0.1924    0.1478    0.00874    0.03764    +0.02890  zaszkodzi
+    [odra] zadanie 01a09cca-74bd-7041-aa23-d656425c2f74 | 20 obwodów (20/20)
+    [odra] zadanie 01a09cca-8ed5-70a0-bbe5-c202f90d305c | 80 obwodów (80/80)
+   512    0.0876    0.1959    0.0811    0.00780    0.01828    +0.01048  zaszkodzi
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:09<?, ?it/s]
+    [odra] zadanie 01a09cca-ab69-75c1-ab03-c880dd41f4a5 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:09<?, ?it/s]
+    [odra] zadanie 01a09cca-d912-73b3-b5b7-e7a201294502 | 80 obwodów (80/80)
+  1024    0.0825    0.1940    0.2897    0.00704    0.01095    +0.00391  zaszkodzi
+    [odra] zadanie 01a09ccb-0416-78c3-ac79-142aa0c59647 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:14<?, ?it/s]
+    [odra] zadanie 01a09ccb-3f5a-7322-978d-412eb1705c36 | 80 obwodów (80/80)
+  1536    0.0893    0.1972    0.0864    0.00801    0.00595    -0.00207     pomoze
+    [odra] zadanie 01a09ccb-7dc2-7662-83b5-8d526dffb963 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:18<?, ?it/s]
+    [odra] zadanie 01a09ccb-ccac-7a03-b3a2-5307fc56ca6f | 80 obwodów (80/80)
+  2048    0.0849    0.1975    0.1381    0.00726    0.00792    +0.00066  zaszkodzi
+    [odra] zadanie 01a09ccc-1a0b-7c12-931e-7d9f49d2c570 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:26<?, ?it/s]
+    [odra] zadanie 01a09ccc-8631-7a33-b6d6-e2b98334f4f6 | 80 obwodów (80/80)
+  3072    0.0876    0.1959    0.1380    0.00770    0.00494    -0.00277     pomoze
+    [odra] zadanie 01a09ccc-f4ba-7922-a779-04dc358dd547 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:34<?, ?it/s]
+    [odra] zadanie 01a09ccd-82aa-7c62-b9da-272006d9d728 | 80 obwodów (80/80)
+  4096    0.0872    0.1943    0.1764    0.00764    0.00338    -0.00427     pomoze
+    [odra] zadanie 01a09cce-0f10-7093-bd1b-6c9fdcabb9d1 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:51<?, ?it/s]
+    [odra] zadanie 01a09cce-dbc9-7670-9c7a-eaaf9214ee8c | 80 obwodów (80/80)
+  6144    0.0852    0.1956    0.2918    0.00730    0.00280    -0.00449     pomoze
+    [odra] zadanie 01a09ccf-ab07-7682-92c5-c3977145bfff | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [01:08<?, ?it/s]
+    [odra] zadanie 01a09cd0-ba49-7e53-9452-3aa45e6f6521 | 80 obwodów (80/80)
+  8192    0.0846    0.1957    0.1597    0.00717    0.00217    -0.00500     pomoze
+
+=== optimal:all_to_all  cz=57 ===
+     S     B_rms    V(cnt)    V(rep)    MSE raw    MSE zne   Delta MSE      wynik
+    [odra] zadanie 01a09cd1-cb6b-7ad1-8a3b-34b7ca6e2a79 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 47127.01it/s][A
+Playlist execution: 100%|██████████| 2/2 [00:01<00:00,  1.55it/s]   [AProgress in queue:   0%|          | 0/1 [00:06<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [00:01<00:00,  1.55it/s]
+    [odra] zadanie 01a09cd1-e63c-7cc2-b470-4f19da3d36d4 | 80 obwodów (80/80)
+   256    0.1629    0.2394    0.3053    0.02748    0.05612    +0.02863  zaszkodzi
+    [odra] zadanie 01a09cd2-049a-76a2-a62f-e9370bdc658f | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 45590.26it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.22s/it]   [A
+Playlist execution: 100%|██████████| 2/2 [00:02<00:00,  1.23s/it][AProgress in queue:   0%|          | 0/1 [00:08<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [00:02<00:00,  1.23s/it]
+    [odra] zadanie 01a09cd2-26bf-7bc1-8816-6156c29ce28b | 80 obwodów (80/80)
+   512    0.1730    0.2399    0.1862    0.03023    0.03541    +0.00518  zaszkodzi
+    [odra] zadanie 01a09cd2-4e7a-7212-8ffd-b001fa70448b | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 52428.80it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.23s/it]   [A
+Playlist execution:  50%|█████     | 1/2 [00:02<00:02,  2.44s/it][A
+Playlist execution: 100%|██████████| 2/2 [00:03<00:00,  1.83s/it][AProgress in queue:   0%|          | 0/1 [00:12<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [00:03<00:00,  1.83s/it]
+    [odra] zadanie 01a09cd2-8242-7d42-b361-01be0c0b3b76 | 80 obwodów (80/80)
+  1024    0.1688    0.2347    0.3037    0.02872    0.02304    -0.00568     pomoze
+    [odra] zadanie 01a09cd2-b80c-7882-9e1b-63a7f67a706d | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:01<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:02<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 37117.73it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.20s/it]   [A
+Playlist execution:  50%|█████     | 1/2 [00:02<00:02,  2.43s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:03<00:03,  3.66s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:04<00:04,  4.88s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:06<00:06,  6.10s/it][A
+Playlist execution: 100%|██████████| 2/2 [00:07<00:00,  3.67s/it][AProgress in queue:   0%|          | 0/1 [00:19<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [00:07<00:00,  3.67s/it]
+    [odra] zadanie 01a09cd2-f988-76e1-83cf-56bbc2dc87d3 | 80 obwodów (80/80)
+  1536    0.1669    0.2370    0.3300    0.02803    0.02268    -0.00535     pomoze
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:17<?, ?it/s]
+    [odra] zadanie 01a09cd3-4c6e-7853-a351-5f4e7ba61307 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 51781.53it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.21s/it]   [A
+Playlist execution:  50%|█████     | 1/2 [00:02<00:02,  2.47s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:03<00:03,  3.71s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:04<00:04,  4.92s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:06<00:06,  6.14s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:07<00:07,  7.39s/it][A
+Playlist execution: 100%|██████████| 2/2 [00:08<00:00,  4.29s/it][AProgress in queue:   0%|          | 0/1 [00:21<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [00:08<00:00,  4.29s/it]
+    [odra] zadanie 01a09cd3-9c9b-7e91-ac28-7c1f1dcee395 | 80 obwodów (80/80)
+  2048    0.1598    0.2409    0.1997    0.02560    0.03265    +0.00705  zaszkodzi
+    [odra] zadanie 01a09cd3-f518-7423-a8c9-a636381c7cf8 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 47662.55it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.22s/it]   [A
+Playlist execution:  50%|█████     | 1/2 [00:02<00:02,  2.46s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:03<00:03,  3.66s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:06<00:06,  6.07s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:07<00:07,  7.29s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:08<00:08,  8.56s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:09<00:09,  9.79s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:10<00:10, 11.00s/it][A
+Playlist execution: 100%|██████████| 2/2 [00:12<00:00,  6.12s/it][A
+Playlist execution: 100%|██████████| 2/2 [00:13<00:00,  6.73s/it][AProgress in queue:   0%|          | 0/1 [00:30<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [00:13<00:00,  6.73s/it]
+    [odra] zadanie 01a09cd4-65e8-7cd0-ad99-89feb3306178 | 80 obwodów (80/80)
+  3072    0.1633    0.2420    0.1197    0.02671    0.01500    -0.01171     pomoze
+    [odra] zadanie 01a09cd4-e3fe-7b21-a50c-aa7bd56b31a6 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 25731.93it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.22s/it]   [A
+Playlist execution:  50%|█████     | 1/2 [00:02<00:02,  2.51s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:03<00:03,  3.72s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:04<00:04,  4.93s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:06<00:06,  6.23s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:07<00:07,  7.43s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:08<00:08,  8.72s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:09<00:09,  9.96s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:11<00:11, 11.17s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:12<00:12, 12.39s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:13<00:13, 13.63s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:14<00:14, 14.83s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:16<00:16, 16.06s/it][A
+Playlist execution: 100%|██████████| 2/2 [00:17<00:00,  8.66s/it][AProgress in queue:   0%|          | 0/1 [00:38<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [00:17<00:00,  8.66s/it]
+    [odra] zadanie 01a09cd5-7a16-7d42-a179-bbb023d55ff4 | 80 obwodów (80/80)
+  4096    0.1629    0.2431    0.2403    0.02658    0.02509    -0.00149     pomoze
+    [odra] zadanie 01a09cd6-1522-7991-bd34-e51c8a758745 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 47662.55it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.24s/it]   [A
+Playlist execution:  50%|█████     | 1/2 [00:02<00:02,  2.48s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:03<00:03,  3.69s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:05<00:05,  5.00s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:06<00:06,  6.21s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:07<00:07,  7.41s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:08<00:08,  8.70s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:09<00:09,  9.91s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:11<00:11, 11.20s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:12<00:12, 12.44s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:13<00:13, 13.65s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:14<00:14, 14.95s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:16<00:16, 16.16s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:17<00:17, 17.36s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:18<00:18, 18.63s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:19<00:19, 19.85s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:21<00:21, 21.05s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:22<00:22, 22.33s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:23<00:23, 23.54s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:24<00:24, 24.83s/it][A
+Playlist execution: 100%|██████████| 2/2 [00:26<00:00, 13.04s/it][AProgress in queue:   0%|          | 0/1 [00:55<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [00:26<00:00, 13.04s/it]
+    [odra] zadanie 01a09cd6-ec7c-7091-9ad0-7f8431245ed8 | 80 obwodów (80/80)
+  6144    0.1638    0.2411    0.1879    0.02686    0.02745    +0.00059  zaszkodzi
+    [odra] zadanie 01a09cd7-cb68-7491-9c23-282aeda14c96 | 20 obwodów (20/20)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 47662.55it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.24s/it]   [A
+Playlist execution:  50%|█████     | 1/2 [00:02<00:02,  2.45s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:03<00:03,  3.67s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:04<00:04,  4.90s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:06<00:06,  6.11s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:07<00:07,  7.34s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:08<00:08,  8.58s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:09<00:09,  9.79s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:11<00:11, 11.09s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:12<00:12, 12.31s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:13<00:13, 13.51s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:14<00:14, 14.81s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:16<00:16, 16.01s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:17<00:17, 17.30s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:18<00:18, 18.53s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:19<00:19, 19.74s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:20<00:20, 20.97s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:22<00:22, 22.20s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:23<00:23, 23.41s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:24<00:24, 24.64s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:25<00:25, 25.87s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:27<00:27, 27.09s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:28<00:28, 28.31s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:29<00:29, 29.54s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:30<00:30, 30.75s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:31<00:31, 31.98s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:33<00:33, 33.21s/it][A
+Playlist execution: 100%|██████████| 2/2 [00:34<00:00, 17.20s/it][A
+Playlist execution: 100%|██████████| 2/2 [00:35<00:00, 17.82s/it][AProgress in queue:   0%|          | 0/1 [01:13<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [00:35<00:00, 17.82s/it]
+    [odra] zadanie 01a09cd8-dfe2-70f0-8d13-7cdc35d9de5d | 80 obwodów (80/80)
+  8192    0.1663    0.2385    0.1233    0.02768    0.01795    -0.00972     pomoze
+
+==============================================================================
+OCENA PO PULI (V i B nie zależą od S, więc pojedyncze oszacowania per-budżet są zaszumione)
+
+  optimal:star
+    V (z rozkładu zliczeń) = 0.1954    B_rms = 0.0867
+    S* = kappa*V/B^2       = 1160
+    przejście zaobserwowane w przedziale (2048, 3072]
+    --> kappa ZMIERZONE = 48.07 +/- 5.99   (przewidziane: 44.56)
+        odchylenie 0.6 sigma -> ZGODNE z teorią
+        usunięte obciążenie sqrt(B^2-B_zne^2) = 0.0781 (B zmierzone bezpośrednio: 0.0867)
+        -> obciążenie RESZTKOWE ZNE: B_zne = 0.0374 (43% obciążenia surowego)
+        -> skorygowane S* = kappa*V/(B^2-B_zne^2) = 1426
+
+  optimal:all_to_all
+    V (z rozkładu zliczeń) = 0.2396    B_rms = 0.1653
+    S* = kappa*V/B^2       = 391
+    przejście zaobserwowane w przedziale (6144, 8192]
+    --> kappa ZMIERZONE = 41.26 +/- 48.69   (przewidziane: 44.56)
+        odchylenie 0.1 sigma -> ZGODNE z teorią
+        usunięte obciążenie sqrt(B^2-B_zne^2) = 0.0856 (B zmierzone bezpośrednio: 0.1653)
+        -> obciążenie RESZTKOWE ZNE: B_zne = 0.1414 (86% obciążenia surowego)
+        -> skorygowane S* = kappa*V/(B^2-B_zne^2) = 1459
+
+zapisano odra_kappa_k7.csv
+ODCZYT: falsyfikowalna jest STAŁA kappa=14.66 --- przejście ma wypaść przy
+S* = kappa*V/B^2 z V i B zmierzonymi w tym samym przebiegu, bez dopasowywania.
+[00:18:48] <<< OK    kappa  (17 min)
+[00:18:48] >>> START native  -> odra_twirl_native_o1.csv
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2112 (528/point) | shots 17301504 | jobs 24
+  COST: ODRA access is not metered in Resonance credits
+
+>>> note your credit balance NOW <<<
+
+    [odra] zadanie 01a09cda-15ab-7ba1-83a0-475b289f3bb3 | 100 obwodów (100/264)
+    [odra] zadanie 01a09cdf-2ba7-7491-bb2b-582bbebfdf31 | 100 obwodów (200/264)
+    [odra] zadanie 01a09ce4-428b-7da0-bc9e-e23d2ed0cf20 | 64 obwodów (264/264)
+   optimal        star cz= 12 | cdr twirl=False | err 0.0568 | r2 0.9702
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:31<?, ?it/s]
+    [odra] zadanie 01a09ce7-87d5-7b00-b49d-91a88e33c2c7 | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a09cec-9ccd-73c3-8c89-2395a6f664de | 100 obwodów (200/264)
+    [odra] zadanie 01a09cf1-b2fe-7031-9a3b-a983665f4216 | 64 obwodów (264/264)
+   optimal        star cz= 12 | cdr twirl= True | err 0.0450 | r2 0.9529
+  [saved] optimal:star -> odra_twirl_native_o1.csv
+    [odra] zadanie 01a09cf4-f942-76f3-94c1-c7132692913b | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a09cfa-1453-7c60-bd6c-d1494b9f2e74 | 100 obwodów (200/264)
+    [odra] zadanie 01a09cff-3027-7c01-922b-bbc6acf1e41b | 64 obwodów (264/264)
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0655 | r2 0.8307
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a09d02-7e73-77a3-b5ab-f089c6531133 | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a09d07-a65a-7fa0-8457-38729c0ae688 | 100 obwodów (200/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:34<?, ?it/s]
+    [odra] zadanie 01a09d0c-c9a0-70c2-bce5-8cfd6f0e6e51 | 64 obwodów (264/264)
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0647 | r2 0.7217
+  [saved] optimal:linear -> odra_twirl_native_o1.csv
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a09d10-1865-7820-809c-fef0ed1a1d70 | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a09d15-36ad-7ff2-8fc0-a55d5c5d429a | 100 obwodów (200/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:35<?, ?it/s]
+    [odra] zadanie 01a09d1a-5599-7ee2-bd5b-32a226a07e9e | 64 obwodów (264/264)
+   optimal    circular cz= 39 | cdr twirl=False | err 0.1702 | r2 0.539
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:36<?, ?it/s]
+    [odra] zadanie 01a09d1d-ad94-7d40-b0be-834a4fa1273c | 100 obwodów (100/264)
+    [odra] zadanie 01a09d22-d98d-7402-bda4-143949964849 | 100 obwodów (200/264)
+    [odra] zadanie 01a09d28-0596-7832-ab04-7e2bbba5055d | 64 obwodów (264/264)
+   optimal    circular cz= 39 | cdr twirl= True | err 0.1486 | r2 0.575
+  [saved] optimal:circular -> odra_twirl_native_o1.csv
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a09d2b-57e7-7351-ae2b-1699fc8ae6e2 | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a09d30-7d7c-7ce1-ac07-e46a5e1382de | 100 obwodów (200/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:34<?, ?it/s]
+    [odra] zadanie 01a09d35-a380-7793-b9b9-2ae9951e5116 | 64 obwodów (264/264)
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.1132 | r2 0.6196
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:38<?, ?it/s]
+    [odra] zadanie 01a09d38-fa60-7d72-9cdf-01be0f1a4919 | 100 obwodów (100/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:38<?, ?it/s]
+    [odra] zadanie 01a09d3e-2e99-7701-ba8a-f1b589e330db | 100 obwodów (200/264)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:37<?, ?it/s]
+    [odra] zadanie 01a09d43-5f44-7773-b5c8-a036f3d8839c | 64 obwodów (264/264)
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.1243 | r2 0.5097
+  [saved] optimal:all_to_all -> odra_twirl_native_o1.csv
+
+wrote/updated odra_twirl_native_o1.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+[02:17:31] <<< OK    native  (118 min)
+[02:17:31] 
+[02:17:31] === PODSUMOWANIE ===
+[02:17:31]   OK    odra_twirl_o1.csv (16 wierszy)
+[02:17:31]   BRAK  odra_depth_L6.csv
+[02:17:31]   BRAK  odra_depth_L9.csv
+[02:17:31]   BRAK  odra_depth_L13.csv
+[02:17:31]   OK    odra_kappa_k7.csv (18 wierszy)
+[02:17:31]   OK    odra_twirl_native_o1.csv (8 wierszy)
+[02:17:31] tylko 1 okno dryfu -- pasma policze sie po drugiej nocy (WINDOW=o2)
+[02:17:31] 
+[02:17:31] Zysk z twirlingu: LOGICZNY vs NATYWNY (natywny obejmuje tez SWAP-y)
+  (usrednione po oknach: logiczny {12: 1, 30: 1, 39: 1, 57: 1}, natywny {12: 1, 30: 1, 39: 1, 57: 1})
+    CZ   d_r2 logiczny    d_r2 natywny  przyrost
+    12         +0.0115         -0.0173  -0.0288
+    30         +0.1156         -0.1090  -0.2246
+    39         +0.3067         +0.0360  -0.2707
+    57         +0.1909         -0.1099  -0.3008
+
+  Dodatni przyrost = owijanie SWAP-ow faktycznie dokłada zysku
+  -> obecny wynik w raporcie jest dolnym ograniczeniem, i wiemy juz o ile.
+
+Os glebokosci: r2 BEZ routingu wobec r2 Z routingiem (ten sam koszt CZ)
+    CZ   bez routingu   z routingiem  roznica
+  (brak danych osi glebokosci)
+[02:17:31] 
+[02:17:31] === KONIEC Mon Sep 14 02:17:31 CEST 2026 ===

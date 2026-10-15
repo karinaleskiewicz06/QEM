@@ -1,0 +1,356 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,graphicx,array,longtable}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=NavyBlue]{hyperref}
+\newcommand{\expv}{\langle O\rangle}
+\setlength{\parskip}{3pt}
+
+\title{QEM: wyniki publikowalne\\ oraz wyniki do uzupełnienia\\[4pt]
+\large Zestawienie na podstawie danych z ODRY, Garneta i Emeralda}
+\author{Karina Leśkiewicz}
+\date{Październik 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Zakres i kryteria}
+
+Zestawienie obejmuje wyłącznie wyniki, które (A) można opublikować w obecnej postaci, oraz
+(B) wyniki, które staną się publikowalne po wskazanych uzupełnieniach. Wyniki, których nie
+da się obronić bez zmiany tezy, pominięto (są omówione w recenzjach roboczych).
+
+\textbf{Źródło danych:} repozytorium \url{https://github.com/karinaleskiewicz06/QEM},
+gałąź \texttt{month2-topology-port}, commit \texttt{81e0f97}. Wszystkie liczby przeliczono
+bezpośrednio z plików CSV wymienionych przy każdym wyniku.
+
+\textbf{Kryterium A:} dane są w repozytorium, efekt jest istotny statystycznie albo
+powtarza się w niezależnych kampaniach, a interpretacja nie wymaga założeń, których dane
+nie testują. \textbf{Kryterium B:} kierunek efektu jest widoczny w danych, ale brakuje
+kontroli, powtórzeń lub danych surowych; podano konkretną listę uzupełnień i kryterium
+sukcesu.
+
+\begin{table}[h]\centering\small
+\caption{Przegląd wyników.}
+\begin{tabular}{@{}lp{9.6cm}l@{}}
+\toprule
+& Wynik & Urządzenia \\
+\midrule
+\textbf{A1} & Twirling logiczny przy równej liczbie pomiarów obniża błąd CDR & ODRA, Garnet \\
+\textbf{A2} & Błąd surowy rośnie z liczbą CZ; zysk ZNE jest największy przy najtańszym obwodzie & ODRA, Garnet \\
+\textbf{A3} & Skończono-pomiarowa granica opłacalności ZNE ($\kappa$) dla trzech zbiorów węzłów & ODRA, Garnet \\
+\midrule
+B1 & Pełny (natywny) twirling, obejmujący CZ ze SWAP-ów & ODRA \\
+B2 & Twirling zmniejsza wrażliwość CDR na dryf kalibracji & Garnet (ODRA: nie) \\
+B3 & Kontrola z dopasowaną liczbą pomiarów jako wkład metodologiczny & symulacja \\
+B4 & Degradację napędza liczba CZ i głębokość, nie sam routing & ODRA \\
+B5 & Mapa koszt--dokładność: raw / ZNE / CDR / CDR+twirling & ODRA, Garnet \\
+B6 & Górna granica okna ZNE (zanik sygnału przy dużej skali) & ODRA, Garnet, Emerald \\
+B7 & Zgodność decyzji klasyfikatora z modelem idealnym po mitygacji & ODRA (Banknote), Garnet \\
+B8 & Dynamiczne odsprzęganie jako wynik negatywny & ODRA \\
+B9 & Nadwyżka spadku $r^2$ ponad szum niekoherentny & Garnet, ODRA \\
+B10 & Mirror fidelity jako miara pomocnicza niezależna od zadania & ODRA, Garnet \\
+B11 & Detekcja $[[4,2,2]]$ na obwodach Cliffordowskich & Garnet \\
+B12 & Rozszerzenie wyników A1--A2 na Emerald & Emerald \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =====================================================================
+\section{Wyniki publikowalne}
+
+\subsection*{A1. Twirling logiczny obniża błąd CDR na dwóch procesorach}
+
+\textbf{Wynik.} Przy kontroli z dopasowaną liczbą pomiarów (ramię bez twirlingu uśrednia
+$M$ identycznych kopii obwodu) twirling obniżył błąd CDR $\varepsilon$ w \textbf{16 z 17}
+par sprzętowych (test znaków $p = 2{,}7\cdot10^{-4}$). W symulacji z szumem wyłącznie
+niekoherentnym efektu nie ma, a w symulacji z wstrzykniętym obrotem koherentnym jest silny
+(Tab.~\ref{tab:a1}, Rys.~\ref{fig:a1}).
+
+\begin{table}[h]\centering\small
+\caption{Pary ON/OFF dla CDR. Iloraz $=\varepsilon_{\text{ON}}/\varepsilon_{\text{OFF}}$.}
+\label{tab:a1}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Seria & okna & pary & $\varepsilon$ spadł & $p$ (znaki) & mediana ilorazu & średnie $\varepsilon$ OFF$\to$ON \\
+\midrule
+ODRA (sprzęt)        & 2 & 8  & 8/8   & 0{,}008 & 0{,}44 & 0{,}088 $\to$ 0{,}041 \\
+Garnet (sprzęt)      & 3 & 9  & 8/9   & 0{,}039 & 0{,}66 & 0{,}055 $\to$ 0{,}033 \\
+\midrule
+sym.\ niekoherentna  & 5 & 15 & 10/15 & 0{,}30  & 0{,}92 & 0{,}051 $\to$ 0{,}045 \\
+sym.\ koherentna $\theta=0{,}05$ & 5 & 15 & 15/15 & $6\cdot10^{-5}$ & 0{,}32 & 0{,}060 $\to$ 0{,}021 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Protokół.} ODRA: 8192 pomiary, $n_{\text{train}}=10$, $M=6$, 4 punkty ewaluacyjne,
+drabina 12/30/39/57 CZ. Garnet: 1024 pomiary, $n_{\text{train}}=10$, $M=6$, 4 punkty,
+drabina 12/57/96 CZ. Twirling na poziomie logicznym: bramki CZ pochodzące ze SWAP-ów nie są
+owijane.
+
+\textbf{Dane:} \texttt{odra\_twirl\_o1.csv}, \texttt{odra\_twirl\_o2.csv},
+\texttt{garnet\_twirl\_w\{1,2,3\}.csv}, \texttt{night\_null\_w*.csv},
+\texttt{night\_coh05\_w*.csv}.
+
+\textbf{Co trzeba uczciwie napisać w pracy.} (i) Wariant natywny (pełne pokrycie CZ) nie
+dał zysku i wymaga poprawki implementacji (B1); do tego czasu nie należy nazywać wariantu
+logicznego ,,dolnym ograniczeniem'' pełnego randomized compiling. (ii) Zysk widać także przy
+12~CZ, gdzie $r^2$ się nie zmienia, więc regułę decyzyjną trzeba opierać na $\varepsilon$,
+a nie na $r^2$. (iii) Błąd liczony jest z 4 punktów ewaluacyjnych na punkt drabiny.
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{{{artifact:art_6a04e106-e401-4f02-97a1-46309fa21508}}}
+\caption{(a) Błąd CDR z twirlingiem wobec błędu bez twirlingu, przy równej liczbie pomiarów;
+każdy punkt to para (punkt drabiny $\times$ okno kalibracyjne); linia przerywana: $y=x$.
+(b) Iloraz błędów dla każdej pary; kreska: mediana; nad seriami liczba par ze spadkiem błędu
+i $p$ testu znaków.}
+\label{fig:a1}
+\end{figure}
+
+\subsection*{A2. Błąd rośnie z liczbą CZ, a zysk ZNE jest największy przy najtańszym obwodzie}
+
+\textbf{Wynik.} Na ODRZE błąd wartości oczekiwanej bez mitygacji rośnie monotonicznie z
+liczbą CZ w dwóch niezależnych kampaniach, z różnymi modelami i różną liczbą punktów
+(dokładne $p=0{,}083$ dla każdej, łącznie jednostronnie $p\approx0{,}002$). Na Garnecie
+(8 punktów drabiny, rozmieszczenie zwarte i rozproszone) korelacja wynosi
+$\rho_S=+0{,}93$ ($p=0{,}001$). Zysk ZNE (Richardson, skale $\{1,3,5\}$) jest największy przy
+12~CZ (ODRA $4{,}6\times$ i $3{,}3\times$, Garnet $3{,}2\times$), a powyżej $\sim$30~CZ spada
+do $1{,}0$--$1{,}7\times$ (Tab.~\ref{tab:a2}, Rys.~\ref{fig:a2}).
+
+\begin{table}[h]\centering\small
+\caption{Błąd surowy i zysk ZNE wzdłuż drabiny routingu.}
+\label{tab:a2}
+\begin{tabular}{@{}p{4.3cm}p{1.9cm}p{8.6cm}@{}}
+\toprule
+Kampania & CZ & błąd surowy / zysk ZNE \\
+\midrule
+ODRA 1 (model łatwy, 30 pkt, 4096, 3 powt.) & 12, 27, 36, 54 & 0{,}112 / 4{,}59; 0{,}281 / 2{,}44; 0{,}299 / 1{,}70; 0{,}357 / 1{,}49 \\
+ODRA 2 (model trudny, 100 pkt, 8192) & 12, 27, 36, 54 & 0{,}075 / 3{,}30; 0{,}150 / 1{,}67; 0{,}186 / 1{,}32; 0{,}278 / 1{,}27 \\
+Garnet (15 pkt, 4096, 1 okno) & 12--96 (8 pkt) & 0{,}061 / 3{,}17 przy 12 CZ; 0{,}075--0{,}205 / 1{,}03--1{,}34 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Dane:} \texttt{hardware\_results.csv} (ODRA 1, wiersze DD-off),
+\texttt{odra\_full\_100pt.csv} (ODRA 2), \texttt{garnet\_full\_results.csv}.
+
+\textbf{Co trzeba uczciwie napisać.} Na Garnecie spadek zysku powyżej 12~CZ nie jest
+monotoniczny ($\rho_S(\text{CZ},\text{zysk})=-0{,}43$, $p=0{,}29$): wynik to ,,duży zysk
+tylko przy najtańszym obwodzie'', a nie ,,monotoniczny spadek''. Przy 12~CZ błąd po ZNE leży
+blisko podłogi szumu śrutowego, więc współczynnik $4{,}6\times$ jest ograniczony próbkowaniem.
+Emerald nie pokazuje tego trendu (zysk 0{,}22 przy 21~CZ) i jest omówiony osobno (B12).
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{{{artifact:art_d240134b-5d51-4bcb-a956-86255c3064cc}}}
+\caption{(a) Błąd $\expv$ bez mitygacji wobec liczby CZ po transpilacji. (b) Zysk ZNE
+(błąd surowy / błąd po ZNE). Emerald pokazano dla kompletności; ma jedno okno i 4 punkty
+ewaluacyjne.}
+\label{fig:a2}
+\end{figure}
+
+\subsection*{A3. Granica opłacalności ZNE przy skończonym budżecie pomiarów}
+
+\textbf{Wynik.} Dla ustalonego punktu drabiny różnica
+$(\mathrm{MSE}_{\text{ZNE}}-\mathrm{MSE}_{\text{raw}})\cdot S$ jest liniowa w budżecie $S$,
+a jej wyraz wolny wynosi $\kappa V$ ze stałą
+$\kappa=|\Lambda|\sum_i c_i^2-1$, zależną tylko od węzłów ekstrapolacji. ZNE szkodzi poniżej
+$S^{*}=\kappa V/B^2$, a pomaga powyżej. Zmierzone $\kappa$ zgadza się z przewidywaniem dla
+trzech zbiorów węzłów na dwóch urządzeniach (Tab.~\ref{tab:a3}, Rys.~\ref{fig:a3}).
+Niezależnie potwierdza się skalowanie $S^{*}\propto B^{-2}$: na Garnecie stosunek
+$B^2$ dwóch punktów wynosi 3{,}07, a stosunek zmierzonych $S^{*}$ (847 wobec 291) 2{,}91.
+
+\begin{table}[h]\centering\small
+\caption{Stała $\kappa$: przewidziana i zmierzona (wyraz wolny regresji, 12 powtórzeń na
+Garnecie, 5 na ODRZE).}
+\label{tab:a3}
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+Węzły & Urządzenie, punkt & CZ & $\kappa$ przewidziane & $\kappa$ zmierzone & $S^{*}$ \\
+\midrule
+$\{1,3\}$ & Garnet, optimal:star & 12 & 4{,}00 & $3{,}54\pm0{,}56$ & 197 \\
+$\{1,3\}$ & Garnet, adverse:star & 36 & 4{,}00 & $3{,}23\pm0{,}58$ & 76 \\
+$\{1,3,5\}$ & Garnet, optimal:star & 12 & 14{,}66 & $14{,}42\pm0{,}95$ & 847 \\
+$\{1,3,5\}$ & Garnet, adverse:star & 48 & 14{,}66 & $13{,}29\pm1{,}73$ & 291 \\
+$\{1,3,5,7\}$ & ODRA, optimal:star & 12 & 44{,}56 & $48{,}1\pm6{,}0$ & 1160 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Dane:} \texttt{zne\_boundary\_k4\_results.csv}, \texttt{zne\_shot\_boundary\_results.csv},
+\texttt{odra\_kappa\_k7.csv}.
+
+\textbf{Jak to przedstawić.} Wyraz wolny wynika z propagacji wariancji dla niezależnych
+pomiarów, a formalizm granicy pochodzi z pracy Scavino Alfaro (arXiv:2605.08251). Wkładem
+jest więc \emph{eksperymentalna walidacja} tej granicy na sprzęcie i reguła praktyczna:
+mniej węzłów obniża $S^{*}$ około czterokrotnie (z $\{1,3,5\}$ do $\{1,3\}$). Słowo
+,,pre-rejestrowana'' należy usunąć albo podać commit z prognozą sprzed pomiaru. Punkt
+ODRA all\_to\_all ($\kappa=41\pm49$) jest nieinformatywny i warto go tylko wymienić.
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{{{artifact:art_c8e610bd-ab2f-4eb2-9bcb-1bbeabf06dcd}}}
+\caption{(a) Różnica MSE między ZNE a pomiarem bez mitygacji w funkcji budżetu pomiarów;
+kółka: optimal:star, kwadraty: drugi punkt drabiny; linie: model $\kappa V/S + \text{const}$
+z $\kappa$ przewidzianym z węzłów i nachyleniem z regresji. (b) $\kappa$ zmierzone wobec
+przewidzianego; linia przerywana: $y=x$.}
+\label{fig:a3}
+\end{figure}
+
+% =====================================================================
+\section{Wyniki do uzupełnienia}
+
+Każdy punkt ma ten sam układ: \emph{stan} (co pokazują obecne dane), \emph{brakuje},
+\emph{do zrobienia}, \emph{kryterium} (co musi wyjść, żeby wynik był publikowalny).
+
+\subsection*{B1. Pełny twirling (natywny)}
+\textbf{Stan.} Owinięcie wszystkich CZ po transpilacji (\texttt{odra\_twirl\_native\_o1.csv})
+obniżyło błąd tylko w 3 z 4 punktów (mediana ilorazu 0{,}93), a $r^2$ spadło średnio o 0{,}05.
+\textbf{Brakuje.} Implementacja \texttt{twirl\_native} wstawia bramki Pauliego jako osobne
+PRX bez scalania z sąsiednimi obrotami, przez co obwód ma 2{,}2--2{,}7$\times$ więcej bramek
+jednokubitowych i około dwukrotnie większą głębokość niż obwód bez twirlingu.
+\textbf{Do zrobienia.} Scalać bramki jednokubitowe po wstawieniu Pauli (np.\ przebieg
+\texttt{Optimize1qGatesDecomposition} bez ponownego routingu) i sprawdzić, że liczba bramek
+odpowiada obwodowi OFF; powtórzyć na ODRZE (2 okna) i Garnecie (3 okna) w tych samych
+punktach co A1. \textbf{Kryterium.} Iloraz błędów nie gorszy niż w wariancie logicznym.
+
+\subsection*{B2. Odporność CDR na dryf kalibracji}
+\textbf{Stan.} Na Garnecie odchylenie błędu CDR między trzema oknami spada z
+0{,}016 / 0{,}017 / 0{,}023 do 0{,}008 / 0{,}006 / 0{,}005 (12/57/96 CZ). Na ODRZE (2 okna)
+efektu nie ma: przy 30 i 57~CZ rozrzut po twirlingu jest większy (Rys.~\ref{fig:b}a).
+\textbf{Brakuje.} Liczby okien: dwa lub trzy okna nie pozwalają testować różnic wariancji.
+\textbf{Do zrobienia.} Co najmniej 5 okien na urządzenie w tych samych punktach; test
+Levene'a lub bootstrap ilorazu wariancji. \textbf{Kryterium.} Istotnie mniejsza wariancja
+po twirlingu na obu urządzeniach.
+
+\subsection*{B3. Kontrola z dopasowaną liczbą pomiarów}
+\textbf{Stan.} Raport podaje, że bez dopasowania liczby pomiarów symulacja z szumem
+depolaryzującym daje pozorny zysk $\Delta r^2\approx+0{,}10\ldots+0{,}15$ przy $M=10$, a po
+dopasowaniu zysk znika. \textbf{Brakuje.} Pliku CSV z przebiegiem bez dopasowania w
+repozytorium. \textbf{Do zrobienia.} Dołączyć dane symulacyjne i dodać jedno tanie ramię
+sprzętowe bez dopasowania (np.\ Garnet, 2 punkty). \textbf{Kryterium.} Pozorny zysk widoczny
+w symulacji i na sprzęcie, znikający po dopasowaniu.
+
+\subsection*{B4. Liczba CZ i głębokość zamiast routingu}
+\textbf{Stan.} Na ODRZE obwód bez routingu (gwiazda, $L=6/9/13$; \texttt{odra\_depth\_L*.csv})
+traci jakość co najmniej tak szybko jak obwód z routingiem: $r^2$ 0{,}827 / 0{,}719 / 0{,}444
+przy 24 / 36 / 52~CZ wobec 0{,}809 / 0{,}792 / 0{,}598 przy 27 / 36 / 54~CZ; błąd surowy przy
+36~CZ 0{,}238 wobec 0{,}186 (Rys.~\ref{fig:b}b). \textbf{Brakuje.} Obwody bez routingu mają
+więcej warstw, więc więcej bramek jednokubitowych i dłuższy czas trwania; jedna kampania,
+jedno urządzenie. \textbf{Do zrobienia.} Powtórzyć na Garnecie; dla każdego obwodu zapisać
+liczbę CZ, liczbę PRX i czas trwania; regresja błędu względem tych trzech zmiennych.
+\textbf{Kryterium.} Rozdzielenie wkładu CZ, bramek 1q i czasu; teza ,,SWAP-y nie są
+szczególnie szkodliwe przy tej samej liczbie CZ'' albo jej odrzucenie.
+
+\subsection*{B5. Mapa koszt--dokładność metod}
+\textbf{Stan.} W kampanii twirlingowej na ODRZE CDR z twirlingiem ma mniejszy błąd niż ZNE
+w każdym punkcie (12 / 30 / 39 / 57~CZ: 0{,}022 / 0{,}041 / 0{,}061 / 0{,}040 wobec
+0{,}026 / 0{,}067 / 0{,}165 / 0{,}123), ale zużywa około 22$\times$ więcej pomiarów.
+Na Garnecie ZNE i CDR mierzono w osobnych kampaniach, których błędy surowe różnią się do
+1{,}7$\times$. \textbf{Brakuje.} Porównania w jednej kampanii przy znormalizowanym koszcie.
+\textbf{Do zrobienia.} Jedna kampania na urządzenie z czterema ramionami (raw, ZNE, CDR,
+CDR+twirling), ten sam $n_{\text{train}}$, raportowanie błędu w funkcji efektywnej liczby
+pomiarów. \textbf{Kryterium.} Front Pareto koszt--błąd z przedziałami niepewności z co
+najmniej 2 okien.
+
+\subsection*{B6. Górna granica okna ZNE}
+\textbf{Stan.} Kryterium retencji $R=|\expv(5)|/|\expv(1)|$ zmierzone na ODRZE uznaje punkt
+39~CZ za ,,zachowany'' ($R=0{,}81$ i $0{,}67$), choć $|\expv(1)|=0{,}04$, czyli sygnał jest
+na podłodze już przy $\lambda=1$. \textbf{Brakuje.} Normalizacji do wartości idealnej i
+wartości per skala na Garnecie i Emeraldzie. \textbf{Do zrobienia.} Retencja
+$|\expv(1)|/|\expv_{\text{ideal}}|$ albo stosunek sygnału do błędu standardowego; test
+przeskalowania Köstera--Mauerera
+$\hat{\expv}_0/(\tfrac{15}{8}\expv(1))$ i kontrola ,,garbage folding''.
+\textbf{Kryterium.} Próg zaniku zdefiniowany niezależnie od wyniku ZNE i potwierdzony na
+2 urządzeniach.
+
+\subsection*{B7. Zgodność decyzji klasyfikatora z modelem idealnym}
+\textbf{Stan.} W danych z Miesiąca 1 (Banknote, ODRA) ZNE przybliża trafność do wartości
+idealnej w 8 z 9 konfiguracji, a w 5 z 9 trafność surowa przekracza idealną. Na Garnecie
+przy 96~CZ trafność surowa (0{,}78) przekracza bezszumową trafność testową modelu (0{,}767).
+Trafność względem etykiet nie mierzy więc działania mitygacji. \textbf{Brakuje.} Danych per
+punkt dla Banknote w repozytorium i trafności idealnej na tych samych punktach.
+\textbf{Do zrobienia.} Metryka: odsetek zgodnych decyzji
+$\mathrm{sign}\,\expv_{\text{mit}}=\mathrm{sign}\,\expv_{\text{ideal}}$, test McNemara na
+punktach, co najmniej 100 punktów. \textbf{Kryterium.} Istotny wzrost zgodności po
+mitygacji przy wysokim CZ.
+
+\subsection*{B8. Dynamiczne odsprzęganie jako wynik negatywny}
+\textbf{Stan.} Na ODRZE włączenie natywnego DD zwiększyło błąd we wszystkich 4 punktach
+drabiny (\texttt{hardware\_results.csv}, np.\ 0{,}112$\to$0{,}159 przy 12~CZ) i obniżyło
+mirror fidelity we wszystkich 13 konfiguracjach (Miesiąc 1). \textbf{Brakuje.} Kontroli
+kolejności: DD-off zawsze wykonywano przed DD-on, a para dla wzorca circular została
+rozdzielona na dwa dni (30.07 i 01.08, według znaczników czasu w ID jobów).
+\textbf{Do zrobienia.} Przeplot ABAB w jednej sesji, obwód kontrolny z długą bezczynnością
+(w którym DD powinno pomagać), co najmniej dwie sekwencje DD, dwa dni.
+\textbf{Kryterium.} Kara za DD utrzymuje się przy przeplocie, a obwód kontrolny pokazuje,
+w jakich warunkach DD pomaga.
+
+\subsection*{B9. Nadwyżka spadku $r^2$ ponad szum niekoherentny}
+\textbf{Stan.} $r^2$ spada z liczbą CZ na wszystkich urządzeniach, ale na Garnecie spadek
+jest ilościowo taki sam jak w symulacji z szumem wyłącznie niekoherentnym (0{,}969$\to$0{,}827
+wobec 0{,}985$\to$0{,}835--0{,}871; Rys.~\ref{fig:b}c). Sam spadek $r^2$ nie dowodzi więc
+koherencji. \textbf{Brakuje.} Symulacji z kalibracją urządzenia (obecna kontrola używa
+kalibracji zastępczej) i modeli łączących szum niekoherentny z koherentnym.
+\textbf{Do zrobienia.} Null skalibrowany do Garneta i ODRY, modele z $\theta\in\{0{,}02;0{,}05\}$
+na tym tle, ten sam $n_{\text{train}}$ i liczba pomiarów co na sprzęcie.
+\textbf{Kryterium.} $r^2$ na sprzęcie istotnie poniżej nulla; dopiero wtedy można mówić o
+$r^2$ jako wskaźniku koherencji.
+
+\subsection*{B10. Mirror fidelity jako miara pomocnicza}
+\textbf{Stan.} Na ODRZE mirror fidelity maleje monotonicznie z kosztem routingu
+(0{,}549$\to$0{,}094, Miesiąc 1). Na Garnecie koreluje silniej z głębokością
+($\rho_S=+0{,}79$, $p=0{,}021$, $n=8$) niż z liczbą CZ ($+0{,}48$).
+\textbf{Brakuje.} Randomizacji obwodów lustrzanych (obwody $UU^\dagger$ bez randomizacji
+częściowo znoszą błąd koherentny), członu SPAM, większej liczby wejść (teraz 3).
+\textbf{Do zrobienia.} Randomized mirror circuits z pomiarem macierzy odczytu, $\geq10$ wejść.
+\textbf{Kryterium.} Monotoniczna zależność od wybranej zmiennej kosztu z przedziałami
+niepewności.
+
+\subsection*{B11. Detekcja $[[4,2,2]]$ na obwodach Cliffordowskich}
+\textbf{Stan.} Na Garnecie (\texttt{garnet\_qec422\_results.csv}) post-selekcja obniża błąd
+we wszystkich 8 punktach, np.\ 0{,}418$\to$0{,}223 przy 40~CZ (akceptacja 0{,}75) i
+0{,}863$\to$0{,}786 przy 131~CZ (akceptacja 0{,}56). \textbf{Brakuje.} Porównania przy
+równej liczbie zaakceptowanych pomiarów; odchylenie między 3 ziarnami sięga 0{,}24.
+\textbf{Do zrobienia.} $\geq10$ ziaren, błąd w funkcji efektywnego kosztu $S/p_{\text{akc}}$,
+porównanie z ZNE na tym samym obwodzie. \textbf{Kryterium.} Przewaga detekcji przy równym
+koszcie w określonym zakresie CZ. Wynik negatywny dla klasyfikatora (symulacja) opisać
+oddzielnie.
+
+\subsection*{B12. Emerald}
+\textbf{Stan.} Jedno okno, 4 punkty ewaluacyjne, brak ramienia z twirlingiem i brak wartości
+per skala ZNE. Błąd surowy rośnie z CZ (0{,}037$\to$0{,}101), ale przy 21~CZ ZNE pogarsza
+wynik ponad czterokrotnie (0{,}168), czego model granicy z A3 nie tłumaczy co do wielkości.
+\textbf{Do zrobienia.} Co najmniej 2 okna, $\geq8$ punktów, ramię CDR+twirling, zapis wartości
+per skala; null można zasymulować na aktywnych kubitach obwodu (obwód logiczny ma 5 kubitów).
+\textbf{Kryterium.} Wyniki A1 i A2 powtórzone na trzecim urządzeniu.
+
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{{{artifact:art_d52565f0-4897-4398-bd33-b9b33322b10e}}}
+\caption{(a) Odchylenie standardowe błędu CDR między oknami kalibracyjnymi, bez i z
+twirlingiem (B2). (b) ODRA: $r^2$ dopasowania CDR dla obwodu z routingiem ($L=3$) i bez
+routingu (gwiazda, $L=6/9/13$) (B4). (c) Garnet: $r^2$ na sprzęcie (średnia $\pm$ SD z 3 okien)
+i w symulacji z szumem wyłącznie niekoherentnym (5 okien) (B9).}
+\label{fig:b}
+\end{figure}
+
+% =====================================================================
+\section{Proponowany artykuł}
+
+\textbf{Roboczy tytuł:} \emph{Shot-matched Pauli twirling improves Clifford data regression
+under routing overhead on superconducting processors, and the finite-shot boundary of
+zero-noise extrapolation.}
+
+\textbf{Rdzeń (już teraz):} A1 jako wynik główny, A2 jako kontekst kosztu routingu, A3 jako
+walidacja granicy ZNE. \textbf{Najbardziej wzmacniające uzupełnienia (w tej kolejności):}
+B1 (pełny twirling), B5 (mapa koszt--dokładność), B2 (dryf), B4 (CZ vs routing).
+Pozostałe punkty B mogą trafić do materiałów uzupełniających albo do osobnej, krótszej pracy
+(B8 jako wynik negatywny dla użytkowników IQM).
+
+\textbf{Wymagania wspólne przed wysłaniem.} Przypiąć wersję Qiskit i zapisywać transpilowane
+obwody razem z ID jobów (liczby CZ dla tych samych obwodów różnią się między skryptami);
+podawać liczbę okien i punktów przy każdym wyniku; cytować Köster i Mauerer
+(arXiv:2607.09360) oraz Scavino Alfaro (arXiv:2605.08251).
+
+\end{document}

@@ -1,0 +1,367 @@
+=== overnight sims START Fri Sep  4 23:13:38 CEST 2026 ===
+--- null (5 windows) Fri Sep  4 23:13:38 CEST 2026 ---
+>>> null w1 Fri Sep  4 23:13:38 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.1143 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.0720 | r2 0.9847
+   optimal        star cz= 33 | cdr twirl= True | err 0.0777 | r2 0.988
+   optimal        star cz= 33 | zne twirl=False | err 0.0382 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.1485 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.0463 | r2 0.8436
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0169 | r2 0.8983
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.1092 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.1446 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.0451 | r2 0.8133
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0370 | r2 0.8317
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.0842 | r2 
+
+wrote night_null_w1.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> null w2 Fri Sep  4 23:39:07 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.1198 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.0707 | r2 0.9848
+   optimal        star cz= 33 | cdr twirl= True | err 0.0701 | r2 0.9838
+   optimal        star cz= 33 | zne twirl=False | err 0.0550 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.1588 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.0253 | r2 0.8505
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0216 | r2 0.8474
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.1478 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.1275 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.0553 | r2 0.8358
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0194 | r2 0.8509
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.1001 | r2 
+
+wrote night_null_w2.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> null w3 Sat Sep  5 00:05:12 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.1126 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.0738 | r2 0.9849
+   optimal        star cz= 33 | cdr twirl= True | err 0.0661 | r2 0.9886
+   optimal        star cz= 33 | zne twirl=False | err 0.0429 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.1532 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.0303 | r2 0.9054
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0456 | r2 0.8348
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.1130 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.1511 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.0213 | r2 0.8517
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0300 | r2 0.8048
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.1003 | r2 
+
+wrote night_null_w3.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> null w4 Sat Sep  5 00:29:44 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.1095 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.0752 | r2 0.9887
+   optimal        star cz= 33 | cdr twirl= True | err 0.0735 | r2 0.9817
+   optimal        star cz= 33 | zne twirl=False | err 0.0619 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.1442 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.0282 | r2 0.8754
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0395 | r2 0.8205
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.1193 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.1487 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.0263 | r2 0.8117
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0277 | r2 0.83
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.1314 | r2 
+
+wrote night_null_w4.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> null w5 Sat Sep  5 00:53:48 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.1241 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.0853 | r2 0.9833
+   optimal        star cz= 33 | cdr twirl= True | err 0.0781 | r2 0.9787
+   optimal        star cz= 33 | zne twirl=False | err 0.0519 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.1437 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.0472 | r2 0.8816
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0377 | r2 0.8636
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.1182 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.1466 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.0572 | r2 0.8614
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0313 | r2 0.8399
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.0827 | r2 
+
+wrote night_null_w5.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+5 file(s), 5 window(s): ['nullw1', 'nullw2', 'nullw3', 'nullw4', 'nullw5']
+
+  cz= 33  optimal:star        cdr | Δr²=-0.0011±0.0047 (within-drift) | Δerr=-0.0023±0.0055 | [nullw1:+0.003; nullw2:-0.001; nullw3:+0.004; nullw4:-0.007; nullw5:-0.005]
+  cz= 33  optimal:star        raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 33  optimal:star        zne | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 87  adverse:all_to_all  cdr | Δr²=-0.0033±0.0296 (within-drift) | Δerr=-0.0120±0.0186 | [nullw1:+0.018; nullw2:+0.015; nullw3:-0.047; nullw4:+0.018; nullw5:-0.022]
+  cz= 87  adverse:all_to_all  raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 87  adverse:all_to_all  zne | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 90  optimal:all_to_all  cdr | Δr²=-0.0184±0.0491 (within-drift) | Δerr=-0.0032±0.0179 | [nullw1:+0.055; nullw2:-0.003; nullw3:-0.071; nullw4:-0.055; nullw5:-0.018]
+  cz= 90  optimal:all_to_all  raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 90  optimal:all_to_all  zne | Δr²=   n/a   () | Δerr=   n/a   | []
+
+  TREND cdr: dΔr²/dCZ = -0.0186±0.0646 per 100 CZ (n=5 windows) -> trend within drift
+
+wrote night_null_banded.csv
+READ: twirl gain is real where Δr²>0 grows with cz AND r2_significant=yes (gain exceeds inter-window drift).
+--- coh05 (5 windows) Sat Sep  5 01:18:02 CEST 2026 ---
+>>> coh05 w1 Sat Sep  5 01:18:02 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.0374 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.0425 | r2 0.9476
+   optimal        star cz= 33 | cdr twirl= True | err 0.0377 | r2 0.9705
+   optimal        star cz= 33 | zne twirl=False | err 0.0403 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.1010 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.0653 | r2 0.8319
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0290 | r2 0.9666
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.2324 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.0902 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.0699 | r2 0.7372
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0167 | r2 0.9795
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.2039 | r2 
+
+wrote night_coh05_w1.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> coh05 w2 Sat Sep  5 01:28:17 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.0399 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.0470 | r2 0.9484
+   optimal        star cz= 33 | cdr twirl= True | err 0.0114 | r2 0.9831
+   optimal        star cz= 33 | zne twirl=False | err 0.0393 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.0943 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.0599 | r2 0.8339
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0484 | r2 0.977
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.2075 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.0735 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.0718 | r2 0.7432
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0261 | r2 0.9718
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.1946 | r2 
+
+wrote night_coh05_w2.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> coh05 w3 Sat Sep  5 01:38:28 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.0351 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.0495 | r2 0.9504
+   optimal        star cz= 33 | cdr twirl= True | err 0.0181 | r2 0.9842
+   optimal        star cz= 33 | zne twirl=False | err 0.0275 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.0873 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.0672 | r2 0.8328
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0224 | r2 0.9761
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.2604 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.0809 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.0701 | r2 0.7473
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0232 | r2 0.986
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.1755 | r2 
+
+wrote night_coh05_w3.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> coh05 w4 Sat Sep  5 01:48:39 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.0381 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.0482 | r2 0.9444
+   optimal        star cz= 33 | cdr twirl= True | err 0.0135 | r2 0.9797
+   optimal        star cz= 33 | zne twirl=False | err 0.0192 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.0773 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.0765 | r2 0.8208
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0136 | r2 0.9632
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.2277 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.0783 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.0643 | r2 0.7392
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0125 | r2 0.9742
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.2041 | r2 
+
+wrote night_coh05_w4.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> coh05 w5 Sat Sep  5 01:59:00 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.0427 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.0402 | r2 0.9397
+   optimal        star cz= 33 | cdr twirl= True | err 0.0129 | r2 0.9822
+   optimal        star cz= 33 | zne twirl=False | err 0.0283 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.0851 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.0691 | r2 0.8301
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0216 | r2 0.9681
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.2421 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.0763 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.0623 | r2 0.7431
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0124 | r2 0.9753
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.1986 | r2 
+
+wrote night_coh05_w5.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+5 file(s), 5 window(s): ['coh05w1', 'coh05w2', 'coh05w3', 'coh05w4', 'coh05w5']
+
+  cz= 33  optimal:star        cdr | Δr²=+0.0338±0.0070 (yes) | Δerr=-0.0268±0.0127 | [coh05w1:+0.023; coh05w2:+0.035; coh05w3:+0.034; coh05w4:+0.035; coh05w5:+0.042]
+  cz= 33  optimal:star        raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 33  optimal:star        zne | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 87  adverse:all_to_all  cdr | Δr²=+0.2354±0.0054 (yes) | Δerr=-0.0495±0.0032 | [coh05w1:+0.242; coh05w2:+0.229; coh05w3:+0.239; coh05w4:+0.235; coh05w5:+0.232]
+  cz= 87  adverse:all_to_all  raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 87  adverse:all_to_all  zne | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 90  optimal:all_to_all  cdr | Δr²=+0.1403±0.0038 (yes) | Δerr=-0.0406±0.0189 | [coh05w1:+0.135; coh05w2:+0.143; coh05w3:+0.143; coh05w4:+0.142; coh05w5:+0.138]
+  cz= 90  optimal:all_to_all  raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 90  optimal:all_to_all  zne | Δr²=   n/a   () | Δerr=   n/a   | []
+
+  TREND cdr: dΔr²/dCZ = +0.2699±0.0147 per 100 CZ (n=5 windows) -> gain GROWS with routing
+
+wrote night_coh05_banded.csv
+READ: twirl gain is real where Δr²>0 grows with cz AND r2_significant=yes (gain exceeds inter-window drift).
+--- coh10 (3 windows) Sat Sep  5 02:09:09 CEST 2026 ---
+>>> coh10 w1 Sat Sep  5 02:09:09 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.0833 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.1026 | r2 0.7943
+   optimal        star cz= 33 | cdr twirl= True | err 0.0459 | r2 0.9305
+   optimal        star cz= 33 | zne twirl=False | err 0.0442 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.1220 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.1013 | r2 0.3708
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0374 | r2 0.8594
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.2313 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.1389 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.1648 | r2 0.3438
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0193 | r2 0.903
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.0995 | r2 
+
+wrote night_coh10_w1.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> coh10 w2 Sat Sep  5 02:19:22 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.0916 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.1066 | r2 0.7846
+   optimal        star cz= 33 | cdr twirl= True | err 0.0394 | r2 0.9681
+   optimal        star cz= 33 | zne twirl=False | err 0.0262 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.1175 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.0995 | r2 0.3413
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0431 | r2 0.8156
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.2043 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.1363 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.1633 | r2 0.3243
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0377 | r2 0.9209
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.0923 | r2 
+
+wrote night_coh10_w2.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+>>> coh10 w3 Sat Sep  5 02:29:37 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: garnet | points ['optimal:star', 'optimal:all_to_all', 'adverse:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 1024 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1632 (544/point) | shots 1671168 | jobs 17
+  ESTIMATED COST: ~339.8 credits
+
+[--sim] running full pipeline on noisy simulator (no credits)
+
+   optimal        star cz= 33 | raw twirl=False | err 0.0869 | r2 
+   optimal        star cz= 33 | cdr twirl=False | err 0.1031 | r2 0.8086
+   optimal        star cz= 33 | cdr twirl= True | err 0.0374 | r2 0.9608
+   optimal        star cz= 33 | zne twirl=False | err 0.0219 | r2 
+   optimal  all_to_all cz= 90 | raw twirl=False | err 0.1215 | r2 
+   optimal  all_to_all cz= 90 | cdr twirl=False | err 0.1067 | r2 0.3368
+   optimal  all_to_all cz= 90 | cdr twirl= True | err 0.0334 | r2 0.8256
+   optimal  all_to_all cz= 90 | zne twirl=False | err 0.2209 | r2 
+   adverse  all_to_all cz= 87 | raw twirl=False | err 0.1427 | r2 
+   adverse  all_to_all cz= 87 | cdr twirl=False | err 0.1623 | r2 0.3238
+   adverse  all_to_all cz= 87 | cdr twirl= True | err 0.0447 | r2 0.8805
+   adverse  all_to_all cz= 87 | zne twirl=False | err 0.1190 | r2 
+
+wrote night_coh10_w3.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+3 file(s), 3 window(s): ['coh10w1', 'coh10w2', 'coh10w3']
+
+  cz= 33  optimal:star        cdr | Δr²=+0.1573±0.0241 (yes) | Δerr=-0.0632±0.0057 | [coh10w1:+0.136; coh10w2:+0.183; coh10w3:+0.152]
+  cz= 33  optimal:star        raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 33  optimal:star        zne | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 87  adverse:all_to_all  cdr | Δr²=+0.5708±0.0223 (yes) | Δerr=-0.1296±0.0144 | [coh10w1:+0.559; coh10w2:+0.597; coh10w3:+0.557]
+  cz= 87  adverse:all_to_all  raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 87  adverse:all_to_all  zne | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 90  optimal:all_to_all  cdr | Δr²=+0.4839±0.0083 (yes) | Δerr=-0.0645±0.0085 | [coh10w1:+0.489; coh10w2:+0.474; coh10w3:+0.489]
+  cz= 90  optimal:all_to_all  raw | Δr²=   n/a   () | Δerr=   n/a   | []
+  cz= 90  optimal:all_to_all  zne | Δr²=   n/a   () | Δerr=   n/a   | []
+
+  TREND cdr: dΔr²/dCZ = +0.6590±0.0341 per 100 CZ (n=3 windows) -> gain GROWS with routing
+
+wrote night_coh10_banded.csv
+READ: twirl gain is real where Δr²>0 grows with cz AND r2_significant=yes (gain exceeds inter-window drift).
+=== overnight sims DONE Sat Sep  5 02:39:52 CEST 2026 ===
+READ: null Δr²≈0 flat; coh05 Δr²>0 growing with CZ (== hardware regime); coh10 larger Δr².
+Banded outputs: night_null_banded.csv, night_coh05_banded.csv, night_coh10_banded.csv

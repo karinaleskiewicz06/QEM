@@ -1,0 +1,105 @@
+>>> okno o1 Mon Oct 12 11:22:41 CEST 2026
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2112 (528/point) | shots 17301504 | jobs 24
+  COST: ODRA access is not metered in Resonance credits
+
+>>> note your credit balance NOW <<<
+
+    [odra] zadanie 01a12f6b-fa26-7182-9b6a-76435a0b2100 | 100 obwodów (100/264)
+  [retry] fetch counts 01a12f72-002a-7c91-b1b7-07eabb2039f8: ReadTimeout (attempt 1/5) -> waiting 5s
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 411, in <module>
+    main()
+    ~~~~^^
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 369, in main
+    vals = eval_groups(specs)
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 341, in eval_groups
+    counts = run(flat)
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 195, in run
+    def run(circs): return run_circuits(backend, circs, args.shots)
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/odra_backend.py", line 123, in run_circuits
+    raw, job_id = fetch_counts(backend.client, job)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 201, in fetch_counts
+    return _retry(_go, what=f"fetch counts {job_id}"), str(job_id)
+           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 163, in _retry
+    return fn()
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 195, in _go
+    job.wait_for_completion(timeout_secs=timeout_s)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 870, in wait_for_completion
+    job_data = self._iqm_server_client._wait_job_completion(
+        self.job_id,
+        progress_callback=get_progress_bar_callback(),
+        timeout_secs=timeout_secs,
+    )
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 469, in _wait_job_completion
+    job_data = self.get_job(job_id)
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 371, in get_job
+    return self._deserialize_response(response, JobData)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 702, in _deserialize_response
+    model = model_class.model_validate_json(response.text)
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JobData
+  Invalid JSON: expected value at line 2 column 1 [type=json_invalid, input_value='\n<!DOCTYPE html>\n<html...>\n\t</body>\n</html>\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+    okno o1 gotowe Mon Oct 12 11:53:45 CEST 2026
+>>> okno o2 Mon Oct 12 11:53:45 CEST 2026
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 411, in <module>
+    main()
+    ~~~~^^
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 193, in main
+    backend = get_backend(args.device)
+  File "/Users/karinaleskiewicz/QEM/odra_backend.py", line 71, in get_backend
+    return OdraBackend(IQMClient(url.rstrip("/")))
+                       ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_client/iqm_client.py", line 91, in __init__
+    self._iqm_server_client = _IQMServerClient(
+                              ~~~~~~~~~~~~~~~~^
+        iqm_server_url=iqm_server_url,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        quantum_computer=quantum_computer,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 157, in __init__
+    self._quantum_computer = self._resolve_quantum_computer(quantum_computer)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 525, in _resolve_quantum_computer
+    quantum_computers = self.get_quantum_computers()
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 308, in get_quantum_computers
+    return self._deserialize_response(response, ListQuantumComputersResponse).quantum_computers
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 702, in _deserialize_response
+    model = model_class.model_validate_json(response.text)
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for ListQuantumComputersResponse
+  Invalid JSON: expected value at line 2 column 1 [type=json_invalid, input_value='\n<!DOCTYPE html>\n<html...>\n\t</body>\n</html>\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+    okno o2 gotowe Mon Oct 12 11:53:47 CEST 2026
+1 file(s), 0 window(s): []
+
+
+
+wrote odra_twirl_native_fixed_banded.csv
+READ: twirl gain is real where Δr²>0 grows with cz AND r2_significant=yes (gain exceeds inter-window drift).
+=== DONE Mon Oct 12 11:53:47 CEST 2026 ===

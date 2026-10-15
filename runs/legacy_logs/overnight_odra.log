@@ -1,0 +1,135 @@
+[21:53:29] === NOCNA KAMPANIA ODRA -- start Sun Sep 13 21:53:29 CEST 2026 ===
+importy OK
+[21:53:32] kontrola wstepna OK (zmienne srodowiskowe + importy)
+[21:53:32] >>> START trening osi glebokosci (CPU, w tle kroku 1)
+[21:53:32]     trening w tle, PID 89480
+[21:53:32] >>> START twirl  -> odra_twirl_o1.csv
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/train_star_depth.py", line 43, in <module>
+    from qiskit_machine_learning.gradients import ParamShiftEstimatorGradient
+ModuleNotFoundError: No module named 'qiskit_machine_learning'
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:linear', 'optimal:circular', 'optimal:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 2176 (544/point) | shots 17825792 | jobs 32
+  COST: ODRA access is not metered in Resonance credits
+
+>>> note your credit balance NOW <<<
+
+[resume] 0 point(s) already in odra_twirl_o1.csv: []
+    [odra] zadanie 01a09c55-105c-7870-9214-8910dcbc0a3e | 4 obwodów (4/4)
+   optimal        star cz= 12 | raw twirl=False | err 0.0780 | r2 
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:02<?, ?it/s]
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 371, in <module>
+    main()
+    ~~~~^^
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 329, in main
+    vals = eval_groups(specs)
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 301, in eval_groups
+    counts = run(flat)
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 169, in run
+    def run(circs): return run_circuits(backend, circs, args.shots)
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/odra_backend.py", line 123, in run_circuits
+    raw, job_id = fetch_counts(backend.client, job)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 201, in fetch_counts
+    return _retry(_go, what=f"fetch counts {job_id}"), str(job_id)
+           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 163, in _retry
+    return fn()
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 198, in _go
+    cmc_batch = client.get_job_measurement_counts(job_id)
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/iqm/iqm_client/iqm_client.py", line 409, in get_job_measurement_counts
+    return self._iqm_server_client.get_job_artifact_measurement_counts(job_id)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 471, in get_job_artifact_measurement_counts
+    response = self._send_request(requests.get, f"jobs/{job_id}/artifacts/measurement_counts")
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 649, in _send_request
+    raise error_class(error_message)
+exa.common.errors.station_control_errors.NotFoundError: Job 01a09c55-4ca0-75e2-ae00-9203ed5e4b6e does not have artifact: measurement_counts
+[21:58:54] <<< BLAD  twirl  (5 min) -- ide dalej, szczegoly w overnight_odra.log
+[21:58:54] >>> START twirl  -> odra_twirl_.csv
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 371, in <module>
+    main()
+    ~~~~^^
+  File "/Users/karinaleskiewicz/QEM/run_garnet_twirl.py", line 202, in main
+    test = transpile(cw0.assign_parameters(dict(zip(xp0, X[0]))), basis_gates=IQM_BASIS_GATES,
+                     coupling_map=star_coupling_map(n, 0), optimization_level=1, seed_transpiler=args.seed)
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/qiskit/compiler/transpiler.py", line 269, in transpile
+    pm = generate_preset_pass_manager(
+        optimization_level,
+    ...<17 lines>...
+        qubits_initially_zero=qubits_initially_zero,
+    )
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/qiskit/transpiler/preset_passmanagers/generate_preset_pass_manager.py", line 313, in generate_preset_pass_manager
+    pm = level_1_pass_manager(pm_config)
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/qiskit/transpiler/preset_passmanagers/level1.py", line 47, in level_1_pass_manager
+    plugin_manager = PassManagerStagePluginManager()
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/qiskit/transpiler/preset_passmanagers/plugin.py", line 221, in __init__
+    self.scheduling_plugins = stevedore.ExtensionManager(
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        "qiskit.transpiler.scheduling", invoke_on_load=True, propagate_map_exceptions=True
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/stevedore/extension.py", line 198, in __init__
+    extensions = self._load_plugins(
+        invoke_on_load, invoke_args, invoke_kwds
+    )
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/stevedore/extension.py", line 302, in _load_plugins
+    ext = self._load_one_plugin(
+        ep, invoke_on_load, invoke_args, invoke_kwds
+    )
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/stevedore/extension.py", line 338, in _load_one_plugin
+    plugin = ep.load()
+  File "/opt/homebrew/anaconda3/lib/python3.13/importlib/metadata/__init__.py", line 179, in load
+    module = import_module(match.group('module'))
+  File "/opt/homebrew/anaconda3/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/iqm/qiskit_iqm/__init__.py", line 24, in <module>
+    from iqm.qiskit_iqm.iqm_provider import IQMBackend, IQMProvider, __version__
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/iqm/qiskit_iqm/iqm_provider.py", line 283, in <module>
+    "facade_adonis": IQMFakeAdonis(),
+                     ~~~~~~~~~~~~~^^
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/iqm/qiskit_iqm/fake_backends/fake_adonis.py", line 49, in IQMFakeAdonis
+    return IQMFakeBackend(architecture, error_profile, name="IQMFakeAdonisBackend")
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/iqm/qiskit_iqm/fake_backends/iqm_fake_backend.py", line 176, in __init__
+    self.noise_model = self._create_noise_model()
+                       ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/iqm/qiskit_iqm/fake_backends/iqm_fake_backend.py", line 292, in _create_noise_model
+    thermal_relaxation_channel.compose(depolarizing_channel),
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/qiskit_aer/noise/errors/quantum_error.py", line 417, in compose
+    self._compose_circ(lqc, rqc, qubits=qargs, front=front)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/qiskit_aer/noise/errors/quantum_error.py", line 438, in _compose_circ
+    return lqc.compose(rqc)
+           ~~~~~~~~~~~^^^^^
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/qiskit/circuit/quantumcircuit.py", line 2235, in compose
+    copy_with_remapping(
+    ~~~~~~~~~~~~~~~~~~~^
+        other,
+        ^^^^^^
+    ...<8 lines>...
+        new_clbits=mapped_clbits,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/qiskit/circuit/quantumcircuit.py", line 2228, in copy_with_remapping
+    instructions.map_nonstandard_ops(map_vars)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/karinaleskiewicz/iteracje_funkcji/venv/lib/python3.13/site-packages/qiskit/circuit/quantumcircuit.py", line 2214, in map_vars
+    if isinstance(n_op, ControlFlowOp):
+       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen abc>", line 119, in __instancecheck__
+KeyboardInterrupt

@@ -1,0 +1,42 @@
+============================================================
+per-pattern training  L=3  patterns=['star', 'linear', 'circular', 'all_to_all']
+two_curves d=8 degree=8 offset=0.3 seed=42
+============================================================
+
+>>> pattern=star
+    epoch   1/60 loss=1.7440
+    epoch  20/60 loss=0.4047
+    epoch  40/60 loss=0.2798
+    epoch  60/60 loss=0.2492
+<<< star: 2q=12 train=0.933 test=0.911 (11.2 min) -> two_curves_d8_q5_deg8_star_mean_L3_weights.npy
+
+>>> pattern=linear
+    epoch   1/60 loss=1.7141
+    epoch  20/60 loss=0.5018
+    epoch  40/60 loss=0.3604
+    epoch  60/60 loss=0.3018
+<<< linear: 2q=12 train=0.933 test=0.933 (11.1 min) -> two_curves_d8_q5_deg8_linear_mean_L3_weights.npy
+
+>>> pattern=circular
+    epoch   1/60 loss=1.6614
+    epoch  20/60 loss=0.5257
+    epoch  40/60 loss=0.4231
+    epoch  60/60 loss=0.3917
+<<< circular: 2q=15 train=0.905 test=0.844 (11.3 min) -> two_curves_d8_q5_deg8_circular_mean_L3_weights.npy
+
+>>> pattern=all_to_all
+    epoch   1/60 loss=1.7746
+    epoch  20/60 loss=0.5225
+    epoch  40/60 loss=0.4248
+    epoch  60/60 loss=0.3775
+<<< all_to_all: 2q=30 train=0.914 test=0.867 (12.5 min) -> two_curves_d8_q5_deg8_all_to_all_mean_L3_weights.npy
+
+============================================================
+    pattern   2q   train    test    min
+       star   12   0.933   0.911   11.2
+     linear   12   0.933   0.933   11.1
+   circular   15   0.905   0.844   11.3
+ all_to_all   30   0.914   0.867   12.5
+
+CSV -> trained_models/pattern_sweep_results.csv
+============================================================
