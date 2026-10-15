@@ -1,0 +1,5 @@
+pattern,cz,r_off,depth_off,r_off_merged,depth_off_merged,r_tw_old,depth_tw_old,r_tw_merged,depth_tw_merged,maxdev_ideal_old,maxdev_ideal_merged,z_off_merged_dev
+star,12,40,20,20,16,92.0,46.1667,24.8333,20.8333,0.0,0.0,0.0
+linear,24,84,64,50,48,178.0,117.1667,51.5,48.3333,0.0,0.0,0.0
+circular,36,119,95,75,73,261.0,173.8333,75.8333,73.0,0.0,0.0,0.0
+all_to_all,54,130,110,63,84,356.0,230.5,85.6667,94.6667,0.0,0.0,0.0
