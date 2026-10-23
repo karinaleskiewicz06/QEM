@@ -43,8 +43,11 @@ from zne_dryrun import SCALE_FACTORS, fold_global
 from topology import device_coupling_map, hardware_placement, star_coupling_map
 
 from qem.env_check import require_locked_environment, add_env_argument
-from qem.provenance import RunRecorder
+from qem.provenance import RunRecorder, add_archive_argument, guard_archive
 from qem.zne import diagnose_point
+from sim import device_model
+from qem.compile import compile_native
+from qem.twirl import twirl_native_merged
 
 PAULIS = ["I", "X", "Y", "Z"]
 
@@ -128,6 +131,10 @@ def main() -> None:
     ap.add_argument("--native-twirl", action="store_true",
                     help="owijaj bramki PO transpilacji, wiec takze CZ pochodzace ze SWAP-ow "
                          "(domyslnie owijane sa tylko bramki logiczne -> zysk jest dolnym ograniczeniem)")
+    ap.add_argument("--legacy-native-twirl", action="store_true",
+                    help="z --native-twirl: stary wariant (Pauli jako osobne bramki r, scalane "
+                         "tylko przez Optimize1qGatesDecomposition; 2,4-2,8x wiecej PRX). "
+                         "Domyslnie qem.twirl.twirl_native_merged (P2: x1,2-1,3)")
     ap.add_argument("--points", nargs="+", default=["optimal:star", "adverse:all_to_all"],
                     help='ladder of "placement:pattern" points spanning low->high CZ')
     ap.add_argument("--models-dir", default="trained_models_hard")
@@ -170,6 +177,11 @@ def main() -> None:
                     help="ZNE: stare zachowanie -- Richardson z |E|>1.25 po cichu zastepowany "
                          "fitem liniowym. Domyslnie estymata zostaje, a wiersz dostaje flagi "
                          "unphysical / fallback_used (Koster & Mauerer, arXiv:2607.09360)")
+    device_model.add_arguments(ap)
+    ap.add_argument("--legacy-transpile", action="store_true",
+                    help="ODRA: stara transpilacja (transpile opt1 bez scalania 1q) zamiast "
+                         "qem.compile.compile_native; potrzebne do odtworzenia archiwum")
+    add_archive_argument(ap)
     add_env_argument(ap)
     ap.add_argument("--out", default="garnet_twirl_results.csv")
     ap.add_argument("--resume", action="store_true",
@@ -178,6 +190,11 @@ def main() -> None:
                          "points already collected. Results are written per-point (crash-safe).")
     args = ap.parse_args()
     require_locked_environment(allow_mismatch=args.allow_env_mismatch)
+    args.out = guard_archive(args.out, allow=args.allow_archive_write)
+    dev = device_model.from_args(args, args.device)
+    if dev is not None:
+        args.sim = True
+        print(dev.describe())
 
     global RECORDER, GROUP_TAG
     if not args.no_provenance:
@@ -185,6 +202,8 @@ def main() -> None:
             args.campaign or f"{args.device}_twirl", window_id=args.window_id,
             args=vars(args), seed=args.seed, device=args.device, submitted=args.submit)
         print(f"[provenance] {RECORDER.dir}")
+        if dev is not None:
+            RECORDER.set_extra("device_model", device_model.manifest_entry(dev))
 
     points = [tuple(p.split(":")) for p in args.points]
     _, observable, cfg = load_frozen_model(models_dir=args.models_dir)
@@ -220,13 +239,20 @@ def main() -> None:
             from iqm_resonance import get_backend, transpile_for_backend, run_circuits
         backend = get_backend(args.device)
         def tpile(c, layout): return transpile_for_backend(c, backend, initial_layout=layout)
-        def run(circs): return run_circuits(backend, circs, args.shots)
+        def run(circs):
+            kw = ({"on_job": RECORDER.add_job}
+                  if RECORDER is not None and args.device == "odra" else {})
+            return run_circuits(backend, circs, args.shots, **kw)
     else:
         cmap = device_coupling_map(args.device)
         def tpile(c, layout):
             return transpile(c, basis_gates=IQM_BASIS_GATES, coupling_map=cmap,
                              initial_layout=layout, optimization_level=1, seed_transpiler=args.seed)
-        if args.sim:
+        if dev is not None:
+            # P7: calibrated device model; the transpiled circuit is simulated as is
+            def run(circs):
+                return dev.run(circs, args.shots)
+        elif args.sim:
             # full-pipeline validation on a NOISY simulator (no credits): exercises twirl,
             # fold, readout, CDR, ZNE on every point incl. adverse routing, exactly as hardware.
             ndev = max(max(e) for e in cmap) + 1
@@ -264,6 +290,12 @@ def main() -> None:
                 return [_sim.run(c, shots=args.shots).result().get_counts() for c in circs]
         else:
             run = None
+
+    if args.device == "odra" and not args.legacy_transpile:
+        # P1/P7: one compilation path for hardware and simulator alike -- fixed layout,
+        # fixed seed, single-qubit runs fused
+        def tpile(c, layout):
+            return compile_native(c, layout=layout, seed=args.seed).circuit
 
     # ---- noiseless twirl SANITY (once) ---- #
     cw0, xp0 = build_circ_w(points[0][1])
@@ -359,12 +391,19 @@ def main() -> None:
             path); readout via perqubit_z_from_counts (clbit/logical order, NOT physical wire)."""
             flat, ksizes, labels = [], [], []
             for si, (bound, twirl, fold, kcopies) in enumerate(specs):
+                frames = None
                 if twirl and args.native_twirl:
                     # NATYWNY: najpierw transpilacja (router wstawia SWAP-y), potem owinięcie
-                    # WSZYSTKICH bramek natywnych. twirl_native emituje wrappery jako bramki `r`
-                    # i nie zmienia łączności, więc powtórna transpilacja nie jest potrzebna.
+                    # WSZYSTKICH bramek natywnych, bez powtórnej transpilacji. Domyślnie z
+                    # pełnym scalaniem 1q i przepychaniem RZ przez CZ (qem.twirl, P2); stary
+                    # wariant zostawiał 2,4-2,8x więcej PRX i to on dał ujemny wynik na ODRZE.
                     base = measured(bound, fold)
-                    reps = [twirl_native(base, rng) for _ in range(args.n_twirl)]
+                    if args.legacy_native_twirl:
+                        reps = [twirl_native(base, rng) for _ in range(args.n_twirl)]
+                    else:
+                        tw = [twirl_native_merged(base, rng) for _ in range(args.n_twirl)]
+                        reps = [t.circuit for t in tw]
+                        frames = [t.frame_str for t in tw]
                     pre = True
                 elif twirl:
                     # LOGICZNY (domyślny): owijane są tylko bramki obwodu logicznego; bramki CZ
@@ -381,8 +420,10 @@ def main() -> None:
                 flat.extend(reps if pre else [measured(b, fold) for b in reps])
                 labels.extend({"spec_index": si, "twirl": bool(twirl), "fold": int(fold),
                                "copy_index": r, "n_copies": len(reps),
-                               "twirl_kind": ("native" if args.native_twirl else "logical")
-                                             if twirl else None}
+                               "twirl_kind": (("native_legacy" if args.legacy_native_twirl
+                                               else "native_merged") if args.native_twirl
+                                              else "logical") if twirl else None,
+                               **({"frame": frames[r]} if frames else {})}
                               for r in range(len(reps)))
             counts = run(flat)
             vals = [float(np.dot(coeffs, perqubit_z_from_counts(c, n))) for c in counts]

@@ -58,7 +58,9 @@ from noisy_sim import (
 from zne_dryrun import SCALE_FACTORS, fold_global
 from topology import device_coupling_map, hardware_placement
 from qem.env_check import require_locked_environment, add_env_argument
-from qem.provenance import RunRecorder
+from qem.provenance import RunRecorder, add_archive_argument, guard_archive
+from sim import device_model
+from qem.compile import compile_native
 from qem.zne import (extrapolate_flagged, kappa_opt, kappa_uniform, neyman_allocation,
                      richardson_coefficients, uniform_allocation)
 
@@ -145,9 +147,19 @@ def main() -> None:
     ap.add_argument("--window-id", default="w1")
     ap.add_argument("--no-provenance", action="store_true",
                     help="pomin manifest i counts.jsonl")
+    device_model.add_arguments(ap)
+    ap.add_argument("--legacy-transpile", action="store_true",
+                    help="ODRA: stara transpilacja (transpile opt1 bez scalania 1q) zamiast "
+                         "qem.compile.compile_native; potrzebne do odtworzenia archiwum")
+    add_archive_argument(ap)
     add_env_argument(ap)
     args = ap.parse_args()
     require_locked_environment(allow_mismatch=args.allow_env_mismatch)
+    args.out = guard_archive(args.out, allow=args.allow_archive_write)
+    dev = device_model.from_args(args, args.device)
+    if dev is not None:
+        args.sim = True
+        print(dev.describe())
 
     global RECORDER, COEFFS
     if not args.no_provenance:
@@ -155,6 +167,8 @@ def main() -> None:
                                     args=vars(args), seed=getattr(args, 'seed', None),
                                     device=args.device, submitted=args.submit)
         print(f"[provenance] {RECORDER.dir}")
+        if dev is not None:
+            RECORDER.set_extra("device_model", device_model.manifest_entry(dev))
 
     # Galaz domyslna odwolywala sie wczesniej do nazwy, ktora nie istnieje na poziomie
     # modulu, a przypisanie w tej samej linii czynilo ja lokalna -- wiec kazdy przebieg
@@ -183,14 +197,21 @@ def main() -> None:
         backend = get_backend(args.device)
         def tpile(c, layout): return transpile_for_backend(c, backend, initial_layout=layout)
         def run(circs, shots, arm="zne"):
-            out = run_circuits(backend, circs, shots)
+            kw = ({"on_job": RECORDER.add_job}
+                  if RECORDER is not None and args.device == "odra" else {})
+            out = run_circuits(backend, circs, shots, **kw)
             _record(circs, out, shots, arm)
             return out
     else:
         def tpile(c, layout):
             return transpile(c, basis_gates=IQM_BASIS_GATES, coupling_map=cmap,
                              initial_layout=layout, optimization_level=1, seed_transpiler=args.seed)
-        if args.sim:
+        if dev is not None:
+            def run(circs, shots, arm="zne"):
+                out = dev.run(circs, shots)
+                _record(circs, out, shots, arm)
+                return out
+        elif args.sim:
             ndev = max(max(e) for e in cmap) + 1
             _sim = make_noisy_simulator(
                 DeviceCalibration(num_qubits=ndev, coupling_map=cmap, p_2q=0.01))
@@ -200,6 +221,11 @@ def main() -> None:
                 return out
         else:
             run = None
+
+    if args.device == "odra" and not args.legacy_transpile:
+        # P1/P7: ta sama sciezka kompilacji na sprzecie i w symulatorze
+        def tpile(c, layout):
+            return compile_native(c, layout=layout, seed=args.seed).circuit
 
     # ---- koszt ---- #
     per_pt = sum(args.reps * len(X) * (1 + len(SCALES)) for _ in args.budgets)

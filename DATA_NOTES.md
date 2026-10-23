@@ -30,6 +30,19 @@ campaigns**, which is why the lock pins it. A correction is recorded in the spec
 
 `qem/compile.py` is now the only compilation entry point, and it is the fixed-layout one.
 
+Since P7 the ODRA paths of the runners (`run_garnet_twirl`, `run_odra_cdr`,
+`zne_shot_boundary`, `random_mirror_benchmark`, `run_hardware`) compile through it, on
+hardware and simulator alike; `--legacy-transpile` restores the archived path. Two
+consequences for comparing new numbers with old ones:
+
+- single-qubit runs are now fused, so circuits carry fewer PRX and, on the device model,
+  lower raw error at the same CZ count (one 57-CZ point: 0.089 against 0.170);
+- `random_mirror_benchmark` on ODRA used to let the transpiler choose the layout; with
+  the fixed layout its CZ counts change (2 layers: 122 instead of 116).
+
+Garnet and Emerald still go through their own transpilation; `compile_native` is the
+five-qubit star only.
+
 ## 2. The old path is not deterministic
 
 Compiling one circuit five times through `native_transpile`:
@@ -141,6 +154,30 @@ ratio of two floors (the 39-CZ ODRA rung: R = 0.81 / 0.67 at `|<O>(1)| = 0.04`).
 stays as a column; normalised retention, SNR(λ_max), W_neg and the garbage-folding
 control replace it. The same script also wrote by default over the archived
 `zne_signal_retention.csv` in the root; it now writes to `results_sim/`.
+
+**The mapped calibration overstates gate error.** `collect_odra_calibration.py` takes
+`p_2q` from the two-qubit *Clifford* RB of each pair (`metrics.rb.clifford.uz_cz`), and
+`p_1q` from single-qubit Clifford RB. A two-qubit Clifford is about 1.5 CZ plus
+single-qubit gates. The same raw dump also carries the per-gate numbers: interleaved RB
+of the CZ (`metrics.irb.cz`) and RB of the PRX (`metrics.rb.prx`). For 2026-08-03:
+
+| | mapped (per Clifford) | per gate |
+|---|---|---|
+| CZ error | 0.0203 (mean) | 0.0078 / 0.0101 / 0.0105 / 0.0079 (IRB, hub with QB1 / QB2 / QB4 / QB5) |
+| PRX error | 0.0018-0.0023 | 0.0010-0.0012 (RB) |
+
+So `p_2q` is about 2.5x the CZ's own error. Every simulation built from the mapped file
+inherits that -- `results_sim/legacy_nested_cal/` and the "ODRA rates" variant of
+`results_sim/wneg_null/` among them. `sim/device_model.py` (P7) reads the per-gate
+values from the raw dump; the mapped file is still accepted, with a warning. The
+collector itself is unchanged, so the archived mapped files stay what they were.
+
+**Every runner's default output was an archived CSV.** `garnet_twirl_results.csv`,
+`odra_cdr_results.csv`, `zne_shot_boundary_results.csv`, `random_mirror_results.csv` and
+`hardware_results.csv` are tracked results, and they were also the default `--out`, so
+any run without `--out` -- a simulation included -- replaced them. The runners now refuse
+to write a tracked file outside `runs/` and `results_sim/` unless
+`--allow-archive-write` is given (`qem.provenance.guard_archive`).
 
 ## 7. Excluded runs
 

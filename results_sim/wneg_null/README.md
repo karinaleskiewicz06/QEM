@@ -11,6 +11,10 @@ the W_neg threshold that P9 fixes before the first ODRA window.
 | `depol_p2q1e-02_S8192_lam1-3-5` | depolarizing only, p_1q = 1e-3, p_2q = 1e-2 |
 | `depol_odra20260803_S8192_lam1-3-5` | depolarizing only, ODRA 2026-08-03 rates: p_1q = 2.0e-3 (mean), p_2q = 2.03e-2 |
 
+The "ODRA rates" are those of the *mapped* calibration, i.e. per-Clifford RB; the CZ's
+own IRB error is about 2.5x smaller (`DATA_NOTES.md` §6). That run is therefore a
+pessimistic noise level, not ODRA's.
+
 Both: frozen `trained_models_hard` classifier, ladder star / linear / circular / all_to_all
 (12 / 30 / 39 / 57 CZ on the fixed-layout path), first 24 reference points, 3 shot-noise
 draws, 8192 shots per circuit, scales {1, 3, 5}, variants genuine / identity / garbage

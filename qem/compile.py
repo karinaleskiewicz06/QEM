@@ -99,7 +99,11 @@ def compile_native(circ: QuantumCircuit, *,
                        initial_layout=layout, optimization_level=1,
                        seed_transpiler=seed)
     if merge_1q:
+        # merge_prx rebuilds the circuit and would drop the routing layout; the qubits
+        # keep their indices, so the transpiler's layout is still exact -- carry it over
+        layout_info = native.layout
         native = merge_prx(native)
+        native._layout = layout_info
     ops = native.count_ops()
     return CompiledCircuit(circuit=native, cz_skeleton=cz_skeleton(native),
                            n_cz=int(ops.get("cz", 0)), n_prx=int(ops.get("r", 0)),

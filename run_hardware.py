@@ -54,7 +54,9 @@ from zne_dryrun import (
     native_transpile,
 )
 from qem.env_check import require_locked_environment, add_env_argument
-from qem.provenance import RunRecorder
+from qem.provenance import RunRecorder, add_archive_argument, guard_archive
+from qem.compile import compile_native
+from sim import device_model
 
 # logical qubit index -> physical ODRA label (hub QB3 = logical 0)
 PHYS = ["QB3", "QB1", "QB2", "QB4", "QB5"]
@@ -157,13 +159,30 @@ def _net_errors():
     return tuple(errs)
 
 
+def _is_html_reply(e: Exception) -> bool:
+    """The server answered with an HTML page (gateway or login page) instead of JSON.
+
+    iqm-client then fails inside pydantic with ``Invalid JSON ... <!DOCTYPE html>``. Seen on
+    ODRA on 2026-10-12 and 2026-10-23 while polling a job that had been submitted fine.
+    Re-polling the same job ID is safe -- nothing is resubmitted.
+    """
+    text = str(e)
+    return type(e).__name__ == "ValidationError" and ("<!DOCTYPE html" in text
+                                                       or "<html" in text)
+
+
 def _retry(fn, what, attempts=5, base_delay=5.0):
-    """Call fn() with exponential backoff on transient network errors."""
+    """Call fn() with exponential backoff on transient network errors.
+
+    An HTML reply from the server counts as transient (see :func:`_is_html_reply`).
+    """
     last = None
     for a in range(attempts):
         try:
             return fn()
-        except _net_errors() as e:
+        except Exception as e:
+            if not (isinstance(e, _net_errors()) or _is_html_reply(e)):
+                raise
             last = e
             wait = base_delay * (2 ** a)
             print(f"  [retry] {what}: {type(e).__name__} "
@@ -184,7 +203,7 @@ def submit_batch(client, batch, shots, dd_on):
                   what="submit_circuits")
 
 
-def fetch_counts(client, job, timeout_s=1800):
+def fetch_counts(client, job, timeout_s=1800, attempts=8):
     """Wait for a submitted job and return counts (with retry on transient errors).
 
     Only the wait/fetch is retried here; the job is already on the server, so a
@@ -200,7 +219,9 @@ def fetch_counts(client, job, timeout_s=1800):
         cmc_batch = client.get_job_measurement_counts(job_id)
         return [counts_of(cmc) for cmc in cmc_batch]
 
-    result = _retry(_go, what=f"fetch counts {job_id}")
+    # 8 attempts with doubling waits span ~21 min: long enough to ride out a gateway
+    # outage, and the job keeps running on the server meanwhile
+    result = _retry(_go, what=f"fetch counts {job_id}", attempts=attempts)
     if RECORDER is not None:                    # P0: powiaz okno z ID jobow
         RECORDER.add_job(str(job_id))
     return result, str(job_id)
@@ -251,6 +272,56 @@ def evaluate(counts_list, ideal_evs, coeffs, p_ro, n, per_circ):
 RECORDER = None          # P0: manifest + counts.jsonl; None = stare zachowanie
 T_1Q, T_2Q = 20e-9, 60e-9
 
+def _simulate_month1(args, batches, patterns, dd_modes, coeffs, p_ro, n, y_eval,
+                     X_eval) -> None:
+    """``--sim-device``: run the same folded natives on ``sim.device_model``.
+
+    DD is a property of the model here (idle qubits dephase at echo T2), one model per DD
+    mode. Counts are converted to the IQM bit order so that :func:`evaluate` -- the same
+    post-processing as on hardware -- reads them unchanged.
+    """
+    rows = []
+    for dd_on in dd_modes:
+        dev = device_model.from_args(args, "odra", dd=dd_on)
+        print(dev.describe())
+        for pattern in patterns:
+            _, per_circ, ideal_evs, n2q, per_pat, qk = batches[pattern]
+            errs = {k: [] for k in ("raw", "rem", "zne_linear", "zne_richardson", "zne_exp")}
+            accs = {k: [] for k in ("raw", "rem", "zne_richardson")}
+            for _rep in range(args.reps):
+                measured = []
+                for c in qk:
+                    m = c.copy()
+                    m.measure_all()
+                    measured.append(m)
+                counts = [{k.replace(" ", "")[::-1]: v for k, v in c.items()}
+                          for c in dev.run(measured, args.shots)]
+                _, err, pred = evaluate(counts, ideal_evs, coeffs, p_ro, n=n,
+                                        per_circ=per_circ)
+                for k in errs:
+                    errs[k].append(float(np.mean(err[k])))
+                for k in accs:
+                    accs[k].append(float(np.mean(np.array(pred[k]) == y_eval)))
+            row = {"pattern": pattern, "per_pattern_weights": per_pat, "transpiled_cz": n2q,
+                   "dd": dd_on, **{f"{k}_err": round(float(np.mean(v)), 4)
+                                   for k, v in errs.items()},
+                   **{f"acc_{k}": round(float(np.mean(v)), 4) for k, v in accs.items()},
+                   "reps": args.reps, "n_points": len(X_eval), "shots": args.shots,
+                   "source": dev.tag}
+            rows.append(row)
+            print(f"  {pattern:>11} DD={'on ' if dd_on else 'off'} | 2q={n2q:>3} | "
+                  f"raw={row['raw_err']:.3f} -> +REM={row['rem_err']:.3f} -> "
+                  f"+ZNE(rich)={row['zne_richardson_err']:.3f}")
+    with open(args.out, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows(rows)
+    print(f"\nwrote {args.out}")
+    if RECORDER is not None:
+        RECORDER.set_extra("device_model", device_model.manifest_entry(dev))
+        RECORDER.close()
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     mode = ap.add_mutually_exclusive_group()
@@ -286,9 +357,17 @@ def main() -> None:
     ap.add_argument("--window-id", default="w1")
     ap.add_argument("--no-provenance", action="store_true",
                     help="pomin manifest i counts.jsonl")
+    device_model.add_arguments(ap)
+    ap.add_argument("--legacy-transpile", action="store_true",
+                    help="stara transpilacja (transpile opt1 bez scalania 1q) zamiast "
+                         "qem.compile.compile_native; potrzebne do odtworzenia archiwum")
+    add_archive_argument(ap)
     add_env_argument(ap)
     args = ap.parse_args()
     require_locked_environment(allow_mismatch=args.allow_env_mismatch)
+    args.out = guard_archive(args.out, allow=args.allow_archive_write)
+    if args.sim_device and args.submit:
+        raise SystemExit("--sim-device and --submit are mutually exclusive")
 
     global RECORDER
     if not args.no_provenance:
@@ -350,21 +429,25 @@ def main() -> None:
         circ, xparams, ans = build_level_circuit(cfg, pattern)
         wparams = ans.weight_parameters(circ)
         circ_w = circ.assign_parameters(dict(zip(wparams, weights)))
-        tq = native_transpile(circ_w.assign_parameters({p: 0.0 for p in xparams}), n)
+        compile_ = ((lambda c: native_transpile(c, n)) if args.legacy_transpile
+                    else (lambda c: compile_native(c, n_qubits=n).circuit))
+        tq = compile_(circ_w.assign_parameters({p: 0.0 for p in xparams}))
         n2q = sum(1 for i in tq.data if i.operation.name == "cz")
 
-        iqm_circs, per_circ, ideal_evs = [], [], []
+        iqm_circs, per_circ, ideal_evs, qk_circs = [], [], [], []
         for pi, x in enumerate(X_eval):
             bound = circ_w.assign_parameters(dict(zip(xparams, x)))
             ideal_evs.append(exact_ev(bound, observable))
-            native = native_transpile(bound, n)
+            native = compile_(bound)
             for s in SCALE_FACTORS:
                 folded = fold_global(native, s)
+                qk_circs.append(folded)
                 ic = qiskit_to_iqm(folded, meas_key="m")
                 validate_circuit(ic)  # local structural validation (no network)
                 iqm_circs.append(ic)
                 per_circ.append((pi, s))
-        batches[pattern] = (iqm_circs, per_circ, np.asarray(ideal_evs), n2q, per_pat)
+        batches[pattern] = (iqm_circs, per_circ, np.asarray(ideal_evs), n2q, per_pat,
+                            qk_circs)
         for dd_on in dd_modes:
             total_circuits += len(iqm_circs) * args.reps
             if (pattern, dd_on) not in done:
@@ -384,6 +467,9 @@ def main() -> None:
     print(f"  mode      : {'SUBMIT to device' if args.submit else 'DRY-RUN (no submission)'}")
     print("=" * 70)
 
+    if args.sim_device:
+        _simulate_month1(args, batches, patterns, dd_modes, coeffs, p_ro, n, y_eval, X_eval)
+        return
     if not args.submit:
         print("\nDRY-RUN ok: all circuits built + validated. Nothing submitted.")
         print("Add --submit to run on the device. Example smoke test:")
@@ -432,7 +518,7 @@ def main() -> None:
                      f"dd={dd_on}\trep={rep}\t{jid}\n")
 
     for pattern in patterns:
-        iqm_circs, per_circ, ideal_evs, n2q, per_pat = batches[pattern]
+        iqm_circs, per_circ, ideal_evs, n2q, per_pat, _ = batches[pattern]
         for dd_on in dd_modes:
             if (pattern, dd_on) in done:
                 print(f"  {pattern:>11} DD={'on ' if dd_on else 'off'} | SKIP (already in CSV)")

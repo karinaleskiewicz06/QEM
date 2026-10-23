@@ -1,0 +1,5 @@
+pattern,per_pattern_weights,transpiled_cz,dd,raw_err,rem_err,zne_linear_err,zne_richardson_err,zne_exp_err,acc_raw,acc_rem,acc_zne_richardson,reps,n_points,shots,source
+star,True,12,False,0.128,0.1052,0.0587,0.042,0.0432,0.875,0.875,0.75,1,8,2048,odra_raw_20260803_th0.0_ph0.0_eps0.0_gecho_idle-alap
+all_to_all,True,57,False,0.3606,0.3505,0.3202,0.1949,0.1587,0.875,0.875,0.875,1,8,2048,odra_raw_20260803_th0.0_ph0.0_eps0.0_gecho_idle-alap
+star,True,12,True,0.1138,0.0903,0.0462,0.0267,0.0266,0.75,0.75,0.75,1,8,2048,odra_raw_20260803_th0.0_ph0.0_eps0.0_gecho_idle-alap_dd
+all_to_all,True,57,True,0.3318,0.3227,0.2919,0.1656,0.092,0.875,0.875,0.875,1,8,2048,odra_raw_20260803_th0.0_ph0.0_eps0.0_gecho_idle-alap_dd

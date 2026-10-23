@@ -106,11 +106,14 @@ def iqm_counts_to_qiskit(counts: dict, n: int, wire_of_logical: list[int]) -> di
 
 
 def run_circuits(backend, circuits, shots: int, max_per_job: int = MAX_CIRCUITS_PER_JOB,
-                 dd: bool = False):
+                 dd: bool = False, on_job=None):
     """Wykonaj listę natywnych obwodów na ODRZE; zwróć zliczenia w kolejności zgłoszenia.
 
     Zgłoszenie następuje RAZ na porcję, a ponawiane jest wyłącznie pobieranie wyniku (po
     ``job_id``), więc awaria sieci nigdy nie powoduje powtórnego wykonania obwodów.
+
+    ``on_job(job_id)`` jest wołane zaraz po zgłoszeniu, PRZED czekaniem na wynik: jeśli
+    pobieranie padnie, ID joba jest już w manifeście i wynik da się odzyskać.
     """
     if not circuits:
         return []
@@ -120,6 +123,9 @@ def run_circuits(backend, circuits, shots: int, max_per_job: int = MAX_CIRCUITS_
     for i in range(0, len(circuits), max_per_job):
         chunk = circuits[i:i + max_per_job]
         job = submit_batch(backend.client, [qiskit_to_iqm(c) for c in chunk], shots, dd_on=dd)
+        print(f"    [odra] zgłoszono zadanie {job.job_id} ({len(chunk)} obwodów)", flush=True)
+        if on_job is not None:
+            on_job(str(job.job_id))
         raw, job_id = fetch_counts(backend.client, job)
         print(f"    [odra] zadanie {job_id} | {len(raw)} obwodów "
               f"({i + len(chunk)}/{len(circuits)})")

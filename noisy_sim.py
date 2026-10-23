@@ -485,11 +485,21 @@ def perqubit_z_on_wires(
 def logical_final_wires(transpiled: QuantumCircuit, n_logical: int) -> list[int]:
     """Physical measurement wire for each logical qubit after transpilation.
 
-    Reads ``transpiled.layout.final_index_layout()`` so single-qubit readout lands
+    Prefers the circuit's own ``measure`` instructions (clbit q -> wire), then
+    ``transpiled.layout.final_index_layout()``, so single-qubit readout lands
     on the correct wire *after* routing/SWAPs moved the logical qubits around
     (generalises the Month-1 Banknote readout-wire fix). Falls back to identity
     ``0..n_logical-1`` when the circuit carries no layout (already-native circuits).
     """
+    # The measurements themselves are the ground truth: clbit q is logical qubit q, and
+    # the wire it is measured on is where that qubit ended up. Unlike the layout, this
+    # survives every pass that rebuilds the circuit (1q merging, twirling, folding),
+    # which drop ``.layout`` -- and then the identity fallback below would silently read
+    # routed qubits off the wrong wires.
+    meas = {transpiled.find_bit(i.clbits[0]).index: transpiled.find_bit(i.qubits[0]).index
+            for i in transpiled.data if i.operation.name == "measure"}
+    if all(q in meas for q in range(n_logical)):
+        return [int(meas[q]) for q in range(n_logical)]
     layout = getattr(transpiled, "layout", None)
     if layout is None:
         return list(range(n_logical))

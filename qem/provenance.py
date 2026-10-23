@@ -79,6 +79,50 @@ def git_state() -> dict[str, Any]:
     }
 
 
+#: where new results may be written without touching the archive
+WRITABLE_ROOTS = ("runs", "results_sim", "results")
+
+
+def guard_archive(path: str | pathlib.Path, *, allow: bool = False) -> str:
+    """Refuse to write over a tracked result outside ``runs/`` and ``results_sim/``.
+
+    Every runner's default ``--out`` used to be an archived CSV in the repository root
+    (``garnet_twirl_results.csv``, ``hardware_results.csv`` ...), so a run without
+    ``--out`` -- a simulation included -- silently replaced historical data. Rule 2 of the
+    campaign spec forbids that.
+
+    Args:
+        path: the intended output.
+        allow: the caller's ``--allow-archive-write``.
+
+    Returns:
+        ``path`` unchanged when writing is permitted.
+
+    Raises:
+        SystemExit: when ``path`` is a git-tracked file outside the writable roots.
+    """
+    p = pathlib.Path(path)
+    if allow:
+        return str(path)
+    try:
+        rel = p.resolve().relative_to(pathlib.Path.cwd().resolve())
+    except ValueError:
+        return str(path)                       # outside the repository: not archive
+    if rel.parts and rel.parts[0] in WRITABLE_ROOTS:
+        return str(path)
+    tracked = _git("ls-files", "--error-unmatch", str(rel))
+    if tracked is not None or (p.exists() and _git("rev-parse") is None):
+        raise SystemExit(
+            f"refusing to write {path}: it is an archived result (rule 2). Pass --out "
+            f"under runs/ or results_sim/, or --allow-archive-write to override.")
+    return str(path)
+
+
+def add_archive_argument(ap) -> None:
+    ap.add_argument("--allow-archive-write", action="store_true",
+                    help="permit --out to replace an archived (git-tracked) result")
+
+
 def package_versions(names: Iterable[str] = TRACKED_PACKAGES) -> dict[str, str | None]:
     return {n: installed_version(n) for n in names}
 
@@ -169,6 +213,9 @@ class RunManifest:
     device: str | None = None
     submitted: bool = False
     notes: list[str] = dataclasses.field(default_factory=list)
+    #: structured facts about the run that are not CLI arguments, e.g. the simulated
+    #: device model with its error budget (P7)
+    extra: dict[str, Any] = dataclasses.field(default_factory=dict)
     environment: dict[str, Any] = dataclasses.field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -231,6 +278,11 @@ class RunRecorder:
         if when not in ("start", "end"):
             raise ValueError("when must be 'start' or 'end'")
         self.manifest.calibration_set_id[when] = value
+        self.manifest.save(self.manifest_path)
+
+    def set_extra(self, key: str, value: Any) -> None:
+        """Store a JSON-serialisable fact under ``manifest["extra"][key]``."""
+        self.manifest.extra[key] = value
         self.manifest.save(self.manifest_path)
 
     def note(self, text: str) -> None:

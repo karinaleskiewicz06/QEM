@@ -40,14 +40,16 @@ from qiskit.quantum_info import Statevector
 from ansatz import HardwareEfficientAnsatz
 from cdr import near_clifford_training_circuits, clifford_ideal_expval, fit_cdr, apply_cdr
 from qem.env_check import require_locked_environment, add_env_argument
-from qem.provenance import RunRecorder
+from qem.provenance import RunRecorder, add_archive_argument, guard_archive
 from metrics import accuracy, macro_f1
 from noisy_sim import (
     load_frozen_model, observable_coeffs, make_noisy_simulator,
-    execute_expectation, DeviceCalibration,
+    execute_expectation, DeviceCalibration, perqubit_z_from_counts,
 )
 from shots_to_target import cdr_effective_shots
 from zne_dryrun import native_transpile, fold_global, SCALE_FACTORS
+from sim import device_model
+from qem.compile import compile_native
 from qem.zne import diagnose_point
 from run_hardware import qiskit_to_iqm, perqubit_z_iqm, submit_batch, fetch_counts
 from topology import device_coupling_map
@@ -119,6 +121,7 @@ def main() -> None:
     ap.add_argument("--window-id", default="w1")
     ap.add_argument("--no-provenance", action="store_true",
                     help="pomin manifest i counts.jsonl (stare zachowanie: sam CSV)")
+    add_archive_argument(ap)
     add_env_argument(ap)
     ap.add_argument("--submit", action="store_true")
     ap.add_argument("--sim", action="store_true", help="walidacja na symulatorze (bez kredytów)")
@@ -127,9 +130,18 @@ def main() -> None:
     ap.add_argument("--legacy-clamp", action="store_true",
                     help="ZNE: stary cichy fallback na fit liniowy przy |E|>1.25; domyslnie "
                          "estymata zostaje, a wiersz dostaje flagi unphysical / fallback_used")
+    device_model.add_arguments(ap)
+    ap.add_argument("--legacy-transpile", action="store_true",
+                    help="ODRA: stara transpilacja (transpile opt1 bez scalania 1q) zamiast "
+                         "qem.compile.compile_native; potrzebne do odtworzenia archiwum")
     ap.add_argument("--out", default="odra_cdr_results.csv")
     args = ap.parse_args()
     require_locked_environment(allow_mismatch=args.allow_env_mismatch)
+    args.out = guard_archive(args.out, allow=args.allow_archive_write)
+    dev = device_model.from_args(args, "odra")
+    if dev is not None:
+        args.sim = True
+        print(dev.describe())
 
     global RECORDER, COEFFS, REDUCTION
     if not args.no_provenance:
@@ -137,6 +149,8 @@ def main() -> None:
                                     args=vars(args), seed=args.seed, device="odra",
                                     submitted=args.submit)
         print(f"[provenance] {RECORDER.dir}")
+        if dev is not None:
+            RECORDER.set_extra("device_model", device_model.manifest_entry(dev))
 
     _, observable, cfg = load_frozen_model(models_dir=args.models_dir)
     base_layers = cfg["n_layers"]          # warstwy modelu zamrozonego (plik referencyjny)
@@ -179,6 +193,9 @@ def main() -> None:
         client = IQMClient(args.url)  # token z IQM_TOKEN
         print("\n>>> ODRA: dostęp niemierzony kredytami Resonance <<<\n")
         _sim = _cal = None
+    elif dev is not None:
+        _sim = _cal = None
+        print("\n[--sim-device] model skalibrowany do urządzenia (P7)\n")
     else:
         cmap = device_coupling_map("odra")
         _cal = DeviceCalibration(num_qubits=n, coupling_map=cmap, p_2q=0.01)
@@ -197,6 +214,17 @@ def main() -> None:
         zliczeniami do ``counts.jsonl``; ``tags`` opisuje rolę obwodu (punkt, indeks
         treningowy, ramię), żeby wynik dało się odtworzyć bez CSV.
         """
+        if dev is not None:
+            # obwody juz natywne; pomiar dokladany tak jak przy wysylce na ODRE
+            measured = []
+            for c in natives:
+                m = c.copy()
+                m.measure_all()
+                measured.append(m)
+            counts = dev.run(measured, args.shots)
+            vals = [float(np.dot(coeffs, perqubit_z_from_counts(c, n))) for c in counts]
+            _record(natives, counts, vals, tags)
+            return (vals, counts) if return_counts else vals
         if not args.submit:
             # pre_transpiled=True: obwody są już w bazie {r, cz} i nie wolno ich
             # przekompilować --- zniknęłaby struktura routingu, którą badamy
@@ -257,7 +285,10 @@ def main() -> None:
             ideal_eval.append(float(np.real(
                 Statevector.from_instruction(b).expectation_value(observable))))
 
-        natives = [native_transpile(c, n) for c in train + eval_circs]
+        # P1: compile_native trzyma szkielet CZ treningu zgodny z celem (stara sciezka
+        # bez seeda dawala 0-2/10 zgodnych szkieletow przy routingu; DATA_NOTES §3)
+        natives = [native_transpile(c, n) if args.legacy_transpile
+                   else compile_native(c, n_qubits=n).circuit for c in train + eval_circs]
         nat_eval = natives[len(train):]
         # składanie WYKONUJEMY na obwodzie natywnym, żeby struktura U^dag U nie została
         # zoptymalizowana przez ponowną transpilację (tak samo jak w run_hardware.py)

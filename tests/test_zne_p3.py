@@ -326,9 +326,10 @@ def test_runners_offer_legacy_clamp(runner):
     assert "--legacy-clamp" in out
 
 
-def test_shot_boundary_dry_run_neyman_45_reps():
+def test_shot_boundary_dry_run_neyman_45_reps(tmp_path):
     out = subprocess.run([sys.executable, "zne_shot_boundary.py", "--allocation", "neyman",
-                          "--reps", "45", "--no-provenance"], cwd=REPO,
+                          "--reps", "45", "--no-provenance",
+                          "--out", str(tmp_path / "k.csv")], cwd=REPO,
                          capture_output=True, text=True, timeout=120)
     assert out.returncode == 0, out.stderr
     assert "kappa_opt = 11.250" in out.stdout

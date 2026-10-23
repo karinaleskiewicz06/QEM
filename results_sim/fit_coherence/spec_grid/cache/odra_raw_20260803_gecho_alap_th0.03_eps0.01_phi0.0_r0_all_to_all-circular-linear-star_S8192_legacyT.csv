@@ -1,0 +1,9 @@
+window,placement,pattern,transpiled_cz,arm,twirl,err,cdr_r2,n_avg,shots,abs_lam1,abs_lam3,abs_lam5,retention_R,mean_lam1,mean_lam3,mean_lam5,fallback_used,unphysical,retention_norm,snr_lmax,w_neg,w_neg_marg
+fit0,optimal,all_to_all,57,cdr,False,0.0312,0.914,6,8192,,,,,,,,,,,,,
+fit0,optimal,all_to_all,57,cdr,True,0.0371,0.907,6,8192,,,,,,,,,,,,,
+fit0,optimal,circular,39,cdr,False,0.0307,0.9379,6,8192,,,,,,,,,,,,,
+fit0,optimal,circular,39,cdr,True,0.0229,0.9075,6,8192,,,,,,,,,,,,,
+fit0,optimal,linear,30,cdr,False,0.04,0.8736,6,8192,,,,,,,,,,,,,
+fit0,optimal,linear,30,cdr,True,0.0188,0.9681,6,8192,,,,,,,,,,,,,
+fit0,optimal,star,12,cdr,False,0.0458,0.9839,6,8192,,,,,,,,,,,,,
+fit0,optimal,star,12,cdr,True,0.0174,0.9929,6,8192,,,,,,,,,,,,,

@@ -30,7 +30,9 @@ from noisy_sim import (
 )
 from topology import placement
 from qem.env_check import require_locked_environment, add_env_argument
-from qem.provenance import RunRecorder
+from qem.provenance import RunRecorder, add_archive_argument, guard_archive
+from sim import device_model
+from qem.compile import compile_native
 
 N_QUBITS = 5
 
@@ -82,9 +84,18 @@ def main() -> None:
     ap.add_argument("--window-id", default="w1")
     ap.add_argument("--no-provenance", action="store_true",
                     help="pomin manifest i counts.jsonl")
+    device_model.add_arguments(ap)
+    ap.add_argument("--legacy-transpile", action="store_true",
+                    help="ODRA: stara transpilacja (transpile opt1 bez scalania 1q) zamiast "
+                         "qem.compile.compile_native; potrzebne do odtworzenia archiwum")
+    add_archive_argument(ap)
     add_env_argument(ap)
     args = ap.parse_args()
     require_locked_environment(allow_mismatch=args.allow_env_mismatch)
+    args.out = guard_archive(args.out, allow=args.allow_archive_write)
+    dev = device_model.from_args(args, args.device)
+    if dev is not None:
+        print(dev.describe())
 
     global RECORDER
     if not args.no_provenance:
@@ -92,6 +103,8 @@ def main() -> None:
                                     args=vars(args), seed=getattr(args, 'seed', None),
                                     device=getattr(args, "device", None), submitted=getattr(args, "submit", False))
         print(f"[provenance] {RECORDER.dir}")
+        if dev is not None:
+            RECORDER.set_extra("device_model", device_model.manifest_entry(dev))
 
     cal = _calibration_for(args.device, args.calibration)
     layout = None if cal.num_qubits == N_QUBITS else placement(args.device, N_QUBITS, args.placement)
@@ -103,12 +116,17 @@ def main() -> None:
     rows = []
     for layers in args.layers:
         mirror = random_mirror(layers, args.seed + layers)
-        native = transpile(mirror, basis_gates=IQM_BASIS_GATES, coupling_map=cal.coupling_map,
-                           initial_layout=layout, optimization_level=1, seed_transpiler=args.seed)
+        if args.device == "odra" and not args.legacy_transpile:
+            native = compile_native(mirror, seed=args.seed).circuit
+        else:
+            native = transpile(mirror, basis_gates=IQM_BASIS_GATES,
+                               coupling_map=cal.coupling_map, initial_layout=layout,
+                               optimization_level=1, seed_transpiler=args.seed)
         n2q = sum(1 for i in native.data if i.operation.name == "cz")
         wires = logical_final_wires(native, N_QUBITS) if layout is not None else list(range(N_QUBITS))
         native.measure_all()
-        counts = sim.run(native, shots=args.shots).result().get_counts()
+        counts = (dev.run([native], args.shots)[0] if dev is not None
+                  else sim.run(native, shots=args.shots).result().get_counts())
         if RECORDER is not None:
             RECORDER.record_circuit(f"mirror/L{layers:02d}", counts, native=native,
                                     t_1q=T_1Q, t_2q=T_2Q, with_qasm=False,
