@@ -256,7 +256,29 @@ class RunRecorder:
         self.dir.mkdir(parents=True, exist_ok=True)
         self.counts_path = self.dir / "counts.jsonl"
         self.manifest_path = self.dir / "manifest.json"
+        if self.manifest_path.exists():
+            # a resumed window: keep what the earlier attempt(s) recorded -- above all
+            # their job IDs -- instead of overwriting the manifest
+            try:
+                old = json.loads(self.manifest_path.read_text())
+            except (OSError, ValueError):
+                old = {}
+            prior = old.get("extra", {}).get("previous_attempts", [])
+            prior.append({k: old.get(k) for k in ("started_utc", "finished_utc",
+                                                    "job_ids", "notes", "cli_args",
+                                                    "calibration_set_id")}
+                         | {"git_commit": old.get("environment", {}).get("git_commit"),
+                            "git_dirty": old.get("environment", {}).get("git_dirty")})
+            self.manifest.extra["previous_attempts"] = prior
         self.manifest.save(self.manifest_path)
+
+    @property
+    def n_recorded(self) -> int:
+        """Records already in ``counts.jsonl`` (non-zero for a resumed window)."""
+        if not self.counts_path.exists():
+            return 0
+        with self.counts_path.open() as fh:
+            return sum(1 for line in fh if line.strip())
 
     @classmethod
     def open(cls, campaign: str, *, window_id: str, args: dict | None = None,

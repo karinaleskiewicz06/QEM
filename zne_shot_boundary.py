@@ -96,22 +96,28 @@ _REC_SEQ = [0]
 COEFFS = None            # wspolczynniki obserwabli; ustawiane w main()
 
 
-def _record(circs, counts, shots, arm="zne") -> None:
+def _record(circs, counts, shots, arm="zne", metas=None) -> None:
     """Dopisz surowe zliczenia kazdego obwodu kappa-kampanii do counts.jsonl.
 
     Numeracja jest sekwencyjna w obrebie okna: te obwody roznia sie budzetem i skala
     foldingu, a nie rola, wiec identyfikator ma byc tylko stabilnym kluczem do
-    zliczen. Skale i budzet odczytuje sie z metadanych, nie z nazwy.
+    zliczen. Skale i budzet odczytuje sie z metadanych, nie z nazwy: ``metas`` (jeden
+    slownik na obwod) niesie budget_S, role (pilot/raw/zne), rep, target, scale.
+    Zapisywane jest tez <O>, wiec rebuild_from_counts moze je sprawdzic bit w bit.
     """
     if RECORDER is None:
         return
-    for c, cnt in zip(circs, counts):
+    metas = metas or [{}] * len(circs)
+    for c, cnt, meta in zip(circs, counts, metas):
         i = _REC_SEQ[0]; _REC_SEQ[0] += 1
+        extra = {}
+        if COEFFS is not None:
+            extra["expval"] = float(np.dot(COEFFS, perqubit_z_from_counts(cnt, len(COEFFS))))
         RECORDER.record_circuit(f"kappa/c{i:05d}", cnt, native=c,
                                 t_1q=T_1Q, t_2q=T_2Q, with_qasm=False,
                                 arm=arm, shots_requested=int(shots),
                                 coeffs=None if COEFFS is None else list(map(float, COEFFS)),
-                                reduction="dot_perqubit")
+                                reduction="dot_perqubit", **meta, **extra)
 T_1Q, T_2Q = 20e-9, 60e-9
 
 def main() -> None:
@@ -167,6 +173,8 @@ def main() -> None:
                                     args=vars(args), seed=getattr(args, 'seed', None),
                                     device=args.device, submitted=args.submit)
         print(f"[provenance] {RECORDER.dir}")
+        # wznowienie: numeracja dalej, nie od zera (inaczej ID obwodow sie powtarzaja)
+        _REC_SEQ[0] = RECORDER.n_recorded
         if dev is not None:
             RECORDER.set_extra("device_model", device_model.manifest_entry(dev))
 
@@ -196,28 +204,28 @@ def main() -> None:
             from iqm_resonance import get_backend, transpile_for_backend, run_circuits
         backend = get_backend(args.device)
         def tpile(c, layout): return transpile_for_backend(c, backend, initial_layout=layout)
-        def run(circs, shots, arm="zne"):
+        def run(circs, shots, arm="zne", metas=None):
             kw = ({"on_job": RECORDER.add_job}
                   if RECORDER is not None and args.device == "odra" else {})
             out = run_circuits(backend, circs, shots, **kw)
-            _record(circs, out, shots, arm)
+            _record(circs, out, shots, arm, metas)
             return out
     else:
         def tpile(c, layout):
             return transpile(c, basis_gates=IQM_BASIS_GATES, coupling_map=cmap,
                              initial_layout=layout, optimization_level=1, seed_transpiler=args.seed)
         if dev is not None:
-            def run(circs, shots, arm="zne"):
+            def run(circs, shots, arm="zne", metas=None):
                 out = dev.run(circs, shots)
-                _record(circs, out, shots, arm)
+                _record(circs, out, shots, arm, metas)
                 return out
         elif args.sim:
             ndev = max(max(e) for e in cmap) + 1
             _sim = make_noisy_simulator(
                 DeviceCalibration(num_qubits=ndev, coupling_map=cmap, p_2q=0.01))
-            def run(circs, shots, arm="zne"):
+            def run(circs, shots, arm="zne", metas=None):
                 out = [_sim.run(c, shots=shots).result().get_counts() for c in circs]
-                _record(circs, out, shots, arm)
+                _record(circs, out, shots, arm, metas)
                 return out
         else:
             run = None
@@ -310,7 +318,9 @@ def main() -> None:
         sigmas = None
         if neyman:
             pilot = run([measured(t, f) for t in targets for f in SCALES], args.pilot_shots,
-                        arm="zne_pilot")
+                        arm="zne_pilot",
+                        metas=[{"point": spec, "role": "pilot", "target": i, "scale": f}
+                               for i in range(len(targets)) for f in SCALES])
             ns_ = len(SCALES)
             sigmas = [float(np.sqrt(np.mean([per_shot_variance_from_counts(
                 pilot[i * ns_ + k], coeffs, n) for i in range(len(targets))])))
@@ -338,7 +348,10 @@ def main() -> None:
             # a nie dryf kalibracji --- a to właśnie wariancję próbkowania chcemy tu zmierzyć.
             ns = len(SCALES)
             E = len(targets)
-            raw_counts = run([measured(t) for _ in range(args.reps) for t in targets], S)
+            raw_counts = run([measured(t) for _ in range(args.reps) for t in targets], S,
+                             metas=[{"point": spec, "budget_S": S, "role": "raw", "rep": r,
+                                     "target": i, "scale": 1}
+                                    for r in range(args.reps) for i in range(E)])
             rv = [float(np.dot(coeffs, perqubit_z_from_counts(ct, n))) for ct in raw_counts]
             raw_vals = np.array(rv).reshape(args.reps, E)
             # V wprost z rozkładu zliczeń (wszystkie S pomiarów), nie z rozrzutu powtórzeń
@@ -347,10 +360,17 @@ def main() -> None:
 
             if len(set(alloc)) == 1:
                 zne_counts = run([measured(t, f) for _ in range(args.reps)
-                                  for t in targets for f in SCALES], alloc[0])
+                                  for t in targets for f in SCALES], alloc[0],
+                                 metas=[{"point": spec, "budget_S": S, "role": "zne",
+                                         "rep": r, "target": i, "scale": f}
+                                        for r in range(args.reps) for i in range(E)
+                                        for f in SCALES])
             else:
                 # osobne zgłoszenie na skalę (różne liczby pomiarów), potem ta sama kolejność
-                by_scale = [run([measured(t, f) for _ in range(args.reps) for t in targets], nk)
+                by_scale = [run([measured(t, f) for _ in range(args.reps) for t in targets], nk,
+                                metas=[{"point": spec, "budget_S": S, "role": "zne",
+                                        "rep": r, "target": i, "scale": f}
+                                       for r in range(args.reps) for i in range(E)])
                             for f, nk in zip(SCALES, alloc)]
                 zne_counts = [by_scale[k][r * E + i] for r in range(args.reps)
                               for i in range(E) for k in range(ns)]
