@@ -52,6 +52,8 @@ from sim import device_model
 from qem.compile import compile_native
 from qem.zne import diagnose_point
 from run_hardware import qiskit_to_iqm, perqubit_z_iqm, submit_batch, fetch_counts
+from odra_backend import iqm_counts_to_qiskit
+from noisy_sim import logical_final_wires
 from topology import device_coupling_map
 
 PATTERNS = ("star", "linear", "circular", "all_to_all")
@@ -241,11 +243,21 @@ def main() -> None:
         for s in range(0, len(natives), args.max_batch):
             chunk = natives[s: s + args.max_batch]
             job = submit_batch(client, [qiskit_to_iqm(c) for c in chunk], args.shots, dd_on=False)
+            if RECORDER is not None:           # przed czekaniem: padniecie nie gubi ID
+                RECORDER.add_job(str(job.job_id))
             counts, jid = fetch_counts(client, job)
             print(f"    zadanie {jid} | {len(counts)}/{len(natives)} obwodów")
-            chunk_vals = [float(np.dot(coeffs, perqubit_z_iqm(c, n))) for c in counts]
-            if RECORDER is not None:
-                RECORDER.add_job(jid)
+            if args.legacy_transpile:
+                # archiwum: drut j czytany jako kubit logiczny j (poprawne tylko dla star;
+                # dla mean-Z wynik i tak niezmienniczy wzgledem permutacji)
+                chunk_vals = [float(np.dot(coeffs, perqubit_z_iqm(c, n))) for c in counts]
+            else:
+                # histogram IQM jest indeksowany drutem; po routingu kubit logiczny q siedzi
+                # na drucie logical_final_wires(...)[q] -- przeliczamy do konwencji Qiskita
+                counts = [iqm_counts_to_qiskit(c, n, logical_final_wires(nat, n))
+                          for c, nat in zip(counts, chunk)]
+                chunk_vals = [float(np.dot(coeffs, perqubit_z_from_counts(c, n)))
+                              for c in counts]
             _record(chunk, counts, chunk_vals,
                     tags[s: s + args.max_batch] if tags else None)
             vals += chunk_vals
@@ -328,7 +340,8 @@ def main() -> None:
                                    legacy_clamp=args.legacy_clamp,
                                    bound=float(np.sum(np.abs(coeffs))),
                                    counts_per_scale=[counts[i] for i in idx], coeffs=coeffs,
-                                   bit_order="iqm" if args.submit else "qiskit")
+                                   bit_order="iqm" if (args.submit and args.legacy_transpile)
+                                   else "qiskit")
                 zne_pts.append(d)
                 err_zne.append(abs(d["zne"] - ideal))
 
