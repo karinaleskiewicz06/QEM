@@ -1,0 +1,6 @@
+placement,pattern,transpiled_cz,budget_S,shots_per_scale,reps,bias_rms,V_counts,V_reps,mse_raw,mse_zne,delta_mse,measured,allocation,shots_alloc,kappa_pred,sigma_lam1,sigma_lam3,sigma_lam5,n_unphysical,n_fallback,legacy_clamp,S_star_pooled,kappa_meas,kappa_err
+optimal,star,12,256,134,10,0.04982,0.18674,0.13936,0.002972,0.009159,0.006187,zaszkodzi,neyman,134/93/29,11.6299,0.43053,0.45872,0.45816,0,0,False,858.6,12.494,1.069
+optimal,star,12,512,269,10,0.04985,0.18699,0.24021,0.002908,0.004998,0.00209,zaszkodzi,neyman,269/186/57,11.6299,0.43584,0.44461,0.45149,0,0,False,858.6,12.494,1.069
+optimal,star,12,1024,540,10,0.04759,0.1892,0.33627,0.00256,0.002925,0.000364,zaszkodzi,neyman,540/371/113,11.6299,0.43472,0.44449,0.4567,0,0,False,858.6,12.494,1.069
+optimal,star,12,2048,1080,10,0.05311,0.19049,0.21135,0.002914,0.00203,-0.000884,pomoze,neyman,1080/743/225,11.6299,0.43496,0.4483,0.44981,0,0,False,858.6,12.494,1.069
+optimal,star,12,4096,2161,10,0.05228,0.18903,0.20446,0.002778,0.001123,-0.001654,pomoze,neyman,2161/1486/449,11.6299,0.43356,0.45005,0.45366,0,0,False,858.6,12.494,1.069
