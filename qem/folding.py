@@ -37,7 +37,7 @@ FoldVariant = Literal["genuine", "identity", "garbage"]
 FOLD_VARIANTS: tuple[FoldVariant, ...] = ("genuine", "identity", "garbage")
 
 #: Gates a foldable native circuit may contain.
-_ALLOWED = {"r", "rz", "cz", "barrier"}
+_ALLOWED = {"r", "rz", "cz", "barrier", "delay"}
 
 
 def _check_native(native: QuantumCircuit) -> None:
@@ -100,7 +100,7 @@ def identity_block(native: QuantumCircuit) -> QuantumCircuit:
             out.append(inst.operation, q)
     out.barrier()
     for inst in native.data:
-        if inst.operation.name in ("cz", "barrier"):
+        if inst.operation.name in ("cz", "barrier", "delay"):
             out.append(inst.operation, _qubits(native, inst))
     return out
 

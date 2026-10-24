@@ -70,6 +70,13 @@ def merge_prx(qc: QuantumCircuit, *, drop_trailing_rz: bool = True) -> QuantumCi
         name = inst.operation.name
         if name == "barrier":
             continue
+        if name == "delay":
+            # idle time is physical: 1q gates may not drift across it, so settle each
+            # wire first and keep the delay where it was
+            for q in qubits:
+                flush(q)
+            out.append(inst.operation, qubits)
+            continue
         if name == "measure":
             flush(qubits[0])
             out.append(inst.operation, qubits,

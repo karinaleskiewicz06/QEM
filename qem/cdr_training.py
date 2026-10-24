@@ -130,7 +130,7 @@ def snap_native_to_clifford(native: QuantumCircuit, angle_sampler: AngleSampler,
                 out.append(RGate(theta, phi), qubits)
         elif name == "cz":
             out.append(inst.operation, qubits)
-        elif name in ("barrier", "measure"):
+        elif name in ("barrier", "measure", "delay"):
             out.append(inst.operation, qubits,
                        [native.find_bit(c).index for c in inst.clbits])
         else:
@@ -146,8 +146,7 @@ def is_clifford(circuit: QuantumCircuit) -> bool:
     actually Clifford would silently make the ideal value uncomputable by the stabilizer
     simulator, and CDR's whole scalability argument rests on it being computable.
     """
-    probe = circuit.copy()
-    probe.remove_final_measurements(inplace=True)
+    probe = _without_delays(circuit)
     try:
         Clifford(probe)
     except Exception:          # Qiskit raises several types here; any of them means "no"
@@ -161,9 +160,16 @@ def clifford_ideal_expval(circuit: QuantumCircuit, observable) -> float:
     Unlike a statevector this stays polynomial in the qubit count, which is the property
     that lets CDR work at scales where the target cannot be simulated at all.
     """
+    probe = _without_delays(circuit)
+    return float(np.real(StabilizerState(Clifford(probe)).expectation_value(observable)))
+
+
+def _without_delays(circuit: QuantumCircuit) -> QuantumCircuit:
+    """Measurement- and delay-free copy: an ideal delay is the identity (P5 idle insertion)."""
     probe = circuit.copy()
     probe.remove_final_measurements(inplace=True)
-    return float(np.real(StabilizerState(Clifford(probe)).expectation_value(observable)))
+    probe.data = [i for i in probe.data if i.operation.name != "delay"]
+    return probe
 
 
 def build_training_set(target_native: QuantumCircuit, *, n_train: int,
