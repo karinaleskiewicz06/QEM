@@ -99,7 +99,14 @@ def qiskit_to_iqm(circ, phys=PHYS, meas_key: str = "m"):
             ops.append(CircuitOperation(
                 name="barrier", locus=tuple(qname(q) for q in qs), args={},
             ))
-        elif name in ("id", "delay"):
+        elif name == "delay":
+            # explicit idle (P5 idle_matched insertion); IQM takes seconds and rounds up
+            from qem.identity_insertion import delay_seconds
+            ops.append(CircuitOperation(
+                name="delay", locus=tuple(qname(q) for q in qs),
+                args={"duration": delay_seconds(inst.operation)},
+            ))
+        elif name == "id":
             continue  # idle is physical on hardware
         elif name == "measure":
             continue  # appended once below

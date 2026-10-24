@@ -283,6 +283,7 @@ class DeviceModel:
             raise ValueError(f"circuit has {circuit.num_qubits} qubits, model has "
                              f"{self.calibration.n_qubits}")
         out = self.over_rotate(circuit)
+        out = _delays_in_dt(out)
         if self.with_idle:
             dur = self.durations()
             sched = ALAPScheduleAnalysis if self.schedule == "alap" else ASAPScheduleAnalysis
@@ -318,6 +319,24 @@ class DeviceModel:
                          f"no-depol F={b['f_no_depol']:.5f} p_depol={b['p_depol']:.5f}"
                          + (f"  BUDGET EXCEEDED ({b['cause']})" if b["exceeded"] else ""))
         return "\n".join(lines)
+
+
+def _delays_in_dt(circuit: QuantumCircuit) -> QuantumCircuit:
+    """Rewrite delays given in seconds (P5 idle insertion) in units of :data:`DT`.
+
+    The scheduler and the relaxation pass work in ``dt``; a delay already there is kept.
+    """
+    if not any(i.operation.name == "delay" and getattr(i.operation, "unit", "dt") != "dt"
+               for i in circuit.data):
+        return circuit
+    from qem.identity_insertion import delay_seconds
+    out = circuit.copy_empty_like()
+    for inst in circuit.data:
+        op = inst.operation
+        if op.name == "delay" and getattr(op, "unit", "dt") != "dt":
+            op = Delay(int(round(delay_seconds(op) / DT)), unit="dt")
+        out.append(op, inst.qubits, inst.clbits)
+    return out
 
 
 def build_noise_model(calibration: str | pathlib.Path | dict | OdraCalibration,

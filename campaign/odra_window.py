@@ -71,6 +71,7 @@ from qem.cdr_training import (build_training_set, clifford_ideal_expval,  # noqa
 from qem.compile import compile_native, cz_skeleton  # noqa: E402
 from qem.env_check import add_env_argument, require_locked_environment  # noqa: E402
 from qem.folding import FOLD_VARIANTS, fold_native  # noqa: E402
+from qem.identity_insertion import insert_identity, scheduled_duration  # noqa: E402
 from qem.provenance import RunRecorder  # noqa: E402
 from qem.twirl import twirl_logical, twirl_native_merged  # noqa: E402
 from qem.zne import diagnose_point  # noqa: E402
@@ -82,10 +83,22 @@ RUNGS: dict[str, tuple[str, int]] = {
     "all_to_all": ("all_to_all", 3),
     "star_L6": ("star", 6), "star_L9": ("star", 9), "star_L13": ("star", 13),
 }
+#: P5 identity insertion on the frozen star L3: rung -> (pairs, mode). 6/12/20 pairs take
+#: the 12-CZ star to 24/36/52 CZ (cz_pairs), or to the same durations at 12 CZ (idle_matched)
+INSERTIONS: dict[str, tuple[int, str]] = {
+    f"star_{m}{n}": (k, mode) for n, k in ((24, 6), (36, 12), (52, 20))
+    for m, mode in (("cz", "cz_pairs"), ("idle", "idle_matched"))}
+RUNGS.update({name: ("star", 3) for name in INSERTIONS})
 DEFAULT_ARMS = ("off_copies:near_target", "twirl_native:near_target", "spread:near_target",
                 "twirl_logical:shared_random", "twirl_native:shared_random")
 #: a window is split over two nights by rung, so every arm of a rung shares a calibration
-NIGHTS = {"A": ("star", "circular"), "B": ("linear", "all_to_all")}
+NIGHTS = {"A": ("star", "circular"), "B": ("linear", "all_to_all"),
+          # P5: what drives degradation -- CZ count, duration or PRX (L6/9/13 add PRX)
+          "P5": ("star", "star_cz24", "star_cz36", "star_cz52", "star_idle24", "star_idle36",
+                 "star_idle52", "star_L6", "star_L9", "star_L13")}
+#: per-night overrides: P5 needs raw error and the untwirled CDR fit, nothing else
+NIGHT_ARMS = {"P5": ("off_copies:near_target",)}
+NIGHT_NO_ZNE = {"P5"}
 ZNE_SCALES = (1, 3, 5)
 #: measured on ODRA, 2026-10-23: ~0.3 s per circuit plus ~2.6e-4 s per shot
 SEC_PER_CIRCUIT, SEC_PER_SHOT = 0.3, 2.6e-4
@@ -155,15 +168,28 @@ def build_plan(args, points: list[dict]) -> tuple[list[Job], dict]:
     obs = readout_observable(N_QUBITS, "mean")
     jobs: list[Job] = []
     info: dict = {"rungs": {}, "blocks": {}}
+    t_cz = getattr(args, "t_cz", 60e-9)
+    t_prx = getattr(args, "t_prx", 20e-9)
     for rung in parse_points(args.points):
         cw, xp = frozen(rung)
+        pairs, mode = INSERTIONS.get(rung, (0, "cz_pairs"))
+
+        def native_of(c, measure=False):
+            """compile_native, then the rung's identity insertion (none for most rungs)."""
+            nat = insert_identity(compile_native(c).circuit, pairs, mode, t_cz=t_cz)
+            if measure:
+                nat.measure_all()
+            return nat
+
         logical = [cw.assign_parameters(dict(zip(xp, p["x"]))) for p in points]
-        natives = [compile_native(c).circuit for c in logical]
+        natives = [native_of(c) for c in logical]
         ideal = [float(np.real(Statevector.from_instruction(c).expectation_value(obs)))
                  for c in logical]
         n_cz = natives[0].count_ops().get("cz", 0)
-        info["rungs"][rung] = {"n_cz": n_cz, "skeleton": [list(e) for e in cz_skeleton(natives[0])]}
-        base = {"rung": rung, "n_cz": n_cz}
+        info["rungs"][rung] = {"n_cz": n_cz, "skeleton": [list(e) for e in cz_skeleton(natives[0])],
+                               "insertion": {"pairs": pairs, "mode": mode} if pairs else None}
+        base = {"rung": rung, "n_cz": n_cz, "insert_pairs": pairs,
+                "insert_mode": mode if pairs else None}
 
         for arm, ts in parse_arms(args.cdr_arms):
             block = f"{rung}/cdr/{arm}/{ts}"
@@ -180,7 +206,7 @@ def build_plan(args, points: list[dict]) -> tuple[list[Job], dict]:
                 else:
                     tr_log = near_clifford_training_circuits(logical[pi], n_train=n_dist,
                                                              seed=args.seed)
-                    tr_nat = [compile_native(c).circuit for c in tr_log]
+                    tr_nat = [native_of(c) for c in tr_log]
                 tr_ideal = [clifford_ideal_expval(c, obs) for c in tr_nat]
                 for spec in plan.specs:
                     is_t = spec.role == "target"
@@ -195,12 +221,13 @@ def build_plan(args, points: list[dict]) -> tuple[list[Job], dict]:
                     elif TWIRL_KIND[arm] == "logical":
                         lg = logical[pi] if is_t else tr_log[spec.train_index]
                         tw = twirl_logical(lg, rng)
-                        circ, frame = compile_native(tw.circuit, measure=True).circuit, tw.frame_str
+                        circ, frame = native_of(tw.circuit, measure=True), tw.frame_str
                     else:
                         circ = nat.copy()
                         circ.measure_all()
                     jobs.append(Job(cid, block, circ, spec.shots, {
                         **base, "kind": "cdr", "arm": arm, "train_set": ts, "eval_index": eix,
+                        "duration_sched_s": scheduled_duration(circ, t_prx=t_prx, t_cz=t_cz),
                         "role": spec.role, "train_index": spec.train_index,
                         "repeat_index": spec.repeat_index, "twirl": spec.twirl,
                         "twirl_kind": spec.twirl_kind, "frame": frame,
@@ -223,6 +250,8 @@ def build_plan(args, points: list[dict]) -> tuple[list[Job], dict]:
                                            seed=_seed(args.seed, args.window_id, cid))
                         jobs.append(Job(cid, block, circ, args.shots, {
                             **base, "kind": "zne", "variant": v, "scale": s,
+                            "duration_sched_s": scheduled_duration(circ, t_prx=t_prx,
+                                                                   t_cz=t_cz),
                             "eval_index": eix, "ideal": ideal[pi]}))
     return jobs, info
 
@@ -426,6 +455,10 @@ def analyse(run_dir: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
                              "err": abs(fit.apply(t_mean) - ideal), "a": fit.a, "b": fit.b,
                              "r2": fit.r2, "n_train_points": len(xs),
                              "shots_total": sum(r["shots"] for r in rs),
+                             "n_prx": tgt[0].get("n_prx"),
+                             "duration_sched_s": tgt[0].get("duration_sched_s"),
+                             "insert_pairs": tgt[0].get("insert_pairs"),
+                             "insert_mode": tgt[0].get("insert_mode"),
                              "calibration_set_id": tgt[0].get("calibration_set_id")})
 
     zg: dict[tuple, dict] = {}
@@ -566,6 +599,10 @@ def main(argv=None) -> None:
         print("note: ODRA has a single placement; adverse: resolves to the same layout")
     if args.night:
         args.points = list(NIGHTS[args.night])
+        if args.night in NIGHT_ARMS:
+            args.cdr_arms = list(NIGHT_ARMS[args.night])
+        if args.night in NIGHT_NO_ZNE:
+            args.no_zne = True
     points = load_eval_points(REPO / "campaign" / "eval_points.json")[: args.eval_points]
     if args.point_set is not None:
         points = [p for k, p in enumerate(points) if k % 3 == args.point_set]
@@ -578,6 +615,10 @@ def main(argv=None) -> None:
     if not (args.submit or args.sim_device):
         print("\n[DRY-RUN] nothing executed. --sim-device <cal.json> or --submit to run.")
         return
+    if args.sim_device:
+        from sim.device_model import load_calibration
+        _c = load_calibration(args.sim_device)
+        args.t_prx, args.t_cz = _c.t_prx, _c.t_cz
     jobs, info = build_plan(args, points)
     print("CZ per rung:", {r: v["n_cz"] for r, v in info["rungs"].items()})
 
