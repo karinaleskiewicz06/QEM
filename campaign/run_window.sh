@@ -14,6 +14,10 @@ export KMP_DUPLICATE_LIB_OK=TRUE
 WIN=${1:?window id, e.g. w01}
 SET=${2:?point set 0, 1 or 2}
 LOG=runs/odra_campaign/${WIN}.log
+if [ "${DRY:-0}" != 1 ] && { [ -z "${IQM_SERVER_URL:-}" ] || [ -z "${IQM_TOKEN:-}" ]; }; then
+  echo "ustaw IQM_SERVER_URL i IQM_TOKEN w tej karcie terminala, potem uruchom ponownie" >&2
+  exit 1
+fi
 mkdir -p runs/odra_campaign
 MODE=--submit
 [ "${DRY:-0}" = 1 ] && MODE=--dry-run
@@ -21,8 +25,11 @@ MODE=--submit
 log() { echo "[$(date '+%F %T')] $*" | tee -a "$LOG"; }
 
 odra_up() {
+  # a real answer from ODRA = a raw dump with observations; without IQM_SERVER_URL the
+  # collector silently writes a placeholder template and exits 0, which is not "up"
+  rm -f /tmp/odra_ping_raw.json
   python collect_odra_calibration.py --out /tmp/odra_ping.json --raw-out /tmp/odra_ping_raw.json \
-    >/dev/null 2>&1
+    >/dev/null 2>&1 && grep -q '"observations"' /tmp/odra_ping_raw.json 2>/dev/null
 }
 
 wait_for_odra() {
@@ -39,6 +46,7 @@ calib() {
   wait_for_odra
   python collect_odra_calibration.py --out "calibrations/odra_${WIN}$1.json" \
     --raw-out "calibrations/odra_raw_${WIN}$1.json" >> "$LOG" 2>&1 \
+    && grep -q '"observations"' "calibrations/odra_raw_${WIN:-$STAMP}$1.json" 2>/dev/null \
     && log "calibration $1 saved" || log "calibration $1 FAILED"
 }
 
