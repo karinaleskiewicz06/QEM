@@ -1,0 +1,6 @@
+placement,pattern,transpiled_cz,budget_S,shots_per_scale,reps,bias_rms,V_counts,V_reps,mse_raw,mse_zne,delta_mse,measured,allocation,shots_alloc,kappa_pred,sigma_lam1,sigma_lam3,sigma_lam5,n_unphysical,n_fallback,legacy_clamp,S_star_pooled,kappa_meas,kappa_err
+optimal,star,12,256,85,10,0.0562,0.19049,0.14362,0.003663,0.013893,0.01023,zaszkodzi,uniform,85/85/85,14.6562,0.42887,0.44422,0.44855,0,0,False,986.2,15.819,1.708
+optimal,star,12,512,170,10,0.04961,0.19042,0.13689,0.002702,0.005574,0.002871,zaszkodzi,uniform,170/170/170,14.6562,0.43599,0.44281,0.45081,0,0,False,986.2,15.819,1.708
+optimal,star,12,1024,341,10,0.05512,0.19039,0.22333,0.003235,0.002905,-0.00033,pomoze,uniform,341/341/341,14.6562,0.43675,0.45087,0.45243,0,0,False,986.2,15.819,1.708
+optimal,star,12,2048,682,10,0.05057,0.18823,0.1352,0.002616,0.001607,-0.001009,pomoze,uniform,682/682/682,14.6562,0.43774,0.44978,0.45145,0,0,False,986.2,15.819,1.708
+optimal,star,12,4096,1365,10,0.05406,0.1895,0.14539,0.002954,0.000942,-0.002012,pomoze,uniform,1365/1365/1365,14.6562,0.43686,0.45153,0.45315,0,0,False,986.2,15.819,1.708

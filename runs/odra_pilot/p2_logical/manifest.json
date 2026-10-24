@@ -1,0 +1,255 @@
+{
+  "campaign": "odra_pilot",
+  "window_id": "p2_logical",
+  "seed": 42,
+  "cli_args": {
+    "device": "odra",
+    "native_twirl": false,
+    "legacy_native_twirl": false,
+    "points": [
+      "optimal:linear",
+      "optimal:circular"
+    ],
+    "models_dir": "trained_models_hard",
+    "eval_points": 4,
+    "shots": 8192,
+    "n_train": 10,
+    "n_twirl": 6,
+    "arms": [
+      "raw",
+      "cdr",
+      "zne"
+    ],
+    "twirl_arms": [
+      "cdr"
+    ],
+    "match_shots": true,
+    "submit": true,
+    "sim": false,
+    "calibration": null,
+    "sim_coh": 0.0,
+    "seed": 42,
+    "window_id": "p2_logical",
+    "campaign": "odra_pilot",
+    "no_provenance": false,
+    "legacy_clamp": false,
+    "sim_device": null,
+    "sim_theta": 0.0,
+    "sim_phi": 0.0,
+    "sim_eps": 0.0,
+    "sim_no_idle": false,
+    "sim_schedule": "alap",
+    "sim_gate_t2": "echo",
+    "legacy_transpile": false,
+    "allow_archive_write": false,
+    "allow_env_mismatch": false,
+    "out": "runs/odra_pilot/p2_logical/twirl_logical.csv",
+    "resume": true
+  },
+  "started_utc": "2026-10-23T21:40:35.049Z",
+  "finished_utc": "2026-10-23T22:41:55.268Z",
+  "calibration_set_id": {
+    "start": null,
+    "end": null
+  },
+  "job_ids": [
+    "01a16ab5-7e3f-7132-8115-357bb136cf83",
+    "01a16ab5-c239-75d0-84fd-85a8a00fb419",
+    "01a16aba-dc60-7e33-82ef-dfe00eccb67a",
+    "01a16abf-f70a-77b0-b4bd-23cb01668f5b",
+    "01a16ac3-4eaf-7563-a52c-fe2b6ebee183",
+    "01a16ac8-6b42-7951-9227-8e4418eb4c60",
+    "01a16acd-86f4-79e2-904c-0c1c556d9369",
+    "01a16ad0-cf61-7693-881b-e77754c83ac6",
+    "01a16ad1-76a7-7fd1-9bd2-317877bd805c",
+    "01a16ad1-bc1e-7c70-921c-e2f29a43999a",
+    "01a16ad6-da47-79f0-95c9-9d078318f45d",
+    "01a16adb-f8b0-7980-8aa4-26d85e3001f5",
+    "01a16adf-5e6c-7811-a253-9b433ea87b47",
+    "01a16ae4-7c52-7103-a5d2-783f7890dbae",
+    "01a16ae9-9bdd-7341-98ea-5bf2d0121319",
+    "01a16aec-e861-7610-9a9d-f074d5712e73"
+  ],
+  "device": "odra",
+  "submitted": true,
+  "notes": [],
+  "extra": {
+    "previous_attempts": [
+      {
+        "started_utc": "2026-10-23T16:36:03.378Z",
+        "finished_utc": null,
+        "job_ids": [],
+        "notes": [],
+        "cli_args": {
+          "device": "odra",
+          "native_twirl": false,
+          "legacy_native_twirl": false,
+          "points": [
+            "optimal:linear",
+            "optimal:circular"
+          ],
+          "models_dir": "trained_models_hard",
+          "eval_points": 4,
+          "shots": 8192,
+          "n_train": 10,
+          "n_twirl": 6,
+          "arms": [
+            "raw",
+            "cdr",
+            "zne"
+          ],
+          "twirl_arms": [
+            "cdr"
+          ],
+          "match_shots": true,
+          "submit": true,
+          "sim": false,
+          "calibration": null,
+          "sim_coh": 0.0,
+          "seed": 42,
+          "window_id": "p2_logical",
+          "campaign": "odra_pilot",
+          "no_provenance": false,
+          "legacy_clamp": false,
+          "sim_device": null,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "sim_no_idle": false,
+          "sim_schedule": "alap",
+          "sim_gate_t2": "echo",
+          "legacy_transpile": false,
+          "allow_archive_write": false,
+          "allow_env_mismatch": false,
+          "out": "runs/odra_pilot/p2_logical/twirl_logical.csv",
+          "resume": false
+        },
+        "calibration_set_id": {
+          "start": null,
+          "end": null
+        },
+        "git_commit": "04eb6b841bc48bd2c880dc2748f6d2e0b77baa04",
+        "git_dirty": true
+      },
+      {
+        "started_utc": "2026-10-23T18:28:54.334Z",
+        "finished_utc": null,
+        "job_ids": [],
+        "notes": [],
+        "cli_args": {
+          "device": "odra",
+          "native_twirl": false,
+          "legacy_native_twirl": false,
+          "points": [
+            "optimal:linear",
+            "optimal:circular"
+          ],
+          "models_dir": "trained_models_hard",
+          "eval_points": 4,
+          "shots": 8192,
+          "n_train": 10,
+          "n_twirl": 6,
+          "arms": [
+            "raw",
+            "cdr",
+            "zne"
+          ],
+          "twirl_arms": [
+            "cdr"
+          ],
+          "match_shots": true,
+          "submit": true,
+          "sim": false,
+          "calibration": null,
+          "sim_coh": 0.0,
+          "seed": 42,
+          "window_id": "p2_logical",
+          "campaign": "odra_pilot",
+          "no_provenance": false,
+          "legacy_clamp": false,
+          "sim_device": null,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "sim_no_idle": false,
+          "sim_schedule": "alap",
+          "sim_gate_t2": "echo",
+          "legacy_transpile": false,
+          "allow_archive_write": false,
+          "allow_env_mismatch": false,
+          "out": "runs/odra_pilot/p2_logical/twirl_logical.csv",
+          "resume": false
+        },
+        "calibration_set_id": {
+          "start": null,
+          "end": null
+        },
+        "git_commit": "f9598d3836758519c8ac14327098a1688328b072",
+        "git_dirty": true
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.13.9",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "argv": [
+      "run_garnet_twirl.py",
+      "--submit",
+      "--device",
+      "odra",
+      "--resume",
+      "--points",
+      "optimal:linear",
+      "optimal:circular",
+      "--arms",
+      "raw",
+      "cdr",
+      "zne",
+      "--twirl-arms",
+      "cdr",
+      "--eval-points",
+      "4",
+      "--shots",
+      "8192",
+      "--n-train",
+      "10",
+      "--n-twirl",
+      "6",
+      "--campaign",
+      "odra_pilot",
+      "--window-id",
+      "p2_logical",
+      "--out",
+      "runs/odra_pilot/p2_logical/twirl_logical.csv"
+    ],
+    "packages": {
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3"
+    },
+    "locked": {
+      "python": "3.13.9",
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "qiskit-ibm-runtime": "0.47.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.6",
+      "scikit-learn": "1.7.2",
+      "statsmodels": "0.14.5",
+      "torch": "2.12.0",
+      "qml_benchmarks": "0.1"
+    },
+    "git_commit": "2d7e24540779bf67844f511aad088c96a2e963f0",
+    "git_branch": "paper-odra-campaign",
+    "git_dirty": true,
+    "git_dirty_files": 1
+  },
+  "split_window": false
+}

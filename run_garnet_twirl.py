@@ -418,7 +418,8 @@ def main() -> None:
                     pre = False
                 ksizes.append(len(reps))
                 flat.extend(reps if pre else [measured(b, fold) for b in reps])
-                labels.extend({"spec_index": si, "twirl": bool(twirl), "fold": int(fold),
+                labels.extend({"arm": arm, "spec_index": si, "twirl": bool(twirl),
+                               "fold": int(fold),
                                "copy_index": r, "n_copies": len(reps),
                                "twirl_kind": (("native_legacy" if args.legacy_native_twirl
                                                else "native_merged") if args.native_twirl
@@ -429,8 +430,11 @@ def main() -> None:
             vals = [float(np.dot(coeffs, perqubit_z_from_counts(c, n))) for c in counts]
             if RECORDER is not None:                       # P0: archive the raw record
                 for native, cnt, val, lab in zip(flat, counts, vals, labels):
+                    # arm and twirl in the ID: spec indices restart at every call, so
+                    # without them the raw/cdr-off/cdr-on/zne records of a point collide
                     RECORDER.record_circuit(
-                        f"{GROUP_TAG}/s{lab['spec_index']}/c{lab['copy_index']}",
+                        f"{GROUP_TAG}/{lab['arm']}/{'on' if lab['twirl'] else 'off'}"
+                        f"/s{lab['spec_index']}/c{lab['copy_index']}",
                         cnt, native=native, t_1q=T_1Q, t_2q=T_2Q,
                         expval=val, coeffs=list(map(float, coeffs)), **lab)
             out, grouped, i = [], [], 0

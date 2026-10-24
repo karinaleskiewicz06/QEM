@@ -1,0 +1,1006 @@
+[2026-10-23 23:37:46] === ODRA pilot campaign 20261023_2337 (DRY=0) ===
+IQMClient.get_calibration_quality_metrics is an experimental method, and the API will likely change in the future with no backwards compatibility.
+Missing fidelity for clifford.xy.QB1
+Missing fidelity for clifford.xy.QB2
+Missing fidelity for clifford.xy.QB3
+Missing fidelity for clifford.xy.QB4
+Missing fidelity for clifford.xy.QB5
+fetching calibration from https://odra5.e-science.pl/ (auth: token) ...
+raw dump -> calibrations/odra_raw_20261023_2337_start.json
+mapped DeviceCalibration -> calibrations/odra_20261023_2337_start.json
+unmapped (still placeholder): []
+observations parsed: 462
+OK: all fields mapped from live ODRA calibration.
+hub: 0 t1_us: [19.78, 9.69, 13.24, 24.74, 17.65] p_2q: 0.0231
+[2026-10-23 23:37:55] calibration start saved
+[2026-10-23 23:37:59] RUN  p2 kappa uniform {1,3,5} (attempt 1)
+[provenance] runs/odra_pilot/p2_kappa_u135
+PROGNOZA (pre-rejestrowana): kappa = 14.656, wsp. Richardsona [1.875, -1.25, 0.375]
+  podział uniform
+  skale [1, 3, 5] | S* = kappa*V/B^2 ; przy V~0.2 i~B zmierzonym na Garnecie:
+     optimal:star   B=0.0567 -> S* ~ 912
+     adverse:star   B=0.1003 -> S* ~ 291
+
+PLAN: odra | punkty ['optimal:star'] | budżety [256, 512, 1024, 2048, 4096] | reps 10 | eval 4
+  obwodów 800 | pomiarów 634880 | jobów 15 | dostep niemierzony kredytami
+[resume] wczytano 4 wierszy z runs/odra_pilot/p2_kappa_u135/kappa.csv
+
+=== optimal:star  cz=12 ===
+     S     B_rms    V(cnt)    V(rep)    MSE raw    MSE zne   Delta MSE      wynik
+  [pomijam] optimal:star S=256 — już w runs/odra_pilot/p2_kappa_u135/kappa.csv
+  [pomijam] optimal:star S=512 — już w runs/odra_pilot/p2_kappa_u135/kappa.csv
+  [pomijam] optimal:star S=1024 — już w runs/odra_pilot/p2_kappa_u135/kappa.csv
+  [pomijam] optimal:star S=2048 — już w runs/odra_pilot/p2_kappa_u135/kappa.csv
+    [odra] zgłoszono zadanie 01a16ab3-279d-7911-a6ed-c533b60e8d84 (40 obwodów)
+    [odra] zadanie 01a16ab3-279d-7911-a6ed-c533b60e8d84 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16ab4-38ac-74b0-b1a9-b572e7c7d0ea (100 obwodów)
+    [odra] zadanie 01a16ab4-38ac-74b0-b1a9-b572e7c7d0ea | 100 obwodów (100/120)
+    [odra] zgłoszono zadanie 01a16ab5-1ba8-7272-aa8f-acb509b2da0d (20 obwodów)
+    [odra] zadanie 01a16ab5-1ba8-7272-aa8f-acb509b2da0d | 20 obwodów (120/120)
+  4096    0.0541    0.1895    0.1454    0.00295    0.00094    -0.00201     pomoze
+
+==============================================================================
+OCENA PO PULI (V i B nie zależą od S, więc pojedyncze oszacowania per-budżet są zaszumione)
+
+  optimal:star
+    V (z rozkładu zliczeń) = 0.1898    B_rms = 0.0531
+    S* = kappa*V/B^2       = 986
+    przejście zaobserwowane w przedziale (512, 1024]
+    --> kappa ZMIERZONE = 15.82 +/- 1.71   (przewidziane: 14.66)
+        odchylenie 0.7 sigma -> ZGODNE z teorią
+        usunięte obciążenie sqrt(B^2-B_zne^2) = 0.0521 (B zmierzone bezpośrednio: 0.0531)
+        -> obciążenie RESZTKOWE ZNE: B_zne = 0.0101 (19% obciążenia surowego)
+        -> skorygowane S* = kappa*V/(B^2-B_zne^2) = 1024
+
+zapisano runs/odra_pilot/p2_kappa_u135/kappa.csv
+[provenance] manifest + counts.jsonl -> runs/odra_pilot/p2_kappa_u135
+ODCZYT: falsyfikowalna jest STAŁA kappa (uniform) --- przejście ma wypaść przy
+S* = kappa*V/B^2 z V i B zmierzonymi w tym samym przebiegu, bez dopasowywania.
+[2026-10-23 23:40:30] DONE p2 kappa uniform {1,3,5}
+[2026-10-23 23:40:34] RUN  p2 twirl logical linear+circular (attempt 1)
+[provenance] runs/odra_pilot/p2_logical
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:linear', 'optimal:circular'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1088 (544/point) | shots 8912896 | jobs 16
+  COST: ODRA access is not metered in Resonance credits
+
+>>> note your credit balance NOW <<<
+
+    [odra] zgłoszono zadanie 01a16ab5-7e3f-7132-8115-357bb136cf83 (4 obwodów)
+    [odra] zadanie 01a16ab5-7e3f-7132-8115-357bb136cf83 | 4 obwodów (4/4)
+   optimal      linear cz= 30 | raw twirl=False | err 0.1302 | r2 
+    [odra] zgłoszono zadanie 01a16ab5-c239-75d0-84fd-85a8a00fb419 (100 obwodów)
+    [odra] zadanie 01a16ab5-c239-75d0-84fd-85a8a00fb419 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16aba-dc60-7e33-82ef-dfe00eccb67a (100 obwodów)
+    [odra] zadanie 01a16aba-dc60-7e33-82ef-dfe00eccb67a | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16abf-f70a-77b0-b4bd-23cb01668f5b (64 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:33<?, ?it/s]
+    [odra] zadanie 01a16abf-f70a-77b0-b4bd-23cb01668f5b | 64 obwodów (264/264)
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0705 | r2 0.6124
+    [odra] zgłoszono zadanie 01a16ac3-4eaf-7563-a52c-fe2b6ebee183 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a16ac3-4eaf-7563-a52c-fe2b6ebee183 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16ac8-6b42-7951-9227-8e4418eb4c60 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a16ac8-6b42-7951-9227-8e4418eb4c60 | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16acd-86f4-79e2-904c-0c1c556d9369 (64 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:33<?, ?it/s]
+    [odra] zadanie 01a16acd-86f4-79e2-904c-0c1c556d9369 | 64 obwodów (264/264)
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0390 | r2 0.9151
+    [odra] zgłoszono zadanie 01a16ad0-cf61-7693-881b-e77754c83ac6 (12 obwodów)
+    [odra] zadanie 01a16ad0-cf61-7693-881b-e77754c83ac6 | 12 obwodów (12/12)
+   optimal      linear cz= 30 | zne twirl=False | err 0.0818 | r2 
+  [saved] optimal:linear -> runs/odra_pilot/p2_logical/twirl_logical.csv
+    [odra] zgłoszono zadanie 01a16ad1-76a7-7fd1-9bd2-317877bd805c (4 obwodów)
+    [odra] zadanie 01a16ad1-76a7-7fd1-9bd2-317877bd805c | 4 obwodów (4/4)
+   optimal    circular cz= 39 | raw twirl=False | err 0.1754 | r2 
+    [odra] zgłoszono zadanie 01a16ad1-bc1e-7c70-921c-e2f29a43999a (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a16ad1-bc1e-7c70-921c-e2f29a43999a | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16ad6-da47-79f0-95c9-9d078318f45d (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a16ad6-da47-79f0-95c9-9d078318f45d | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16adb-f8b0-7980-8aa4-26d85e3001f5 (64 obwodów)
+    [odra] zadanie 01a16adb-f8b0-7980-8aa4-26d85e3001f5 | 64 obwodów (264/264)
+   optimal    circular cz= 39 | cdr twirl=False | err 0.1050 | r2 0.9041
+    [odra] zgłoszono zadanie 01a16adf-5e6c-7811-a253-9b433ea87b47 (100 obwodów)
+    [odra] zadanie 01a16adf-5e6c-7811-a253-9b433ea87b47 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16ae4-7c52-7103-a5d2-783f7890dbae (100 obwodów)
+    [odra] zadanie 01a16ae4-7c52-7103-a5d2-783f7890dbae | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16ae9-9bdd-7341-98ea-5bf2d0121319 (64 obwodów)
+    [odra] zadanie 01a16ae9-9bdd-7341-98ea-5bf2d0121319 | 64 obwodów (264/264)
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0625 | r2 0.9227
+    [odra] zgłoszono zadanie 01a16aec-e861-7610-9a9d-f074d5712e73 (12 obwodów)
+    [odra] zadanie 01a16aec-e861-7610-9a9d-f074d5712e73 | 12 obwodów (12/12)
+   optimal    circular cz= 39 | zne twirl=False | err 0.1273 | r2 
+  [saved] optimal:circular -> runs/odra_pilot/p2_logical/twirl_logical.csv
+[provenance] manifest + counts.jsonl -> runs/odra_pilot/p2_logical
+
+wrote/updated runs/odra_pilot/p2_logical/twirl_logical.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+[2026-10-24 00:41:55] DONE p2 twirl logical linear+circular
+[2026-10-24 00:41:59] RUN  p2 twirl native linear+circular (attempt 1)
+[provenance] runs/odra_pilot/p2_native
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:linear', 'optimal:circular'] | arms ['cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1056 (528/point) | shots 8650752 | jobs 12
+  COST: ODRA access is not metered in Resonance credits
+
+>>> note your credit balance NOW <<<
+
+    [odra] zgłoszono zadanie 01a16aed-b9a9-7da3-83fe-68874c938b65 (100 obwodów)
+    [odra] zadanie 01a16aed-b9a9-7da3-83fe-68874c938b65 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16af2-d0a2-7d41-946d-27d2c14e8ae3 (100 obwodów)
+    [odra] zadanie 01a16af2-d0a2-7d41-946d-27d2c14e8ae3 | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16af7-e9fd-7de3-a4fb-de6b33c69f51 (64 obwodów)
+    [odra] zadanie 01a16af7-e9fd-7de3-a4fb-de6b33c69f51 | 64 obwodów (264/264)
+   optimal      linear cz= 30 | cdr twirl=False | err 0.0690 | r2 0.6724
+    [odra] zgłoszono zadanie 01a16afb-3934-7a31-bc16-1a936ef3bdcc (100 obwodów)
+    [odra] zadanie 01a16afb-3934-7a31-bc16-1a936ef3bdcc | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16b00-599b-7533-b52f-d3f9ff965dd0 (100 obwodów)
+    [odra] zadanie 01a16b00-599b-7533-b52f-d3f9ff965dd0 | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16b05-787b-7c62-8e32-f4ab23637283 (64 obwodów)
+    [odra] zadanie 01a16b05-787b-7c62-8e32-f4ab23637283 | 64 obwodów (264/264)
+   optimal      linear cz= 30 | cdr twirl= True | err 0.0895 | r2 0.7932
+  [saved] optimal:linear -> runs/odra_pilot/p2_native/twirl_native.csv
+    [odra] zgłoszono zadanie 01a16b08-c4b7-7f40-b592-af6a658f03ff (100 obwodów)
+    [odra] zadanie 01a16b08-c4b7-7f40-b592-af6a658f03ff | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16b0d-e224-7a10-937d-f23758bb6aca (100 obwodów)
+    [odra] zadanie 01a16b0d-e224-7a10-937d-f23758bb6aca | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16b12-fddf-7160-ac48-6cbff109f7e3 (64 obwodów)
+    [odra] zadanie 01a16b12-fddf-7160-ac48-6cbff109f7e3 | 64 obwodów (264/264)
+   optimal    circular cz= 39 | cdr twirl=False | err 0.1124 | r2 0.8989
+    [odra] zgłoszono zadanie 01a16b16-5583-7ca3-b11b-7b5865683a21 (100 obwodów)
+python(3606) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a16b16-5583-7ca3-b11b-7b5865683a21 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16b1b-7449-7102-b57e-89baab6e2f92 (100 obwodów)
+    [odra] zadanie 01a16b1b-7449-7102-b57e-89baab6e2f92 | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16b20-92e4-7162-ac79-e886a7f8ec57 (64 obwodów)
+    [odra] zadanie 01a16b20-92e4-7162-ac79-e886a7f8ec57 | 64 obwodów (264/264)
+   optimal    circular cz= 39 | cdr twirl= True | err 0.0577 | r2 0.8569
+  [saved] optimal:circular -> runs/odra_pilot/p2_native/twirl_native.csv
+[provenance] manifest + counts.jsonl -> runs/odra_pilot/p2_native
+
+wrote/updated runs/odra_pilot/p2_native/twirl_native.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+[2026-10-24 01:41:15] DONE p2 twirl native linear+circular
+[2026-10-24 01:41:20] RUN  p2 CDR+ZNE 100 points, 4 rungs (attempt 1)
+python(51445) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+[provenance] runs/odra_pilot/p2_cdr100
+PLAN: ODRA (gwiazda, iqm-client) | wzorce ['star', 'linear', 'circular', 'all_to_all'] | 100 pkt ewaluacyjnych | n_train 100 | shots 8192
+  obwodów 1600 (400/wzorzec) | zgłoszeń 16 | pomiarów 13107200
+
+>>> ODRA: dostęp niemierzony kredytami Resonance <<<
+
+  star        cz= 12 | 400 obwodów (ZNE, skale [1, 3, 5])
+    zadanie 01a16b24-0fff-79a2-83ee-75b5d3ddeb0d | 100/400 obwodów
+    zadanie 01a16b29-240f-7021-8f11-3976a42912b4 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    zadanie 01a16b2e-3825-7d40-80a6-1a7cd153936b | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    zadanie 01a16b33-5429-77a3-b4c6-a7f341a384f0 | 100/400 obwodów
+    -> raw 0.0638 | CDR 0.0312 | ZNE 0.0284 | acc 0.69 -> 0.68 | r2 0.9301
+  linear      cz= 30 | 400 obwodów (ZNE, skale [1, 3, 5])
+    zadanie 01a16b38-7cce-7de0-a766-12080b03373c | 100/400 obwodów
+    zadanie 01a16b3d-957b-7243-a29f-b2fbb8a20a82 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:38<?, ?it/s]
+    zadanie 01a16b42-b26a-7f72-a11f-c0623c3bd650 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:42<?, ?it/s]
+    zadanie 01a16b47-ee0d-7b51-86ae-3cfa498732c7 | 100/400 obwodów
+    -> raw 0.1388 | CDR 0.0771 | ZNE 0.0877 | acc 0.74 -> 0.71 | r2 0.8238
+  circular    cz= 39 | 400 obwodów (ZNE, skale [1, 3, 5])
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    zadanie 01a16b4d-39e0-7933-a25d-1a4064eebc74 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    zadanie 01a16b52-5928-7053-be4e-71eebbc1178c | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:39<?, ?it/s]
+    zadanie 01a16b57-84e9-7962-8b57-37a6b90264e8 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 144631.17it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.26s/it]    [A
+Playlist execution:  50%|█████     | 1/2 [00:02<00:02,  2.91s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:04<00:04,  4.14s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:05<00:05,  5.61s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:06<00:06,  6.81s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:08<00:08,  8.26s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:09<00:09,  9.50s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:10<00:10, 10.75s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:12<00:12, 12.05s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:13<00:13, 13.39s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:14<00:14, 14.65s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:15<00:15, 15.85s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:17<00:17, 17.14s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:18<00:18, 18.33s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:19<00:19, 19.59s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:20<00:20, 20.79s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:22<00:22, 22.02s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:23<00:23, 23.26s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:24<00:24, 24.49s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:26<00:26, 26.13s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:27<00:27, 27.37s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:28<00:28, 28.70s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:30<00:30, 30.04s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:31<00:31, 31.31s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:32<00:32, 32.53s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:33<00:33, 33.92s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:35<00:35, 35.43s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:36<00:36, 36.69s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:37<00:37, 37.87s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:39<00:39, 39.05s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:40<00:40, 40.31s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:41<00:41, 41.55s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:42<00:42, 42.78s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:44<00:44, 44.02s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:45<00:45, 45.17s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:46<00:46, 46.35s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:47<00:47, 47.63s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:48<00:48, 48.85s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:50<00:50, 50.18s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:51<00:51, 51.41s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:52<00:52, 52.65s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:53<00:53, 53.88s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:55<00:55, 55.12s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:56<00:56, 56.47s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:57<00:57, 57.79s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:59<00:59, 59.23s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:00<01:00, 60.56s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:01<01:01, 61.87s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:03<01:03, 63.28s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:04<01:04, 64.58s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:06<01:06, 66.03s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:07<01:07, 67.24s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:08<01:08, 68.79s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:10<01:10, 70.12s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:11<01:11, 71.36s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:12<01:12, 72.60s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:13<01:13, 73.93s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:15<01:15, 75.16s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:16<01:16, 76.37s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:17<01:17, 77.63s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:18<01:18, 78.86s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:20<01:20, 80.20s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:21<01:21, 81.43s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:22<01:22, 82.76s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:24<01:24, 84.10s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:25<01:25, 85.44s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:26<01:26, 86.64s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:27<01:27, 87.83s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:29<01:29, 89.15s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:30<01:30, 90.55s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:32<01:32, 92.01s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:33<01:33, 93.32s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:34<01:34, 94.84s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:36<01:36, 96.03s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:37<01:37, 97.37s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:38<01:38, 98.69s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:40<01:40, 100.04s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:41<01:41, 101.37s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:42<01:42, 102.57s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:43<01:43, 103.83s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:45<01:45, 105.07s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:46<01:46, 106.27s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:47<01:47, 107.64s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:48<01:48, 108.87s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:50<01:50, 110.10s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:51<01:51, 111.54s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:52<01:52, 112.78s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:54<01:54, 114.11s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:55<01:55, 115.28s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:56<01:56, 116.80s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:57<01:57, 117.95s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:59<01:59, 119.25s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:00<02:00, 120.69s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:02<02:02, 122.00s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:03<02:03, 123.26s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:04<02:04, 124.42s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:05<02:05, 125.62s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:06<02:06, 126.79s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:07<02:07, 128.00s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:09<02:09, 129.34s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:10<02:10, 130.66s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:11<02:11, 131.89s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:13<02:13, 133.04s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:14<02:14, 134.36s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:15<02:15, 135.63s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:17<02:17, 137.03s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:18<02:18, 138.20s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:19<02:19, 139.71s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:21<02:21, 141.07s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:22<02:22, 142.38s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:23<02:23, 143.84s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:25<02:25, 145.23s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:26<02:26, 146.50s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:27<02:27, 147.73s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:28<02:28, 148.97s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:30<02:30, 150.12s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:31<02:31, 151.42s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:32<02:32, 152.66s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:33<02:33, 153.99s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:35<02:35, 155.33s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:36<02:36, 156.66s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:37<02:37, 157.90s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:39<02:39, 159.13s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:40<02:40, 160.44s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:41<02:41, 161.62s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:42<02:42, 162.94s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:44<02:44, 164.17s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:45<02:45, 165.51s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:46<02:46, 166.74s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:48<02:48, 168.18s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:49<02:49, 169.44s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:50<02:50, 170.67s/it][A
+Playlist execution: 100%|██████████| 2/2 [02:51<00:00, 85.99s/it] [AProgress in queue:   0%|          | 0/1 [05:46<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [02:51<00:00, 85.99s/it]
+    zadanie 01a16b5c-c2af-7c82-9690-52aa25fdc43a | 100/400 obwodów
+    -> raw 0.1811 | CDR 0.1083 | ZNE 0.1315 | acc 0.74 -> 0.72 | r2 0.6864
+  all_to_all  cz= 57 | 400 obwodów (ZNE, skale [1, 3, 5])
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    zadanie 01a16b62-1b63-74d2-bede-a77cc808f568 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    zadanie 01a16b67-3b4d-7340-ab6e-edc67f00a860 | 100/400 obwodów
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s]Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 349525.33it/s]Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.23s/it]    Playlist execution:  50%|█████     | 1/2 [00:02<00:02,  2.44s/it]Playlist execution:  50%|█████     | 1/2 [00:03<00:03,  3.70s/it]Playlist execution:  50%|█████     | 1/2 [00:04<00:04,  4.93s/it]Playlist execution:  50%|█████     | 1/2 [00:06<00:06,  6.27s/it]Playlist execution:  50%|█████     | 1/2 [00:07<00:07,  7.50s/it]Playlist execution:  50%|█████     | 1/2 [00:08<00:08,  8.74s/it]Playlist execution:  50%|█████     | 1/2 [00:09<00:09,  9.97s/it]Playlist execution:  50%|█████     | 1/2 [00:11<00:11, 11.30s/it]Playlist execution:  50%|█████     | 1/2 [00:12<00:12, 12.56s/it]Playlist execution:  50%|█████     | 1/2 [00:13<00:13, 13.85s/it]Playlist execution:  50%|█████     | 1/2 [00:15<00:15, 15.05s/it]Playlist execution:  50%|█████     | 1/2 [00:16<00:16, 16.24s/it]Playlist execution:  50%|█████     | 1/2 [00:17<00:17, 17.58s/it]Playlist execution:  50%|█████     | 1/2 [00:18<00:18, 18.85s/it]Playlist execution:  50%|█████     | 1/2 [00:20<00:20, 20.15s/it]Playlist execution:  50%|█████     | 1/2 [00:21<00:21, 21.48s/it]Playlist execution:  50%|█████     | 1/2 [00:22<00:22, 22.82s/it]Playlist execution:  50%|█████     | 1/2 [00:24<00:24, 24.36s/it]Playlist execution:  50%|█████     | 1/2 [00:25<00:25, 25.80s/it]Playlist execution:  50%|█████     | 1/2 [00:27<00:27, 27.14s/it]Playlist execution:  50%|█████     | 1/2 [00:28<00:28, 28.59s/it]Playlist execution:  50%|█████     | 1/2 [00:29<00:29, 29.90s/it]Playlist execution:  50%|█████     | 1/2 [00:31<00:31, 31.14s/it]Playlist execution:  50%|█████     | 1/2 [00:32<00:32, 32.58s/it]Playlist execution:  50%|█████     | 1/2 [00:33<00:33, 33.74s/it]Playlist execution:  50%|█████     | 1/2 [00:35<00:35, 35.07s/it]Playlist execution:  50%|█████     | 1/2 [00:36<00:36, 36.59s/it]Playlist execution:  50%|█████     | 1/2 [00:37<00:37, 37.93s/it]Playlist execution:  50%|█████     | 1/2 [00:39<00:39, 39.16s/it]Playlist execution:  50%|█████     | 1/2 [00:40<00:40, 40.39s/it]Playlist execution:  50%|█████     | 1/2 [00:41<00:41, 41.82s/it]Playlist execution:  50%|█████     | 1/2 [00:43<00:43, 43.38s/it]Playlist execution:  50%|█████     | 1/2 [00:44<00:44, 44.62s/it]Playlist execution:  50%|█████     | 1/2 [00:46<00:46, 46.12s/it]Playlist execution:  50%|█████     | 1/2 [00:47<00:47, 47.38s/it]Playlist execution:  50%|█████     | 1/2 [00:48<00:48, 48.55s/it]Playlist execution:  50%|█████     | 1/2 [00:49<00:49, 49.85s/it]Playlist execution:  50%|█████     | 1/2 [00:51<00:51, 51.26s/it]Playlist execution:  50%|█████     | 1/2 [00:52<00:52, 52.53s/it]Playlist execution:  50%|█████     | 1/2 [00:53<00:53, 53.74s/it]Playlist execution:  50%|█████     | 1/2 [00:54<00:54, 54.99s/it]Playlist execution:  50%|█████     | 1/2 [00:56<00:56, 56.14s/it]Playlist execution:  50%|█████     | 1/2 [00:57<00:57, 57.66s/it]Playlist execution:  50%|█████     | 1/2 [00:58<00:58, 58.90s/it]Playlist execution:  50%|█████     | 1/2 [01:00<01:00, 60.10s/it]Playlist execution:  50%|█████     | 1/2 [01:01<01:01, 61.27s/it]Playlist execution:  50%|█████     | 1/2 [01:02<01:02, 62.79s/it]Playlist execution:  50%|█████     | 1/2 [01:04<01:04, 64.03s/it]Playlist execution:  50%|█████     | 1/2 [01:05<01:05, 65.36s/it]Playlist execution:  50%|█████     | 1/2 [01:06<01:06, 66.60s/it]Playlist execution:  50%|█████     | 1/2 [01:08<01:08, 68.14s/it]Playlist execution:  50%|█████     | 1/2 [01:09<01:09, 69.58s/it]Playlist execution:  50%|█████     | 1/2 [01:10<01:10, 70.82s/it]Playlist execution:  50%|█████     | 1/2 [01:12<01:12, 72.03s/it]Playlist execution:  50%|█████     | 1/2 [01:13<01:13, 73.27s/it]Playlist execution:  50%|█████     | 1/2 [01:14<01:14, 74.53s/it]Playlist execution:  50%|█████     | 1/2 [01:15<01:15, 75.76s/it]Playlist execution:  50%|█████     | 1/2 [01:16<01:16, 76.97s/it]Playlist execution:  50%|█████     | 1/2 [01:18<01:18, 78.25s/it]Playlist execution:  50%|█████     | 1/2 [01:19<01:19, 79.57s/it]Playlist execution:  50%|█████     | 1/2 [01:20<01:20, 80.99s/it]Playlist execution:  50%|█████     | 1/2 [01:22<01:22, 82.16s/it]Playlist execution:  50%|█████     | 1/2 [01:23<01:23, 83.46s/it]Playlist execution:  50%|█████     | 1/2 [01:24<01:24, 84.91s/it]Playlist execution:  50%|█████     | 1/2 [01:26<01:26, 86.28s/it]Playlist execution:  50%|█████     | 1/2 [01:27<01:27, 87.47s/it]Playlist execution:  50%|█████     | 1/2 [01:28<01:28, 88.70s/it]Playlist execution:  50%|█████     | 1/2 [01:29<01:29, 89.93s/it]Playlist execution:  50%|█████     | 1/2 [01:31<01:31, 91.27s/it]Playlist execution:  50%|█████     | 1/2 [01:32<01:32, 92.61s/it]Playlist execution:  50%|█████     | 1/2 [01:33<01:33, 93.84s/it]Playlist execution:  50%|█████     | 1/2 [01:35<01:35, 95.29s/it]Playlist execution:  50%|█████     | 1/2 [01:36<01:36, 96.72s/it]Playlist execution:  50%|█████     | 1/2 [01:37<01:37, 97.93s/it]Playlist execution:  50%|█████     | 1/2 [01:39<01:39, 99.21s/it]Playlist execution:  50%|█████     | 1/2 [01:40<01:40, 100.62s/it]Playlist execution:  50%|█████     | 1/2 [01:42<01:42, 102.06s/it]Playlist execution:  50%|█████     | 1/2 [01:43<01:43, 103.40s/it]Playlist execution:  50%|█████     | 1/2 [01:44<01:44, 104.64s/it]Playlist execution:  50%|█████     | 1/2 [01:45<01:45, 105.97s/it]Playlist execution:  50%|█████     | 1/2 [01:47<01:47, 107.30s/it]Playlist execution:  50%|█████     | 1/2 [01:48<01:48, 108.64s/it]Playlist execution:  50%|█████     | 1/2 [01:49<01:49, 109.79s/it]Playlist execution:  50%|█████     | 1/2 [01:51<01:51, 111.02s/it]Playlist execution:  50%|█████     | 1/2 [01:52<01:52, 112.24s/it]Playlist execution:  50%|█████     | 1/2 [01:53<01:53, 113.47s/it]Playlist execution:  50%|█████     | 1/2 [01:54<01:54, 114.71s/it]Playlist execution:  50%|█████     | 1/2 [01:55<01:55, 115.99s/it]Playlist execution:  50%|█████     | 1/2 [01:57<01:57, 117.31s/it]Playlist execution:  50%|█████     | 1/2 [01:58<01:58, 118.61s/it]Playlist execution:  50%|█████     | 1/2 [01:59<01:59, 119.95s/it]Playlist execution:  50%|█████     | 1/2 [02:01<02:01, 121.18s/it]Playlist execution:  50%|█████     | 1/2 [02:02<02:02, 122.55s/it]Playlist execution:  50%|█████     | 1/2 [02:03<02:03, 123.74s/it]Playlist execution:  50%|█████     | 1/2 [02:05<02:05, 125.09s/it]Playlist execution:  50%|█████     | 1/2 [02:06<02:06, 126.36s/it]Playlist execution:  50%|█████     | 1/2 [02:07<02:07, 127.57s/it]Playlist execution:  50%|█████     | 1/2 [02:08<02:08, 128.89s/it]Playlist execution:  50%|█████     | 1/2 [02:10<02:10, 130.14s/it]Playlist execution:  50%|█████     | 1/2 [02:11<02:11, 131.56s/it]Playlist execution:  50%|█████     | 1/2 [02:12<02:12, 132.80s/it]Playlist execution:  50%|█████     | 1/2 [02:14<02:14, 134.25s/it]Playlist execution:  50%|█████     | 1/2 [02:15<02:15, 135.40s/it]Playlist execution:  50%|█████     | 1/2 [02:16<02:16, 136.61s/it]Playlist execution:  50%|█████     | 1/2 [02:17<02:17, 137.83s/it]Playlist execution:  50%|█████     | 1/2 [02:19<02:19, 139.06s/it]Playlist execution:  50%|█████     | 1/2 [02:20<02:20, 140.38s/it]Playlist execution:  50%|█████     | 1/2 [02:21<02:21, 141.64s/it]Playlist execution:  50%|█████     | 1/2 [02:22<02:22, 142.97s/it]Playlist execution:  50%|█████     | 1/2 [02:24<02:24, 144.14s/it]Playlist execution:  50%|█████     | 1/2 [02:25<02:25, 145.44s/it]Playlist execution:  50%|█████     | 1/2 [02:26<02:26, 146.77s/it]Playlist execution:  50%|█████     | 1/2 [02:28<02:28, 148.11s/it]Playlist execution:  50%|█████     | 1/2 [02:29<02:29, 149.34s/it]Playlist execution:  50%|█████     | 1/2 [02:30<02:30, 150.67s/it]Playlist execution:  50%|█████     | 1/2 [02:31<02:31, 151.92s/it]Playlist execution:  50%|█████     | 1/2 [02:33<02:33, 153.24s/it]Playlist execution:  50%|█████     | 1/2 [02:34<02:34, 154.41s/it]Playlist execution:  50%|█████     | 1/2 [02:35<02:35, 155.62s/it]Playlist execution:  50%|█████     | 1/2 [02:36<02:36, 156.86s/it]Playlist execution:  50%|█████     | 1/2 [02:38<02:38, 158.21s/it]Playlist execution:  50%|█████     | 1/2 [02:39<02:39, 159.41s/it]Playlist execution:  50%|█████     | 1/2 [02:40<02:40, 160.76s/it]Playlist execution:  50%|█████     | 1/2 [02:42<02:42, 162.00s/it]Playlist execution:  50%|█████     | 1/2 [02:43<02:43, 163.21s/it]Playlist execution:  50%|█████     | 1/2 [02:44<02:44, 164.54s/it]Playlist execution:  50%|█████     | 1/2 [02:45<02:45, 165.69s/it]Playlist execution:  50%|█████     | 1/2 [02:46<02:46, 166.89s/it]Playlist execution: 100%|██████████| 2/2 [02:48<00:00, 84.07s/it] Playlist execution: 100%|██████████| 2/2 [02:49<00:00, 84.68s/it]Playlist execution: 100%|██████████| 2/2 [02:49<00:00, 84.68s/it]
+    zadanie 01a16b6c-636d-7312-aa9d-e2061fc381ab | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 123361.88it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.26s/it]    [A
+Playlist execution:  50%|█████     | 1/2 [00:02<00:02,  2.49s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:03<00:03,  3.79s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:05<00:05,  5.17s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:06<00:06,  6.35s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:07<00:07,  7.54s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:08<00:08,  8.76s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:10<00:10, 10.00s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:11<00:11, 11.33s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:12<00:12, 12.56s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:13<00:13, 13.80s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:15<00:15, 15.03s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:16<00:16, 16.26s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:17<00:17, 17.56s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:18<00:18, 18.83s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:20<00:20, 20.04s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:21<00:21, 21.40s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:22<00:22, 22.57s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:24<00:24, 24.11s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:25<00:25, 25.34s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:26<00:26, 26.55s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:27<00:27, 27.92s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:29<00:29, 29.32s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:30<00:30, 30.62s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:32<00:32, 32.01s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:33<00:33, 33.43s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:34<00:34, 34.66s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:36<00:36, 36.10s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:37<00:37, 37.33s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:38<00:38, 38.64s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:39<00:39, 39.81s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:41<00:41, 41.04s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:42<00:42, 42.36s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:43<00:43, 43.62s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:44<00:44, 44.94s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:46<00:46, 46.43s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:47<00:47, 47.97s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:49<00:49, 49.18s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:50<00:50, 50.49s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:51<00:51, 51.74s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:52<00:52, 52.97s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:54<00:54, 54.48s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:56<00:56, 56.04s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:57<00:57, 57.40s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:58<00:58, 58.71s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:59<00:59, 59.96s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:01<01:01, 61.17s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:02<01:02, 62.48s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:03<01:03, 63.90s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:05<01:05, 65.09s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:06<01:06, 66.47s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:07<01:07, 67.98s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:09<01:09, 69.41s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:10<01:10, 70.74s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:11<01:11, 71.97s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:13<01:13, 73.41s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:14<01:14, 74.65s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:15<01:15, 75.80s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:17<01:17, 77.11s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:18<01:18, 78.31s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:19<01:19, 79.60s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:20<01:20, 80.82s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:22<01:22, 82.05s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:23<01:23, 83.30s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:24<01:24, 84.51s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:25<01:25, 85.85s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:27<01:27, 87.21s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:28<01:28, 88.63s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:29<01:29, 89.96s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:31<01:31, 91.21s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:32<01:32, 92.53s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:33<01:33, 93.88s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:35<01:35, 95.25s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:36<01:36, 96.45s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:37<01:37, 97.75s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:39<01:39, 99.11s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:40<01:40, 100.55s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:41<01:41, 101.88s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:43<01:43, 103.04s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:44<01:44, 104.37s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:45<01:45, 105.53s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:46<01:46, 106.79s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:48<01:48, 108.06s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:49<01:49, 109.28s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:50<01:50, 110.51s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:51<01:51, 111.75s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:52<01:52, 112.98s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:54<01:54, 114.22s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:55<01:55, 115.55s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:56<01:56, 116.79s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:58<01:58, 118.12s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:59<01:59, 119.35s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:00<02:00, 120.59s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:01<02:01, 121.92s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:03<02:03, 123.26s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:04<02:04, 124.51s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:05<02:05, 125.93s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:07<02:07, 127.16s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:08<02:08, 128.40s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:09<02:09, 129.75s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:11<02:11, 131.07s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:12<02:12, 132.30s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:13<02:13, 133.46s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:14<02:14, 134.61s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:15<02:15, 135.91s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:17<02:17, 137.24s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:18<02:18, 138.40s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:19<02:19, 139.70s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:20<02:20, 140.94s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:22<02:22, 142.34s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:23<02:23, 143.58s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:24<02:24, 144.75s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:25<02:25, 145.97s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:27<02:27, 147.22s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:28<02:28, 148.44s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:29<02:29, 149.77s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:31<02:31, 151.01s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:32<02:32, 152.44s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:34<02:34, 154.27s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:37<02:37, 157.16s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:38<02:38, 158.37s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:39<02:39, 159.75s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:40<02:40, 160.93s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:42<02:42, 162.26s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:43<02:43, 163.61s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:44<02:44, 164.81s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:45<02:45, 165.98s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:47<02:47, 167.28s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:48<02:48, 168.43s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:49<02:49, 169.69s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:51<02:51, 171.01s/it][A
+Playlist execution: 100%|██████████| 2/2 [02:52<00:00, 86.12s/it] [A
+Playlist execution: 100%|██████████| 2/2 [02:53<00:00, 86.80s/it][AProgress in queue:   0%|          | 0/1 [05:55<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [02:53<00:00, 86.80s/it]
+    zadanie 01a16b71-abac-7193-b175-315e917515cc | 100/400 obwodów
+    -> raw 0.2679 | CDR 0.1587 | ZNE 0.1982 | acc 0.69 -> 0.74 | r2 0.5978
+
+zapisano runs/odra_pilot/p2_cdr100/cdr_zne_100pt.csv
+[provenance] manifest + counts.jsonl -> runs/odra_pilot/p2_cdr100
+ODCZYT: r^2 ma spadać z liczbą CZ --- to sprzętowy odpowiednik krzywej ODRY
+z Rysunku 1, zastępujący dotychczasową symulację.
+[2026-10-24 03:12:10] DONE p2 CDR+ZNE 100 points, 4 rungs
+[2026-10-24 03:12:13] RUN  p2 depth L6 (attempt 1)
+python(24139) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+[provenance] runs/odra_pilot/p2_depth_L6
+[os glebokosci] n_layers 3 -> 6 (zero narzutu routingu; wagi z train_star_depth.py)
+PLAN: ODRA (gwiazda, iqm-client) | wzorce ['star'] | 100 pkt ewaluacyjnych | n_train 100 | shots 8192
+  obwodów 400 (400/wzorzec) | zgłoszeń 4 | pomiarów 3276800
+
+>>> ODRA: dostęp niemierzony kredytami Resonance <<<
+
+  star        cz= 24 | 400 obwodów (ZNE, skale [1, 3, 5])
+    zadanie 01a16b77-3d60-78e3-8c61-3b5ec2404c94 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:36<?, ?it/s]
+    zadanie 01a16b7c-8319-79c1-90aa-ea1ca4fc3eb5 | 100/400 obwodów
+    zadanie 01a16b81-ad53-7a72-9749-c577f19808a9 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:43<?, ?it/s]
+    zadanie 01a16b86-f407-71e3-803d-8dc99a91130c | 100/400 obwodów
+    -> raw 0.1514 | CDR 0.1074 | ZNE 0.0517 | acc 0.70 -> 0.71 | r2 0.6736
+
+zapisano runs/odra_pilot/p2_depth_L6/cdr_zne.csv
+[provenance] manifest + counts.jsonl -> runs/odra_pilot/p2_depth_L6
+ODCZYT: r^2 ma spadać z liczbą CZ --- to sprzętowy odpowiednik krzywej ODRY
+z Rysunku 1, zastępujący dotychczasową symulację.
+[2026-10-24 03:35:13] DONE p2 depth L6
+[2026-10-24 03:35:17] RUN  p2 depth L9 (attempt 1)
+python(39531) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+[provenance] runs/odra_pilot/p2_depth_L9
+[os glebokosci] n_layers 3 -> 9 (zero narzutu routingu; wagi z train_star_depth.py)
+PLAN: ODRA (gwiazda, iqm-client) | wzorce ['star'] | 100 pkt ewaluacyjnych | n_train 100 | shots 8192
+  obwodów 400 (400/wzorzec) | zgłoszeń 4 | pomiarów 3276800
+
+>>> ODRA: dostęp niemierzony kredytami Resonance <<<
+
+  star        cz= 36 | 400 obwodów (ZNE, skale [1, 3, 5])
+    zadanie 01a16b8c-5e1b-7ae0-b15f-ef956dc2e2b7 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    zadanie 01a16b91-7a08-7130-9cc3-a5004ca36957 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:45<?, ?it/s]
+    zadanie 01a16b96-9cfe-7690-a9de-1d2bd6d6e4c2 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:41<?, ?it/s]
+    zadanie 01a16b9b-f1f6-7791-a3c6-9ffef63a4a98 | 100/400 obwodów
+    -> raw 0.2414 | CDR 0.1673 | ZNE 0.1492 | acc 0.78 -> 0.77 | r2 0.5192
+
+zapisano runs/odra_pilot/p2_depth_L9/cdr_zne.csv
+[provenance] manifest + counts.jsonl -> runs/odra_pilot/p2_depth_L9
+ODCZYT: r^2 ma spadać z liczbą CZ --- to sprzętowy odpowiednik krzywej ODRY
+z Rysunku 1, zastępujący dotychczasową symulację.
+[2026-10-24 03:58:08] DONE p2 depth L9
+[2026-10-24 03:58:11] RUN  p2 depth L13 (attempt 1)
+python(53298) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+[provenance] runs/odra_pilot/p2_depth_L13
+[os glebokosci] n_layers 3 -> 13 (zero narzutu routingu; wagi z train_star_depth.py)
+PLAN: ODRA (gwiazda, iqm-client) | wzorce ['star'] | 100 pkt ewaluacyjnych | n_train 100 | shots 8192
+  obwodów 400 (400/wzorzec) | zgłoszeń 4 | pomiarów 3276800
+
+>>> ODRA: dostęp niemierzony kredytami Resonance <<<
+
+  star        cz= 52 | 400 obwodów (ZNE, skale [1, 3, 5])
+    zadanie 01a16ba1-54c2-79c0-9345-737c5fcd84c2 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:40<?, ?it/s]
+    zadanie 01a16ba6-7429-7b12-a44c-f7c1b60facc4 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:47<?, ?it/s]
+    zadanie 01a16bab-aec9-7622-b7a5-d8d431974991 | 100/400 obwodów
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]
+Playlist execution:   0%|          | 0/2 [00:00<?, ?it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:00<00:00, 127100.12it/s][A
+Playlist execution:  50%|█████     | 1/2 [00:01<00:01,  1.30s/it]    [A
+Playlist execution:  50%|█████     | 1/2 [00:02<00:02,  2.53s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:03<00:03,  3.86s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:05<00:05,  5.09s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:06<00:06,  6.43s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:07<00:07,  7.66s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:09<00:09,  9.10s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:10<00:10, 10.34s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:11<00:11, 11.54s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:12<00:12, 12.80s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:14<00:14, 14.04s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:15<00:15, 15.47s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:16<00:16, 16.71s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:17<00:17, 17.94s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:19<00:19, 19.17s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:20<00:20, 20.41s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:21<00:21, 21.75s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:23<00:23, 23.08s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:24<00:24, 24.24s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:25<00:25, 25.57s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:26<00:26, 26.99s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:28<00:28, 28.20s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:29<00:29, 29.39s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:30<00:30, 30.70s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:32<00:32, 32.12s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:33<00:33, 33.36s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:34<00:34, 34.61s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:35<00:35, 35.93s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:37<00:37, 37.16s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:38<00:38, 38.50s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:39<00:39, 39.80s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:41<00:41, 41.07s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:42<00:42, 42.30s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:43<00:43, 43.57s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:44<00:44, 44.87s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:46<00:46, 46.21s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:47<00:47, 47.55s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:48<00:48, 48.91s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:50<00:50, 50.14s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:51<00:51, 51.38s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:52<00:52, 52.61s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:53<00:53, 53.85s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:55<00:55, 55.22s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:56<00:56, 56.39s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:57<00:57, 57.62s/it][A
+Playlist execution:  50%|█████     | 1/2 [00:58<00:58, 58.85s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:01<01:01, 61.17s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:04<01:04, 64.63s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:06<01:06, 66.16s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:07<01:07, 67.48s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:08<01:08, 68.73s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:09<01:09, 69.96s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:11<01:11, 71.18s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:12<01:12, 72.39s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:13<01:13, 73.56s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:14<01:14, 74.77s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:15<01:15, 75.92s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:17<01:17, 77.20s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:18<01:18, 78.48s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:19<01:19, 79.72s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:21<01:21, 81.06s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:22<01:22, 82.56s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:23<01:23, 83.83s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:25<01:25, 85.18s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:26<01:26, 86.60s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:27<01:27, 87.94s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:29<01:29, 89.12s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:30<01:30, 90.48s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:31<01:31, 91.81s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:33<01:33, 93.07s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:34<01:34, 94.51s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:35<01:35, 95.85s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:37<01:37, 97.39s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:38<01:38, 98.64s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:40<01:40, 100.19s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:41<01:41, 101.50s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:43<01:43, 103.15s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:44<01:44, 104.49s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:46<01:46, 106.03s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:47<01:47, 107.67s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:48<01:48, 108.93s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:50<01:50, 110.38s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:51<01:51, 111.58s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:53<01:53, 113.07s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:54<01:54, 114.27s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:55<01:55, 115.59s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:56<01:56, 116.92s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:58<01:58, 118.26s/it][A
+Playlist execution:  50%|█████     | 1/2 [01:59<01:59, 119.49s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:00<02:00, 120.78s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:01<02:01, 121.97s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:03<02:03, 123.29s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:04<02:04, 124.63s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:05<02:05, 125.83s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:07<02:07, 127.11s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:08<02:08, 128.51s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:09<02:09, 129.77s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:11<02:11, 131.11s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:12<02:12, 132.31s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:13<02:13, 133.58s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:14<02:14, 134.93s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:16<02:16, 136.14s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:17<02:17, 137.41s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:18<02:18, 138.72s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:20<02:20, 140.22s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:21<02:21, 141.58s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:22<02:22, 142.82s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:24<02:24, 144.05s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:25<02:25, 145.29s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:26<02:26, 146.68s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:28<02:28, 148.06s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:29<02:29, 149.30s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:30<02:30, 150.76s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:32<02:32, 152.07s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:33<02:33, 153.93s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:35<02:35, 155.36s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:36<02:36, 156.82s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:38<02:38, 158.14s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:39<02:39, 159.35s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:40<02:40, 160.51s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:41<02:41, 161.86s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:43<02:43, 163.18s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:44<02:44, 164.42s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:45<02:45, 165.75s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:47<02:47, 167.51s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:48<02:48, 168.73s/it][A
+Playlist execution:  50%|█████     | 1/2 [02:49<02:49, 169.96s/it][A
+Playlist execution: 100%|██████████| 2/2 [02:51<00:00, 85.59s/it] [AProgress in queue:   0%|          | 0/1 [05:49<?, ?it/s]
+Playlist execution: 100%|██████████| 2/2 [02:51<00:00, 85.59s/it]
+    zadanie 01a16bb1-08d4-7ad0-8169-7c57dcb797b9 | 100/400 obwodów
+    -> raw 0.2989 | CDR 0.1670 | ZNE 0.2003 | acc 0.79 -> 0.79 | r2 0.3176
+
+zapisano runs/odra_pilot/p2_depth_L13/cdr_zne.csv
+[provenance] manifest + counts.jsonl -> runs/odra_pilot/p2_depth_L13
+ODCZYT: r^2 ma spadać z liczbą CZ --- to sprzętowy odpowiednik krzywej ODRY
+z Rysunku 1, zastępujący dotychczasową symulację.
+[2026-10-24 04:21:18] DONE p2 depth L13
+[2026-10-24 04:21:21] RUN  p3 twirl logical star+all_to_all (attempt 1)
+[provenance] runs/odra_pilot/p3_logical
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:all_to_all'] | arms ['raw', 'cdr', 'zne'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1088 (544/point) | shots 8912896 | jobs 16
+  COST: ODRA access is not metered in Resonance credits
+
+>>> note your credit balance NOW <<<
+
+    [odra] zgłoszono zadanie 01a16bb6-807b-7d02-b0bb-a0deb8832418 (4 obwodów)
+    [odra] zadanie 01a16bb6-807b-7d02-b0bb-a0deb8832418 | 4 obwodów (4/4)
+   optimal        star cz= 12 | raw twirl=False | err 0.0457 | r2 
+    [odra] zgłoszono zadanie 01a16bb6-cb67-7c02-9811-6a2283911889 (100 obwodów)
+    [odra] zadanie 01a16bb6-cb67-7c02-9811-6a2283911889 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16bbb-ec35-79b3-8c29-65b90104928f (100 obwodów)
+    [odra] zadanie 01a16bbb-ec35-79b3-8c29-65b90104928f | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16bc1-255d-7f02-a93c-cf1397b5d705 (64 obwodów)
+python(79354) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:37<?, ?it/s]
+    [odra] zadanie 01a16bc1-255d-7f02-a93c-cf1397b5d705 | 64 obwodów (264/264)
+   optimal        star cz= 12 | cdr twirl=False | err 0.0482 | r2 0.9787
+    [odra] zgłoszono zadanie 01a16bc4-8120-78a2-abf3-6f7ff42b3121 (100 obwodów)
+    [odra] zadanie 01a16bc4-8120-78a2-abf3-6f7ff42b3121 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16bc9-b7b4-7d71-9e45-2ac14fdae68c (100 obwodów)
+    [odra] zadanie 01a16bc9-b7b4-7d71-9e45-2ac14fdae68c | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16bce-d561-7971-bf30-532b4b0f6953 (64 obwodów)
+    [odra] zadanie 01a16bce-d561-7971-bf30-532b4b0f6953 | 64 obwodów (264/264)
+   optimal        star cz= 12 | cdr twirl= True | err 0.0232 | r2 0.9837
+    [odra] zgłoszono zadanie 01a16bd2-3e83-70c1-a789-592d790709d1 (12 obwodów)
+    [odra] zadanie 01a16bd2-3e83-70c1-a789-592d790709d1 | 12 obwodów (12/12)
+   optimal        star cz= 12 | zne twirl=False | err 0.0242 | r2 
+  [saved] optimal:star -> runs/odra_pilot/p3_logical/twirl_logical.csv
+    [odra] zgłoszono zadanie 01a16bd2-fa35-7fa3-abd0-15a087e15f56 (4 obwodów)
+    [odra] zadanie 01a16bd2-fa35-7fa3-abd0-15a087e15f56 | 4 obwodów (4/4)
+   optimal  all_to_all cz= 57 | raw twirl=False | err 0.1439 | r2 
+    [odra] zgłoszono zadanie 01a16bd3-3c3f-7041-a85d-f82ff3a6fa5a (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a16bd3-3c3f-7041-a85d-f82ff3a6fa5a | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16bd8-5ea6-7c92-89d7-ccf9e89e647a (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a16bd8-5ea6-7c92-89d7-ccf9e89e647a | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16bdd-7c30-77e1-8d52-561ffdb33dae (64 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:34<?, ?it/s]
+    [odra] zadanie 01a16bdd-7c30-77e1-8d52-561ffdb33dae | 64 obwodów (264/264)
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0612 | r2 0.7139
+    [odra] zgłoszono zadanie 01a16be0-d80b-7562-b7e1-22cd74696f19 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a16be0-d80b-7562-b7e1-22cd74696f19 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16be5-faea-7820-8ab4-99b23dce8e55 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a16be5-faea-7820-8ab4-99b23dce8e55 | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16beb-1d5f-71d2-9483-ad19e1776400 (64 obwodów)
+    [odra] zadanie 01a16beb-1d5f-71d2-9483-ad19e1776400 | 64 obwodów (264/264)
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0491 | r2 0.8657
+    [odra] zgłoszono zadanie 01a16bee-6af1-7cd3-82fd-b27445f56114 (12 obwodów)
+    [odra] zadanie 01a16bee-6af1-7cd3-82fd-b27445f56114 | 12 obwodów (12/12)
+   optimal  all_to_all cz= 57 | zne twirl=False | err 0.1046 | r2 
+  [saved] optimal:all_to_all -> runs/odra_pilot/p3_logical/twirl_logical.csv
+[provenance] manifest + counts.jsonl -> runs/odra_pilot/p3_logical
+
+wrote/updated runs/odra_pilot/p3_logical/twirl_logical.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+[2026-10-24 05:23:11] DONE p3 twirl logical star+all_to_all
+[2026-10-24 05:23:14] RUN  p3 twirl native star+all_to_all (attempt 1)
+[provenance] runs/odra_pilot/p3_native
+twirl sanity (noiseless): OK
+
+PLAN: odra | points ['optimal:star', 'optimal:all_to_all'] | arms ['cdr'] | 4 eval pts | shots 8192 | M_twirl 6 | n_train 10 | match_shots True (OFF averages 6 copy/ies)
+  circuits 1056 (528/point) | shots 8650752 | jobs 12
+  COST: ODRA access is not metered in Resonance credits
+
+>>> note your credit balance NOW <<<
+
+    [odra] zgłoszono zadanie 01a16bef-2e75-7303-8330-cb052bd56107 (100 obwodów)
+    [odra] zadanie 01a16bef-2e75-7303-8330-cb052bd56107 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16bf4-41da-7040-8102-a2488f1b027a (100 obwodów)
+    [odra] zadanie 01a16bf4-41da-7040-8102-a2488f1b027a | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16bf9-535f-7733-98e9-ed89d7a39206 (64 obwodów)
+    [odra] zadanie 01a16bf9-535f-7733-98e9-ed89d7a39206 | 64 obwodów (264/264)
+   optimal        star cz= 12 | cdr twirl=False | err 0.0516 | r2 0.9818
+    [odra] zgłoszono zadanie 01a16bfc-97a7-7503-96ce-ac53d8dd8756 (100 obwodów)
+    [odra] zadanie 01a16bfc-97a7-7503-96ce-ac53d8dd8756 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16c01-aaaf-7301-9c06-f038269c435f (100 obwodów)
+    [odra] zadanie 01a16c01-aaaf-7301-9c06-f038269c435f | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16c06-ba81-78e1-8a82-eb41e19bc19f (64 obwodów)
+python(3419) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:32<?, ?it/s]
+    [odra] zadanie 01a16c06-ba81-78e1-8a82-eb41e19bc19f | 64 obwodów (264/264)
+   optimal        star cz= 12 | cdr twirl= True | err 0.0113 | r2 0.9821
+  [saved] optimal:star -> runs/odra_pilot/p3_native/twirl_native.csv
+    [odra] zgłoszono zadanie 01a16c0a-0553-7941-90f6-4bb8416ce008 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a16c0a-0553-7941-90f6-4bb8416ce008 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16c0f-28aa-7213-b5fb-d24063ad6330 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a16c0f-28aa-7213-b5fb-d24063ad6330 | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16c14-44da-7040-a779-f9d7bf2fa0d4 (64 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:33<?, ?it/s]
+    [odra] zadanie 01a16c14-44da-7040-a779-f9d7bf2fa0d4 | 64 obwodów (264/264)
+   optimal  all_to_all cz= 57 | cdr twirl=False | err 0.0707 | r2 0.722
+    [odra] zgłoszono zadanie 01a16c17-9d16-7941-a66c-b1c6464691b8 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:47<?, ?it/s]
+    [odra] zadanie 01a16c17-9d16-7941-a66c-b1c6464691b8 | 100 obwodów (100/264)
+    [odra] zgłoszono zadanie 01a16c1c-ef76-7fc2-8bbc-f446510b8de5 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:44<?, ?it/s]
+    [odra] zadanie 01a16c1c-ef76-7fc2-8bbc-f446510b8de5 | 100 obwodów (200/264)
+    [odra] zgłoszono zadanie 01a16c22-395a-7093-adff-27afdca802f8 (64 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:34<?, ?it/s]
+    [odra] zadanie 01a16c22-395a-7093-adff-27afdca802f8 | 64 obwodów (264/264)
+   optimal  all_to_all cz= 57 | cdr twirl= True | err 0.0474 | r2 0.8433
+  [saved] optimal:all_to_all -> runs/odra_pilot/p3_native/twirl_native.csv
+[provenance] manifest + counts.jsonl -> runs/odra_pilot/p3_native
+
+wrote/updated runs/odra_pilot/p3_native/twirl_native.csv
+READ: hypothesis holds if twirl improves err/r2, and the improvement GROWS with CZ.
+[2026-10-24 06:22:40] DONE p3 twirl native star+all_to_all
+[2026-10-24 06:22:44] RUN  p3 kappa Neyman {1,3,5} (attempt 1)
+[provenance] runs/odra_pilot/p3_kappa_n135
+PROGNOZA (pre-rejestrowana): kappa = 14.656, wsp. Richardsona [1.875, -1.25, 0.375]
+  podział neyman: kappa_opt = 11.250 przy równych sigma; ostateczna wartość z sigma_i pilota (2048 pomiarów/obwód)
+  skale [1, 3, 5] | S* = kappa*V/B^2 ; przy V~0.2 i~B zmierzonym na Garnecie:
+     optimal:star   B=0.0567 -> S* ~ 700
+     adverse:star   B=0.1003 -> S* ~ 224
+
+PLAN: odra | punkty ['optimal:star'] | budżety [256, 512, 1024, 2048, 4096] | reps 10 | eval 4
+  obwodów 812 | pomiarów 659456 | jobów 23 | dostep niemierzony kredytami
+
+=== optimal:star  cz=12 ===
+    [odra] zgłoszono zadanie 01a16c25-a509-7b81-9da3-94e0c433af6d (12 obwodów)
+    [odra] zadanie 01a16c25-a509-7b81-9da3-94e0c433af6d | 12 obwodów (12/12)
+  pilot: sigma_i = [0.4285, 0.4495, 0.4568] -> kappa_opt = 11.859 | podział [522, 366, 112] na 1000 pomiarów
+     S     B_rms    V(cnt)    V(rep)    MSE raw    MSE zne   Delta MSE      wynik
+    [odra] zgłoszono zadanie 01a16c25-e645-77a2-9488-d148439f5af1 (40 obwodów)
+    [odra] zadanie 01a16c25-e645-77a2-9488-d148439f5af1 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c26-a5b2-7700-83d8-a19b61a3576e (40 obwodów)
+    [odra] zadanie 01a16c26-a5b2-7700-83d8-a19b61a3576e | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c27-2618-77b1-88da-e9d8c3220c85 (40 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [04:50<?, ?it/s]
+    [odra] zadanie 01a16c27-2618-77b1-88da-e9d8c3220c85 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c2b-9dcd-7d13-a0b4-cf3fdf7a0587 (40 obwodów)
+    [odra] zadanie 01a16c2b-9dcd-7d13-a0b4-cf3fdf7a0587 | 40 obwodów (40/40)
+   256    0.0560    0.1908    0.2515    0.00402    0.01260    +0.00858  zaszkodzi
+    [odra] zgłoszono zadanie 01a16c31-c4a6-7c70-acf8-5a4ecd4222e9 (40 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:17<?, ?it/s]
+    [odra] zadanie 01a16c31-c4a6-7c70-acf8-5a4ecd4222e9 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c32-0e7d-7073-80e6-6d7b013ea349 (40 obwodów)
+    [odra] zadanie 01a16c32-0e7d-7073-80e6-6d7b013ea349 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c32-4c18-7400-afda-fb73b7636abd (40 obwodów)
+    [odra] zadanie 01a16c32-4c18-7400-afda-fb73b7636abd | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c32-c062-7aa2-a17c-dd04e278e4f7 (40 obwodów)
+    [odra] zadanie 01a16c32-c062-7aa2-a17c-dd04e278e4f7 | 40 obwodów (40/40)
+   512    0.0521    0.1923    0.2263    0.00311    0.00570    +0.00260  zaszkodzi
+    [odra] zgłoszono zadanie 01a16c33-bc20-7273-acdf-5748c1bdc442 (40 obwodów)
+    [odra] zadanie 01a16c33-bc20-7273-acdf-5748c1bdc442 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c38-6829-71d2-baca-5f669e7a1ad0 (40 obwodów)
+    [odra] zadanie 01a16c38-6829-71d2-baca-5f669e7a1ad0 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c3d-257e-7970-89be-48be08370bb6 (40 obwodów)
+    [odra] zadanie 01a16c3d-257e-7970-89be-48be08370bb6 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c41-a6de-7fe3-b9d4-ebe603c318ab (40 obwodów)
+    [odra] zadanie 01a16c41-a6de-7fe3-b9d4-ebe603c318ab | 40 obwodów (40/40)
+  1024    0.0492    0.1894    0.2315    0.00263    0.00192    -0.00070     pomoze
+    [odra] zgłoszono zadanie 01a16c41-bac9-7b03-993c-bcc1b7122c3a (40 obwodów)
+    [odra] zadanie 01a16c41-bac9-7b03-993c-bcc1b7122c3a | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c42-4875-7f93-9a75-db02a6b2a395 (40 obwodów)
+    [odra] zadanie 01a16c42-4875-7f93-9a75-db02a6b2a395 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c42-96d4-7222-8a4e-18c4b904f79d (40 obwodów)
+    [odra] zadanie 01a16c42-96d4-7222-8a4e-18c4b904f79d | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c42-d005-7442-84f5-bff0c6f7071d (40 obwodów)
+    [odra] zadanie 01a16c42-d005-7442-84f5-bff0c6f7071d | 40 obwodów (40/40)
+  2048    0.0527    0.1907    0.1943    0.00287    0.00493    +0.00206  zaszkodzi
+    [odra] zgłoszono zadanie 01a16c42-e8de-7ba2-9676-f8dc7f2cce9c (40 obwodów)
+    [odra] zadanie 01a16c42-e8de-7ba2-9676-f8dc7f2cce9c | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c43-f600-7392-b732-6d484d415ad3 (40 obwodów)
+    [odra] zadanie 01a16c43-f600-7392-b732-6d484d415ad3 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c44-864f-7460-a717-2745886ccaec (40 obwodów)
+    [odra] zadanie 01a16c44-864f-7460-a717-2745886ccaec | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c44-f1e8-7932-be66-d21ae6981619 (40 obwodów)
+    [odra] zadanie 01a16c44-f1e8-7932-be66-d21ae6981619 | 40 obwodów (40/40)
+  4096    0.0783    0.1886    0.2184    0.00617    0.00357    -0.00260     pomoze
+
+==============================================================================
+OCENA PO PULI (V i B nie zależą od S, więc pojedyncze oszacowania per-budżet są zaszumione)
+
+  optimal:star
+    V (z rozkładu zliczeń) = 0.1904    B_rms = 0.0577
+    S* = kappa*V/B^2       = 679
+    przejście zaobserwowane w przedziale (2048, 4096]
+    --> kappa ZMIERZONE = 20.74 +/- 14.67   (przewidziane: 11.86)
+        odchylenie 0.6 sigma -> ZGODNE z teorią
+        usunięte obciążenie sqrt(B^2-B_zne^2) = 0.0543 (B zmierzone bezpośrednio: 0.0577)
+        -> obciążenie RESZTKOWE ZNE: B_zne = 0.0195 (34% obciążenia surowego)
+        -> skorygowane S* = kappa*V/(B^2-B_zne^2) = 767
+
+zapisano runs/odra_pilot/p3_kappa_n135/kappa.csv
+[provenance] manifest + counts.jsonl -> runs/odra_pilot/p3_kappa_n135
+ODCZYT: falsyfikowalna jest STAŁA kappa (neyman) --- przejście ma wypaść przy
+S* = kappa*V/B^2 z V i B zmierzonymi w tym samym przebiegu, bez dopasowywania.
+[2026-10-24 06:57:09] DONE p3 kappa Neyman {1,3,5}
+[2026-10-24 06:57:13] RUN  p3 kappa Neyman {1,3,5,7} (attempt 1)
+[provenance] runs/odra_pilot/p3_kappa_n1357
+PROGNOZA (pre-rejestrowana): kappa = 44.562, wsp. Richardsona [2.188, -2.188, 1.312, -0.312]
+  podział neyman: kappa_opt = 35.000 przy równych sigma; ostateczna wartość z sigma_i pilota (2048 pomiarów/obwód)
+  skale [1, 3, 5, 7] | S* = kappa*V/B^2 ; przy V~0.2 i~B zmierzonym na Garnecie:
+     optimal:star   B=0.0567 -> S* ~ 2177
+     adverse:star   B=0.1003 -> S* ~ 696
+
+PLAN: odra | punkty ['optimal:star'] | budżety [256, 512, 1024, 2048, 4096] | reps 10 | eval 4
+  obwodów 1016 | pomiarów 667648 | jobów 29 | dostep niemierzony kredytami
+
+=== optimal:star  cz=12 ===
+    [odra] zgłoszono zadanie 01a16c45-36ce-7b53-99f4-2638b64d61ca (16 obwodów)
+    [odra] zadanie 01a16c45-36ce-7b53-99f4-2638b64d61ca | 16 obwodów (16/16)
+  pilot: sigma_i = [0.4314, 0.451, 0.4525, 0.4598] -> kappa_opt = 37.240 | podział [353, 369, 223, 55] na 1000 pomiarów
+     S     B_rms    V(cnt)    V(rep)    MSE raw    MSE zne   Delta MSE      wynik
+    [odra] zgłoszono zadanie 01a16c45-7443-74d1-b54f-4929626281a3 (40 obwodów)
+    [odra] zadanie 01a16c45-7443-74d1-b54f-4929626281a3 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c45-9005-7d90-b1a1-cd6390f3ca00 (40 obwodów)
+    [odra] zadanie 01a16c45-9005-7d90-b1a1-cd6390f3ca00 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c45-a1e8-7243-8ce0-68b3d56dfc16 (40 obwodów)
+    [odra] zadanie 01a16c45-a1e8-7243-8ce0-68b3d56dfc16 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c45-b2f1-7040-bae9-a8da63cb3fee (40 obwodów)
+python(47562) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:02<?, ?it/s]
+    [odra] zadanie 01a16c45-b2f1-7040-bae9-a8da63cb3fee | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c45-c4e0-7240-b7a9-e15a089b955f (40 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:01<?, ?it/s]
+    [odra] zadanie 01a16c45-c4e0-7240-b7a9-e15a089b955f | 40 obwodów (40/40)
+   256    0.0802    0.1908    0.1390    0.00693    0.03579    +0.02886  zaszkodzi
+    [odra] zgłoszono zadanie 01a16c45-ce53-7550-8be7-7ad06c6a6bec (40 obwodów)
+    [odra] zadanie 01a16c45-ce53-7550-8be7-7ad06c6a6bec | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c45-f9f6-7451-8c0b-1df54fe6f1bf (40 obwodów)
+    [odra] zadanie 01a16c45-f9f6-7451-8c0b-1df54fe6f1bf | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c46-16ac-7a60-b351-e7a23f1924b7 (40 obwodów)
+    [odra] zadanie 01a16c46-16ac-7a60-b351-e7a23f1924b7 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c46-2e48-7392-a779-85648c769806 (40 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:02<?, ?it/s]
+    [odra] zadanie 01a16c46-2e48-7392-a779-85648c769806 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c46-402c-7bc1-a63f-0f88663943c6 (40 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:01<?, ?it/s]
+    [odra] zadanie 01a16c46-402c-7bc1-a63f-0f88663943c6 | 40 obwodów (40/40)
+   512    0.0763    0.1938    0.1887    0.00616    0.01889    +0.01273  zaszkodzi
+    [odra] zgłoszono zadanie 01a16c46-4a68-7021-abe8-c82f2607e54b (40 obwodów)
+    [odra] zadanie 01a16c46-4a68-7021-abe8-c82f2607e54b | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c46-95b9-7773-a23d-9c0e215fda8e (40 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:07<?, ?it/s]
+    [odra] zadanie 01a16c46-95b9-7773-a23d-9c0e215fda8e | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c46-b782-7871-8631-909643edd3f6 (40 obwodów)
+    [odra] zadanie 01a16c46-b782-7871-8631-909643edd3f6 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c46-dc9c-7000-a90f-3b77f9db145a (40 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:05<?, ?it/s]
+    [odra] zadanie 01a16c46-dc9c-7000-a90f-3b77f9db145a | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c46-f88e-7150-9b40-7595a3a5ef46 (40 obwodów)
+    [odra] zadanie 01a16c46-f88e-7150-9b40-7595a3a5ef46 | 40 obwodów (40/40)
+  1024    0.0790    0.1879    0.1611    0.00639    0.00713    +0.00075  zaszkodzi
+    [odra] zgłoszono zadanie 01a16c47-0487-7bb0-a40e-f035caa71dba (40 obwodów)
+    [odra] zadanie 01a16c47-0487-7bb0-a40e-f035caa71dba | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c47-8fa4-7bd0-b7d2-7827cd6ff72d (40 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:13<?, ?it/s]
+    [odra] zadanie 01a16c47-8fa4-7bd0-b7d2-7827cd6ff72d | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c47-c9d5-7b51-aa4b-9c58a550c47a (40 obwodów)
+    [odra] zadanie 01a16c47-c9d5-7b51-aa4b-9c58a550c47a | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c48-010c-7ac3-a73d-ad8ea015fe8a (40 obwodów)
+    [odra] zadanie 01a16c48-010c-7ac3-a73d-ad8ea015fe8a | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c48-2882-7340-8f7e-a50442aa1d37 (40 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:02<?, ?it/s]
+    [odra] zadanie 01a16c48-2882-7340-8f7e-a50442aa1d37 | 40 obwodów (40/40)
+  2048    0.0782    0.1897    0.1811    0.00619    0.00760    +0.00141  zaszkodzi
+    [odra] zgłoszono zadanie 01a16c48-3777-7db2-aae3-e899a7391717 (40 obwodów)
+    [odra] zadanie 01a16c48-3777-7db2-aae3-e899a7391717 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c49-41f4-7101-bc0d-dd3add73dc00 (40 obwodów)
+    [odra] zadanie 01a16c49-41f4-7101-bc0d-dd3add73dc00 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c49-a899-7731-a71f-bcb749088f68 (40 obwodów)
+    [odra] zadanie 01a16c49-a899-7731-a71f-bcb749088f68 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c4a-118a-7c20-bc4e-efbe3cc262b5 (40 obwodów)
+    [odra] zadanie 01a16c4a-118a-7c20-bc4e-efbe3cc262b5 | 40 obwodów (40/40)
+    [odra] zgłoszono zadanie 01a16c4a-5443-7480-b0b7-d4dd826e2db9 (40 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:05<?, ?it/s]
+    [odra] zadanie 01a16c4a-5443-7480-b0b7-d4dd826e2db9 | 40 obwodów (40/40)
+  4096    0.0745    0.1890    0.1434    0.00559    0.00701    +0.00142  zaszkodzi
+
+==============================================================================
+OCENA PO PULI (V i B nie zależą od S, więc pojedyncze oszacowania per-budżet są zaszumione)
+
+  optimal:star
+    V (z rozkładu zliczeń) = 0.1903    B_rms = 0.0777
+    S* = kappa*V/B^2       = 1175
+    --> kappa ZMIERZONE = 25.73 +/- 11.32   (przewidziane: 37.24)
+        odchylenie 1.0 sigma -> ZGODNE z teorią
+        usunięte obciążenie sqrt(B^2-B_zne^2) = 0.0118 (B zmierzone bezpośrednio: 0.0777)
+        -> obciążenie RESZTKOWE ZNE: B_zne = 0.0768 (99% obciążenia surowego)
+        -> skorygowane S* = kappa*V/(B^2-B_zne^2) = 50765
+
+zapisano runs/odra_pilot/p3_kappa_n1357/kappa.csv
+[provenance] manifest + counts.jsonl -> runs/odra_pilot/p3_kappa_n1357
+ODCZYT: falsyfikowalna jest STAŁA kappa (neyman) --- przejście ma wypaść przy
+S* = kappa*V/B^2 z V i B zmierzonymi w tym samym przebiegu, bez dopasowywania.
+[2026-10-24 07:02:58] DONE p3 kappa Neyman {1,3,5,7}
+IQMClient.get_calibration_quality_metrics is an experimental method, and the API will likely change in the future with no backwards compatibility.
+Missing fidelity for clifford.xy.QB1
+Missing fidelity for clifford.xy.QB2
+Missing fidelity for clifford.xy.QB3
+Missing fidelity for clifford.xy.QB4
+Missing fidelity for clifford.xy.QB5
+fetching calibration from https://odra5.e-science.pl/ (auth: token) ...
+raw dump -> calibrations/odra_raw_20261023_2337_end.json
+mapped DeviceCalibration -> calibrations/odra_20261023_2337_end.json
+unmapped (still placeholder): []
+observations parsed: 462
+OK: all fields mapped from live ODRA calibration.
+hub: 0 t1_us: [18.27, 15.59, 12.73, 21.47, 23.53] p_2q: 0.02403
+[2026-10-24 07:03:03] calibration end saved
+[2026-10-24 07:03:03] === KONIEC ===

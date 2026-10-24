@@ -1,0 +1,195 @@
+{
+  "campaign": "odra_pilot",
+  "window_id": "p2_depth_L13",
+  "seed": 42,
+  "cli_args": {
+    "patterns": [
+      "star"
+    ],
+    "models_dir": "trained_models_hard",
+    "eval_points": 100,
+    "n_train": 100,
+    "shots": 8192,
+    "seed": 42,
+    "layers": 13,
+    "max_batch": 100,
+    "url": "https://odra5.e-science.pl/",
+    "campaign": "odra_pilot",
+    "window_id": "p2_depth_L13",
+    "no_provenance": false,
+    "allow_archive_write": false,
+    "allow_env_mismatch": false,
+    "submit": true,
+    "sim": false,
+    "zne": true,
+    "legacy_clamp": false,
+    "sim_device": null,
+    "sim_theta": 0.0,
+    "sim_phi": 0.0,
+    "sim_eps": 0.0,
+    "sim_no_idle": false,
+    "sim_schedule": "alap",
+    "sim_gate_t2": "echo",
+    "legacy_transpile": false,
+    "out": "runs/odra_pilot/p2_depth_L13/cdr_zne.csv"
+  },
+  "started_utc": "2026-10-24T01:58:11.898Z",
+  "finished_utc": "2026-10-24T02:21:17.911Z",
+  "calibration_set_id": {
+    "start": null,
+    "end": null
+  },
+  "job_ids": [
+    "01a16ba1-54c2-79c0-9345-737c5fcd84c2",
+    "01a16ba6-7429-7b12-a44c-f7c1b60facc4",
+    "01a16bab-aec9-7622-b7a5-d8d431974991",
+    "01a16bb1-08d4-7ad0-8169-7c57dcb797b9"
+  ],
+  "device": "odra",
+  "submitted": true,
+  "notes": [],
+  "extra": {
+    "previous_attempts": [
+      {
+        "started_utc": "2026-10-23T16:39:50.093Z",
+        "finished_utc": null,
+        "job_ids": [],
+        "notes": [],
+        "cli_args": {
+          "patterns": [
+            "star"
+          ],
+          "models_dir": "trained_models_hard",
+          "eval_points": 100,
+          "n_train": 100,
+          "shots": 8192,
+          "seed": 42,
+          "layers": 13,
+          "max_batch": 100,
+          "url": "https://odra5.e-science.pl/",
+          "campaign": "odra_pilot",
+          "window_id": "p2_depth_L13",
+          "no_provenance": false,
+          "allow_archive_write": false,
+          "allow_env_mismatch": false,
+          "submit": true,
+          "sim": false,
+          "zne": true,
+          "legacy_clamp": false,
+          "sim_device": null,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "sim_no_idle": false,
+          "sim_schedule": "alap",
+          "sim_gate_t2": "echo",
+          "legacy_transpile": false,
+          "out": "runs/odra_pilot/p2_depth_L13/cdr_zne.csv"
+        },
+        "calibration_set_id": {
+          "start": null,
+          "end": null
+        },
+        "git_commit": "04eb6b841bc48bd2c880dc2748f6d2e0b77baa04",
+        "git_dirty": true
+      },
+      {
+        "started_utc": "2026-10-23T18:29:17.224Z",
+        "finished_utc": null,
+        "job_ids": [],
+        "notes": [],
+        "cli_args": {
+          "patterns": [
+            "star"
+          ],
+          "models_dir": "trained_models_hard",
+          "eval_points": 100,
+          "n_train": 100,
+          "shots": 8192,
+          "seed": 42,
+          "layers": 13,
+          "max_batch": 100,
+          "url": "https://odra5.e-science.pl/",
+          "campaign": "odra_pilot",
+          "window_id": "p2_depth_L13",
+          "no_provenance": false,
+          "allow_archive_write": false,
+          "allow_env_mismatch": false,
+          "submit": true,
+          "sim": false,
+          "zne": true,
+          "legacy_clamp": false,
+          "sim_device": null,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "sim_no_idle": false,
+          "sim_schedule": "alap",
+          "sim_gate_t2": "echo",
+          "legacy_transpile": false,
+          "out": "runs/odra_pilot/p2_depth_L13/cdr_zne.csv"
+        },
+        "calibration_set_id": {
+          "start": null,
+          "end": null
+        },
+        "git_commit": "f9598d3836758519c8ac14327098a1688328b072",
+        "git_dirty": true
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.13.9",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "argv": [
+      "run_odra_cdr.py",
+      "--submit",
+      "--zne",
+      "--patterns",
+      "star",
+      "--layers",
+      "13",
+      "--eval-points",
+      "100",
+      "--n-train",
+      "100",
+      "--shots",
+      "8192",
+      "--campaign",
+      "odra_pilot",
+      "--window-id",
+      "p2_depth_L13",
+      "--out",
+      "runs/odra_pilot/p2_depth_L13/cdr_zne.csv"
+    ],
+    "packages": {
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3"
+    },
+    "locked": {
+      "python": "3.13.9",
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "qiskit-ibm-runtime": "0.47.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.6",
+      "scikit-learn": "1.7.2",
+      "statsmodels": "0.14.5",
+      "torch": "2.12.0",
+      "qml_benchmarks": "0.1"
+    },
+    "git_commit": "2d7e24540779bf67844f511aad088c96a2e963f0",
+    "git_branch": "paper-odra-campaign",
+    "git_dirty": true,
+    "git_dirty_files": 1
+  },
+  "split_window": false
+}

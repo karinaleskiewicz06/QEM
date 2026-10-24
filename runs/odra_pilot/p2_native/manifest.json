@@ -1,0 +1,244 @@
+{
+  "campaign": "odra_pilot",
+  "window_id": "p2_native",
+  "seed": 42,
+  "cli_args": {
+    "device": "odra",
+    "native_twirl": true,
+    "legacy_native_twirl": false,
+    "points": [
+      "optimal:linear",
+      "optimal:circular"
+    ],
+    "models_dir": "trained_models_hard",
+    "eval_points": 4,
+    "shots": 8192,
+    "n_train": 10,
+    "n_twirl": 6,
+    "arms": [
+      "cdr"
+    ],
+    "twirl_arms": [
+      "cdr"
+    ],
+    "match_shots": true,
+    "submit": true,
+    "sim": false,
+    "calibration": null,
+    "sim_coh": 0.0,
+    "seed": 42,
+    "window_id": "p2_native",
+    "campaign": "odra_pilot",
+    "no_provenance": false,
+    "legacy_clamp": false,
+    "sim_device": null,
+    "sim_theta": 0.0,
+    "sim_phi": 0.0,
+    "sim_eps": 0.0,
+    "sim_no_idle": false,
+    "sim_schedule": "alap",
+    "sim_gate_t2": "echo",
+    "legacy_transpile": false,
+    "allow_archive_write": false,
+    "allow_env_mismatch": false,
+    "out": "runs/odra_pilot/p2_native/twirl_native.csv",
+    "resume": true
+  },
+  "started_utc": "2026-10-23T22:41:59.676Z",
+  "finished_utc": "2026-10-23T23:41:15.183Z",
+  "calibration_set_id": {
+    "start": null,
+    "end": null
+  },
+  "job_ids": [
+    "01a16aed-b9a9-7da3-83fe-68874c938b65",
+    "01a16af2-d0a2-7d41-946d-27d2c14e8ae3",
+    "01a16af7-e9fd-7de3-a4fb-de6b33c69f51",
+    "01a16afb-3934-7a31-bc16-1a936ef3bdcc",
+    "01a16b00-599b-7533-b52f-d3f9ff965dd0",
+    "01a16b05-787b-7c62-8e32-f4ab23637283",
+    "01a16b08-c4b7-7f40-b592-af6a658f03ff",
+    "01a16b0d-e224-7a10-937d-f23758bb6aca",
+    "01a16b12-fddf-7160-ac48-6cbff109f7e3",
+    "01a16b16-5583-7ca3-b11b-7b5865683a21",
+    "01a16b1b-7449-7102-b57e-89baab6e2f92",
+    "01a16b20-92e4-7162-ac79-e886a7f8ec57"
+  ],
+  "device": "odra",
+  "submitted": true,
+  "notes": [],
+  "extra": {
+    "previous_attempts": [
+      {
+        "started_utc": "2026-10-23T16:36:37.203Z",
+        "finished_utc": null,
+        "job_ids": [],
+        "notes": [],
+        "cli_args": {
+          "device": "odra",
+          "native_twirl": true,
+          "legacy_native_twirl": false,
+          "points": [
+            "optimal:linear",
+            "optimal:circular"
+          ],
+          "models_dir": "trained_models_hard",
+          "eval_points": 4,
+          "shots": 8192,
+          "n_train": 10,
+          "n_twirl": 6,
+          "arms": [
+            "cdr"
+          ],
+          "twirl_arms": [
+            "cdr"
+          ],
+          "match_shots": true,
+          "submit": true,
+          "sim": false,
+          "calibration": null,
+          "sim_coh": 0.0,
+          "seed": 42,
+          "window_id": "p2_native",
+          "campaign": "odra_pilot",
+          "no_provenance": false,
+          "legacy_clamp": false,
+          "sim_device": null,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "sim_no_idle": false,
+          "sim_schedule": "alap",
+          "sim_gate_t2": "echo",
+          "legacy_transpile": false,
+          "allow_archive_write": false,
+          "allow_env_mismatch": false,
+          "out": "runs/odra_pilot/p2_native/twirl_native.csv",
+          "resume": false
+        },
+        "calibration_set_id": {
+          "start": null,
+          "end": null
+        },
+        "git_commit": "04eb6b841bc48bd2c880dc2748f6d2e0b77baa04",
+        "git_dirty": true
+      },
+      {
+        "started_utc": "2026-10-23T18:28:58.956Z",
+        "finished_utc": null,
+        "job_ids": [],
+        "notes": [],
+        "cli_args": {
+          "device": "odra",
+          "native_twirl": true,
+          "legacy_native_twirl": false,
+          "points": [
+            "optimal:linear",
+            "optimal:circular"
+          ],
+          "models_dir": "trained_models_hard",
+          "eval_points": 4,
+          "shots": 8192,
+          "n_train": 10,
+          "n_twirl": 6,
+          "arms": [
+            "cdr"
+          ],
+          "twirl_arms": [
+            "cdr"
+          ],
+          "match_shots": true,
+          "submit": true,
+          "sim": false,
+          "calibration": null,
+          "sim_coh": 0.0,
+          "seed": 42,
+          "window_id": "p2_native",
+          "campaign": "odra_pilot",
+          "no_provenance": false,
+          "legacy_clamp": false,
+          "sim_device": null,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "sim_no_idle": false,
+          "sim_schedule": "alap",
+          "sim_gate_t2": "echo",
+          "legacy_transpile": false,
+          "allow_archive_write": false,
+          "allow_env_mismatch": false,
+          "out": "runs/odra_pilot/p2_native/twirl_native.csv",
+          "resume": false
+        },
+        "calibration_set_id": {
+          "start": null,
+          "end": null
+        },
+        "git_commit": "f9598d3836758519c8ac14327098a1688328b072",
+        "git_dirty": true
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.13.9",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "argv": [
+      "run_garnet_twirl.py",
+      "--submit",
+      "--device",
+      "odra",
+      "--native-twirl",
+      "--resume",
+      "--points",
+      "optimal:linear",
+      "optimal:circular",
+      "--arms",
+      "cdr",
+      "--twirl-arms",
+      "cdr",
+      "--eval-points",
+      "4",
+      "--shots",
+      "8192",
+      "--n-train",
+      "10",
+      "--n-twirl",
+      "6",
+      "--campaign",
+      "odra_pilot",
+      "--window-id",
+      "p2_native",
+      "--out",
+      "runs/odra_pilot/p2_native/twirl_native.csv"
+    ],
+    "packages": {
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3"
+    },
+    "locked": {
+      "python": "3.13.9",
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "qiskit-ibm-runtime": "0.47.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.6",
+      "scikit-learn": "1.7.2",
+      "statsmodels": "0.14.5",
+      "torch": "2.12.0",
+      "qml_benchmarks": "0.1"
+    },
+    "git_commit": "2d7e24540779bf67844f511aad088c96a2e963f0",
+    "git_branch": "paper-odra-campaign",
+    "git_dirty": true,
+    "git_dirty_files": 1
+  },
+  "split_window": false
+}

@@ -1,0 +1,5 @@
+device,placement,pattern,transpiled_cz,per_pattern_weights,err_raw,err_cdr,acc_raw,acc_cdr,f1_raw,f1_cdr,err_zne,cdr_a,cdr_b,cdr_r2,mean_lam1,mean_lam3,mean_lam5,fallback_used,unphysical,retention_norm,snr_lmax,w_neg,dd,n_train,shots,effective_shots,source
+odra,optimal,star,12,True,0.0638,0.0312,0.69,0.68,0.69,0.6795,0.0284,1.1572,-0.021,0.9301,-0.0123,-0.031,-0.0298,0,0,1.5181,25.96,0.00749,False,100,8192,827392,hardware
+odra,optimal,linear,30,True,0.1388,0.0771,0.74,0.71,0.7348,0.7076,0.0877,1.6658,-0.0619,0.8238,0.0513,0.0624,0.06,0,0,1.2126,11.733,0.00179,False,100,8192,827392,hardware
+odra,optimal,circular,39,True,0.1811,0.1083,0.74,0.72,0.7348,0.7196,0.1315,2.0473,-0.0499,0.6864,0.0207,0.0306,0.0283,0,0,56.1565,5.664,5e-05,False,100,8192,827392,hardware
+odra,optimal,all_to_all,57,True,0.2679,0.1587,0.69,0.74,0.6847,0.7399,0.1982,2.2414,-0.0655,0.5978,0.0225,0.0289,0.0292,0,0,0.382,5.843,0.0004,False,100,8192,827392,hardware

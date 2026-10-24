@@ -1,0 +1,233 @@
+{
+  "campaign": "odra_pilot",
+  "window_id": "p2_kappa_u135",
+  "seed": 42,
+  "cli_args": {
+    "device": "odra",
+    "points": [
+      "optimal:star"
+    ],
+    "budgets": [
+      256,
+      512,
+      1024,
+      2048,
+      4096
+    ],
+    "reps": 10,
+    "eval_points": 4,
+    "models_dir": "trained_models_hard",
+    "seed": 42,
+    "submit": true,
+    "sim": false,
+    "scales": null,
+    "allocation": "uniform",
+    "pilot_shots": 2048,
+    "legacy_clamp": false,
+    "out": "runs/odra_pilot/p2_kappa_u135/kappa.csv",
+    "resume": true,
+    "campaign": "odra_pilot",
+    "window_id": "p2_kappa_u135",
+    "no_provenance": false,
+    "sim_device": null,
+    "sim_theta": 0.0,
+    "sim_phi": 0.0,
+    "sim_eps": 0.0,
+    "sim_no_idle": false,
+    "sim_schedule": "alap",
+    "sim_gate_t2": "echo",
+    "legacy_transpile": false,
+    "allow_archive_write": false,
+    "allow_env_mismatch": false
+  },
+  "started_utc": "2026-10-23T21:37:59.427Z",
+  "finished_utc": "2026-10-23T21:40:29.004Z",
+  "calibration_set_id": {
+    "start": null,
+    "end": null
+  },
+  "job_ids": [
+    "01a16ab3-279d-7911-a6ed-c533b60e8d84",
+    "01a16ab4-38ac-74b0-b1a9-b572e7c7d0ea",
+    "01a16ab5-1ba8-7272-aa8f-acb509b2da0d"
+  ],
+  "device": "odra",
+  "submitted": true,
+  "notes": [],
+  "extra": {
+    "previous_attempts": [
+      {
+        "started_utc": "2026-10-23T16:25:22.264Z",
+        "finished_utc": null,
+        "job_ids": [
+          "01a16994-ebd8-7af1-8ef5-96096c0e2ebb",
+          "01a16995-0b0b-7aa3-b0bf-6b1fb2197ce8",
+          "01a16995-25a3-7563-b1db-2a0c48ca43bb",
+          "01a16995-3161-71f1-9309-e6eea02d0742",
+          "01a16995-6211-73c0-aaa2-f824fcb547e5",
+          "01a16995-8604-7e63-9c20-a43fb09cf107",
+          "01a16995-9451-7c30-94fb-6b4ef75c32be",
+          "01a16995-e437-71f3-98de-7928061ebf4c",
+          "01a16996-21f3-7b61-95c8-355768e242a2",
+          "01a16996-3889-7930-acaf-57ab6ec34714",
+          "01a16996-ca84-70e0-9e74-572327cbbbca",
+          "01a16997-3e04-7bb0-8e24-74625eaf2704",
+          "01a16997-5afd-7c10-8261-cd719538c807"
+        ],
+        "notes": [],
+        "cli_args": {
+          "device": "odra",
+          "points": [
+            "optimal:star"
+          ],
+          "budgets": [
+            256,
+            512,
+            1024,
+            2048,
+            4096
+          ],
+          "reps": 10,
+          "eval_points": 4,
+          "models_dir": "trained_models_hard",
+          "seed": 42,
+          "submit": true,
+          "sim": false,
+          "scales": null,
+          "allocation": "uniform",
+          "pilot_shots": 2048,
+          "legacy_clamp": false,
+          "out": "runs/odra_pilot/p2_kappa_u135/kappa.csv",
+          "resume": false,
+          "campaign": "odra_pilot",
+          "window_id": "p2_kappa_u135",
+          "no_provenance": false,
+          "sim_device": null,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "sim_no_idle": false,
+          "sim_schedule": "alap",
+          "sim_gate_t2": "echo",
+          "legacy_transpile": false,
+          "allow_archive_write": false,
+          "allow_env_mismatch": false
+        },
+        "calibration_set_id": {
+          "start": null,
+          "end": null
+        },
+        "git_commit": "04eb6b841bc48bd2c880dc2748f6d2e0b77baa04",
+        "git_dirty": true
+      },
+      {
+        "started_utc": "2026-10-23T18:28:49.304Z",
+        "finished_utc": null,
+        "job_ids": [],
+        "notes": [],
+        "cli_args": {
+          "device": "odra",
+          "points": [
+            "optimal:star"
+          ],
+          "budgets": [
+            256,
+            512,
+            1024,
+            2048,
+            4096
+          ],
+          "reps": 10,
+          "eval_points": 4,
+          "models_dir": "trained_models_hard",
+          "seed": 42,
+          "submit": true,
+          "sim": false,
+          "scales": null,
+          "allocation": "uniform",
+          "pilot_shots": 2048,
+          "legacy_clamp": false,
+          "out": "runs/odra_pilot/p2_kappa_u135/kappa.csv",
+          "resume": true,
+          "campaign": "odra_pilot",
+          "window_id": "p2_kappa_u135",
+          "no_provenance": false,
+          "sim_device": null,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "sim_no_idle": false,
+          "sim_schedule": "alap",
+          "sim_gate_t2": "echo",
+          "legacy_transpile": false,
+          "allow_archive_write": false,
+          "allow_env_mismatch": false
+        },
+        "calibration_set_id": {
+          "start": null,
+          "end": null
+        },
+        "git_commit": "f9598d3836758519c8ac14327098a1688328b072",
+        "git_dirty": true
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.13.9",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "argv": [
+      "zne_shot_boundary.py",
+      "--submit",
+      "--device",
+      "odra",
+      "--resume",
+      "--points",
+      "optimal:star",
+      "--budgets",
+      "256",
+      "512",
+      "1024",
+      "2048",
+      "4096",
+      "--reps",
+      "10",
+      "--eval-points",
+      "4",
+      "--campaign",
+      "odra_pilot",
+      "--window-id",
+      "p2_kappa_u135",
+      "--out",
+      "runs/odra_pilot/p2_kappa_u135/kappa.csv"
+    ],
+    "packages": {
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3"
+    },
+    "locked": {
+      "python": "3.13.9",
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "qiskit-ibm-runtime": "0.47.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.6",
+      "scikit-learn": "1.7.2",
+      "statsmodels": "0.14.5",
+      "torch": "2.12.0",
+      "qml_benchmarks": "0.1"
+    },
+    "git_commit": "2d7e24540779bf67844f511aad088c96a2e963f0",
+    "git_branch": "paper-odra-campaign",
+    "git_dirty": true,
+    "git_dirty_files": 1
+  },
+  "split_window": false
+}
