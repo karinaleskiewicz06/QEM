@@ -1,0 +1,14 @@
+all L3          raw cz10   n=56 factor 0.955 CI_t7 [0.74, 1.24] p_normal 0.68 p_t7 0.69 p_wildboot 0.680
+all L3          raw dur_us n=56 factor 1.434 CI_t7 [1.27, 1.61] p_normal 5.3e-13 p_t7 0.00017 p_wildboot 0.008
+all L3          cdr cz10   n=56 factor 1.339 CI_t7 [1.07, 1.67] p_normal 0.002 p_t7 0.018 p_wildboot 0.016
+all L3          cdr dur_us n=56 factor 1.321 CI_t7 [0.69, 2.53] p_normal 0.31 p_t7 0.35 p_wildboot 0.305
+drop cz52       raw cz10   n=48 factor 1.025 CI_t7 [0.67, 1.56] p_normal 0.89 p_t7 0.9 p_wildboot 0.914
+drop cz52       raw dur_us n=48 factor 1.484 CI_t7 [1.29, 1.71] p_normal 2.1e-11 p_t7 0.00028 p_wildboot 0.008
+drop cz52       cdr cz10   n=48 factor 1.586 CI_t7 [1.20, 2.09] p_normal 8.5e-05 p_t7 0.0057 p_wildboot 0.008
+drop cz52       cdr dur_us n=48 factor 1.434 CI_t7 [0.71, 2.91] p_normal 0.23 p_t7 0.27 p_wildboot 0.227
+drop cz24+cz52  raw cz10   n=40 factor 1.029 CI_t7 [0.68, 1.55] p_normal 0.87 p_t7 0.87 p_wildboot 0.906
+drop cz24+cz52  raw dur_us n=40 factor 1.478 CI_t7 [1.22, 1.79] p_normal 1.3e-06 p_t7 0.0019 p_wildboot 0.008
+drop cz24+cz52  cdr cz10   n=40 factor 1.703 CI_t7 [1.37, 2.12] p_normal 9.1e-09 p_t7 0.0007 p_wildboot 0.008
+drop cz24+cz52  cdr dur_us n=40 factor 1.334 CI_t7 [0.62, 2.89] p_normal 0.38 p_t7 0.41 p_wildboot 0.359
+|ideal|>=0.1    raw cz10   n=42 G=6 factor 1.107 p_t(G-1) 0.0078
+|ideal|>=0.1    raw dur_us n=42 G=6 factor 1.432 p_t(G-1) 0.00064

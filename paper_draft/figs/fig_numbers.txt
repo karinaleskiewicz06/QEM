@@ -1,0 +1,27 @@
+fig1 12CZ off=0.0216 tw=0.0150 wins=4/8 geo=1.410
+fig1 39CZ off=0.0529 tw=0.0397 wins=7/8 geo=0.683
+fig2 12CZ raw ($\lambda{=}1$) mean=0.0690
+fig2 12CZ genuine mean=0.0452
+fig2 12CZ garbage mean=0.1373
+fig2 12CZ identity mean=0.0720
+fig2 12CZ floor_tracking_median=0.1719 retention=0.815 wneg=0.0045 snr=23.36
+fig2 12CZ raw_from_CDR_target(M*S)=0.0737
+fig2 39CZ raw ($\lambda{=}1$) mean=0.1584
+fig2 39CZ genuine mean=0.1115
+fig2 39CZ garbage mean=0.1028
+fig2 39CZ identity mean=0.1939
+fig2 39CZ floor_tracking_median=0.0160 retention=0.240 wneg=0.0000 snr=4.09
+fig2 39CZ raw_from_CDR_target(M*S)=0.1608
+fig2 identity mean ev lam3/lam5: {'ev_lam3': {'circular': 0.403, 'star': 0.156}, 'ev_lam5': {'circular': 0.568, 'star': 0.282}}
+fig3 star_L6      L6/L9/L13     ncz=24 dur=1.58us raw=0.1156 cdr=0.0367 n=8
+fig3 star_L9      L6/L9/L13     ncz=36 dur=2.36us raw=0.2266 cdr=0.1348 n=8
+fig3 star_L13     L6/L9/L13     ncz=52 dur=3.40us raw=0.2511 cdr=0.1847 n=8
+fig3 star         base          ncz=12 dur=0.80us raw=0.0672 cdr=0.0209 n=8
+fig3 star_cz24    cz_pairs      ncz=24 dur=1.52us raw=0.0938 cdr=0.0220 n=8
+fig3 star_cz36    cz_pairs      ncz=36 dur=2.24us raw=0.1588 cdr=0.0723 n=8
+fig3 star_cz52    cz_pairs      ncz=52 dur=3.20us raw=0.1765 cdr=0.0741 n=8
+fig3 star_idle24  idle_matched  ncz=12 dur=1.52us raw=0.0899 cdr=0.0139 n=8
+fig3 star_idle36  idle_matched  ncz=12 dur=2.24us raw=0.1121 cdr=0.0313 n=8
+fig3 star_idle52  idle_matched  ncz=12 dur=3.20us raw=0.1467 cdr=0.0374 n=8
+fig4 12CZ zne=0.0452 remzne=0.0162 raw24=0.0737 off=[(0.25, 0.0284), (0.5, 0.0251), (1.0, 0.0238), (2.0, 0.0226), (4.0, 0.0224), (8.0, 0.0219), (16.0, 0.0217), (42.0, 0.0216)] tw=[(0.25, 0.0215), (0.5, 0.0185), (1.0, 0.0168), (2.0, 0.016), (4.0, 0.0153), (8.0, 0.015), (16.0, 0.015), (42.0, 0.015)]
+fig4 39CZ zne=0.1115 remzne=0.1073 raw24=0.1609 off=[(0.25, 0.1186), (0.5, 0.091), (1.0, 0.0748), (2.0, 0.0637), (4.0, 0.0578), (8.0, 0.0549), (16.0, 0.0535), (42.0, 0.0529)] tw=[(0.25, 0.1116), (0.5, 0.076), (1.0, 0.0561), (2.0, 0.0452), (4.0, 0.0419), (8.0, 0.0404), (16.0, 0.0397), (42.0, 0.0397)]
