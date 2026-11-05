@@ -210,7 +210,7 @@ def submit_batch(client, batch, shots, dd_on):
                   what="submit_circuits")
 
 
-def fetch_counts(client, job, timeout_s=1800, attempts=8):
+def fetch_counts(client, job, timeout_s=7200, attempts=8):
     """Wait for a submitted job and return counts (with retry on transient errors).
 
     Only the wait/fetch is retried here; the job is already on the server, so a

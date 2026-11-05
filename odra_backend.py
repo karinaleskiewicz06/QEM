@@ -44,6 +44,7 @@ from zne_dryrun import IQM_BASIS_GATES
 # ODRA przyjmuje wsady; 100 obwodów na zgłoszenie trzyma je w rozmiarze, który serwer przyjmuje
 # bez kolejkowania w nieskończoność (ta sama wartość co limit Resonance, dla spójności logów).
 MAX_CIRCUITS_PER_JOB = 100
+SHOTS_PER_JOB = 100 * 8192
 
 
 class OdraBackend:
@@ -120,6 +121,8 @@ def run_circuits(backend, circuits, shots: int, max_per_job: int = MAX_CIRCUITS_
     n = circuits[0].num_qubits
     wires = [logical_final_wires(c, n) for c in circuits]
     out: list[dict[str, int]] = []
+    # keep one job at <= SHOTS_PER_JOB shots (night A: 100 x 8192); larger jobs outlive the wait
+    max_per_job = max(1, min(max_per_job, SHOTS_PER_JOB // shots))
     for i in range(0, len(circuits), max_per_job):
         chunk = circuits[i:i + max_per_job]
         job = submit_batch(backend.client, [qiskit_to_iqm(c) for c in chunk], shots, dd_on=dd)
