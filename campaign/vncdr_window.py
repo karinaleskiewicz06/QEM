@@ -277,7 +277,8 @@ def main(argv=None):
     ap.add_argument("--t-cz", type=float, default=60e-9)
     ap.add_argument("--t-prx", type=float, default=20e-9)
     ap.add_argument("--resume", action="store_true")
-    ap.add_argument("--chunk", type=int, default=400)
+    ap.add_argument("--chunk", type=int, default=25,
+                    help="circuits per executor call; each call is saved at once (resume unit)")
     ap.add_argument("--no-qasm", action="store_true")
     ap.add_argument("--sim-theta", type=float, default=0.0)
     ap.add_argument("--sim-phi", type=float, default=0.0)
