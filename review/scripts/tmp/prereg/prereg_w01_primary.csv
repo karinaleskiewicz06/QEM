@@ -1,0 +1,6 @@
+id,comparison,n_pairs,p,ratio,ci_lo,ci_hi,a_better,per_rung,p_holm,reject
+H1,twirl_native:near_target vs off_copies:near_target,16,0.3528594970703125,0.9811514698420237,0.6050069787830709,1.698463088409401,11.0,"{'circular': 0.6825, 'star': 1.4105}",1.0,False
+H3,twirl_native:shared_random vs twirl_logical:shared_random,16,0.85107421875,1.356831562115617,0.8611478869825997,2.2101573889925867,7.0,"{'circular': 1.2373, 'star': 1.4879}",1.0,False
+H6,spread:near_target vs twirl_native:near_target,16,0.5500335693359375,1.114943142658162,0.6208661282258233,1.9982994683761806,8.0,"{'circular': 1.7513, 'star': 0.7098}",1.0,False
+H7a,coefficient of cz10 on log raw error,56,0.6604150977711708,0.9554790146186838,0.7700031193622333,1.1856317518984176,,,1.0,False
+H7b,coefficient of dur_us on log raw error,56,2.6338013214173146e-13,1.4339972304202533,1.3002913682930675,1.5814517476589796,,,1.3169006607086573e-12,True

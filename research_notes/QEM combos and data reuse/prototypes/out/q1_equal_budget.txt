@@ -1,0 +1,102 @@
+
+## star  (n_cz=12)
+ZNE genuine realized: mean err 0.0452; raw(λ1, 8192 sh) 0.0690; raw at 24,576 sh (expected) 0.0737
+ZNE vs raw24: mean err ZNE=0.0452 raw24=0.0737; diff -0.0285 [95% boot -0.0672,+0.0085]; geo ratio 0.82 [0.35,1.89]; ZNE wins 5/8; Wilcoxon 2-sided p=0.461
+  off_copies:near_target T=8192 N=20 s=819: E|err| 0.0239  (full-budget CDR 0.0216); P(single CDR draw < ZNE) 0.89
+  off_copies:near_target T=8192 N=10 s=1638: E|err| 0.0262  (full-budget CDR 0.0216); P(single CDR draw < ZNE) 0.84
+  off_copies:near_target T=8192 N=8 s=2048: E|err| 0.0266  (full-budget CDR 0.0216); P(single CDR draw < ZNE) 0.83
+  off_copies:near_target T=8192 N=4 s=4096: E|err| 0.0443  (full-budget CDR 0.0216); P(single CDR draw < ZNE) 0.69
+  off_copies:near_target T=4096 N=10 s=2048: E|err| 0.0269  (full-budget CDR 0.0216); P(single CDR draw < ZNE) 0.81
+  off_copies:near_target T=12288 N=6 s=2048: E|err| 0.0326  (full-budget CDR 0.0216); P(single CDR draw < ZNE) 0.78
+  off_copies:near_target T=16384 N=4 s=2048: E|err| 0.0437  (full-budget CDR 0.0216); P(single CDR draw < ZNE) 0.69
+  off_copies:near_target T=4096 N=20 s=1024: E|err| 0.0243  (full-budget CDR 0.0216); P(single CDR draw < ZNE) 0.87
+ BEST off_copies:near_target (8192, 20, 819): mean err CDR@24k=0.0239 ZNE=0.0452; diff -0.0213 [95% boot -0.0319,-0.0108]; geo ratio 0.41 [0.25,0.64]; CDR@24k wins 8/8; Wilcoxon 2-sided p=0.008
+      vs raw24: mean err CDR@24k=0.0239 raw24=0.0737; diff -0.0498 [95% boot -0.0838,-0.0154]; geo ratio 0.33 [0.15,0.79]; CDR@24k wins 6/8; Wilcoxon 2-sided p=0.039
+  twirl_native:near_target T=8192 N=20 s=819: E|err| 0.0164  (full-budget CDR 0.0150); P(single CDR draw < ZNE) 0.96
+  twirl_native:near_target T=8192 N=10 s=1638: E|err| 0.0177  (full-budget CDR 0.0150); P(single CDR draw < ZNE) 0.94
+  twirl_native:near_target T=8192 N=8 s=2048: E|err| 0.0186  (full-budget CDR 0.0150); P(single CDR draw < ZNE) 0.92
+  twirl_native:near_target T=8192 N=4 s=4096: E|err| 0.0319  (full-budget CDR 0.0150); P(single CDR draw < ZNE) 0.82
+  twirl_native:near_target T=4096 N=10 s=2048: E|err| 0.0181  (full-budget CDR 0.0150); P(single CDR draw < ZNE) 0.92
+  twirl_native:near_target T=12288 N=6 s=2048: E|err| 0.0216  (full-budget CDR 0.0150); P(single CDR draw < ZNE) 0.90
+  twirl_native:near_target T=16384 N=4 s=2048: E|err| 0.0326  (full-budget CDR 0.0150); P(single CDR draw < ZNE) 0.82
+  twirl_native:near_target T=4096 N=20 s=1024: E|err| 0.0171  (full-budget CDR 0.0150); P(single CDR draw < ZNE) 0.95
+ BEST twirl_native:near_target (8192, 20, 819): mean err CDR@24k=0.0164 ZNE=0.0452; diff -0.0288 [95% boot -0.0374,-0.0191]; geo ratio 0.33 [0.21,0.50]; CDR@24k wins 8/8; Wilcoxon 2-sided p=0.008
+      vs raw24: mean err CDR@24k=0.0164 raw24=0.0737; diff -0.0573 [95% boot -0.0933,-0.0220]; geo ratio 0.27 [0.14,0.63]; CDR@24k wins 7/8; Wilcoxon 2-sided p=0.023
+  spread:near_target T=8192 N=20 s=819: E|err| 0.0178  (full-budget CDR 0.0122); P(single CDR draw < ZNE) 0.91
+  spread:near_target T=8192 N=16 s=1024: E|err| 0.0186  (full-budget CDR 0.0122); P(single CDR draw < ZNE) 0.90
+  spread:near_target T=8192 N=8 s=2048: E|err| 0.0230  (full-budget CDR 0.0122); P(single CDR draw < ZNE) 0.85
+  spread:near_target T=12288 N=6 s=2048: E|err| 0.0268  (full-budget CDR 0.0122); P(single CDR draw < ZNE) 0.80
+  spread:near_target T=4096 N=20 s=1024: E|err| 0.0182  (full-budget CDR 0.0122); P(single CDR draw < ZNE) 0.90
+ BEST spread:near_target (8192, 20, 819): mean err CDR@24k=0.0178 ZNE=0.0452; diff -0.0275 [95% boot -0.0348,-0.0174]; geo ratio 0.39 [0.26,0.61]; CDR@24k wins 7/8; Wilcoxon 2-sided p=0.016
+      vs raw24: mean err CDR@24k=0.0178 raw24=0.0737; diff -0.0560 [95% boot -0.0914,-0.0214]; geo ratio 0.32 [0.17,0.68]; CDR@24k wins 7/8; Wilcoxon 2-sided p=0.023
+  twirl_logical:shared_random T=8192 N=20 s=819: E|err| 0.0345  (full-budget CDR 0.0194); P(single CDR draw < ZNE) 0.68
+  twirl_logical:shared_random T=8192 N=10 s=1638: E|err| 0.0814  (full-budget CDR 0.0194); P(single CDR draw < ZNE) 0.63
+  twirl_logical:shared_random T=8192 N=8 s=2048: E|err| 0.1086  (full-budget CDR 0.0194); P(single CDR draw < ZNE) 0.59
+  twirl_logical:shared_random T=8192 N=4 s=4096: E|err| 0.1871  (full-budget CDR 0.0194); P(single CDR draw < ZNE) 0.42
+  twirl_logical:shared_random T=4096 N=10 s=2048: E|err| 0.0795  (full-budget CDR 0.0194); P(single CDR draw < ZNE) 0.65
+  twirl_logical:shared_random T=12288 N=6 s=2048: E|err| 0.1490  (full-budget CDR 0.0194); P(single CDR draw < ZNE) 0.51
+  twirl_logical:shared_random T=16384 N=4 s=2048: E|err| 0.1925  (full-budget CDR 0.0194); P(single CDR draw < ZNE) 0.39
+  twirl_logical:shared_random T=4096 N=20 s=1024: E|err| 0.0312  (full-budget CDR 0.0194); P(single CDR draw < ZNE) 0.72
+ BEST twirl_logical:shared_random (4096, 20, 1024): mean err CDR@24k=0.0312 ZNE=0.0452; diff -0.0140 [95% boot -0.0257,-0.0007]; geo ratio 0.65 [0.37,1.19]; CDR@24k wins 7/8; Wilcoxon 2-sided p=0.078
+      vs raw24: mean err CDR@24k=0.0312 raw24=0.0737; diff -0.0426 [95% boot -0.0735,-0.0130]; geo ratio 0.54 [0.36,0.99]; CDR@24k wins 7/8; Wilcoxon 2-sided p=0.039
+  twirl_native:shared_random T=8192 N=20 s=819: E|err| 0.0462  (full-budget CDR 0.0308); P(single CDR draw < ZNE) 0.59
+  twirl_native:shared_random T=8192 N=10 s=1638: E|err| 0.0870  (full-budget CDR 0.0308); P(single CDR draw < ZNE) 0.58
+  twirl_native:shared_random T=8192 N=8 s=2048: E|err| 0.1182  (full-budget CDR 0.0308); P(single CDR draw < ZNE) 0.52
+  twirl_native:shared_random T=8192 N=4 s=4096: E|err| 0.1945  (full-budget CDR 0.0308); P(single CDR draw < ZNE) 0.37
+  twirl_native:shared_random T=4096 N=10 s=2048: E|err| 0.0905  (full-budget CDR 0.0308); P(single CDR draw < ZNE) 0.58
+  twirl_native:shared_random T=12288 N=6 s=2048: E|err| 0.1545  (full-budget CDR 0.0308); P(single CDR draw < ZNE) 0.45
+  twirl_native:shared_random T=16384 N=4 s=2048: E|err| 0.1959  (full-budget CDR 0.0308); P(single CDR draw < ZNE) 0.36
+  twirl_native:shared_random T=4096 N=20 s=1024: E|err| 0.0431  (full-budget CDR 0.0308); P(single CDR draw < ZNE) 0.62
+ BEST twirl_native:shared_random (4096, 20, 1024): mean err CDR@24k=0.0431 ZNE=0.0452; diff -0.0021 [95% boot -0.0224,+0.0203]; geo ratio 0.83 [0.44,1.75]; CDR@24k wins 5/8; Wilcoxon 2-sided p=0.844
+      vs raw24: mean err CDR@24k=0.0431 raw24=0.0737; diff -0.0306 [95% boot -0.0512,-0.0088]; geo ratio 0.69 [0.44,1.22]; CDR@24k wins 7/8; Wilcoxon 2-sided p=0.039
+
+## circular  (n_cz=39)
+ZNE genuine realized: mean err 0.1115; raw(λ1, 8192 sh) 0.1584; raw at 24,576 sh (expected) 0.1609
+ZNE vs raw24: mean err ZNE=0.1115 raw24=0.1609; diff -0.0494 [95% boot -0.0730,-0.0257]; geo ratio 0.50 [0.28,0.78]; ZNE wins 7/8; Wilcoxon 2-sided p=0.016
+  off_copies:near_target T=8192 N=20 s=819: E|err| 0.0753  (full-budget CDR 0.0529); P(single CDR draw < ZNE) 0.64
+  off_copies:near_target T=8192 N=10 s=1638: E|err| 0.0756  (full-budget CDR 0.0529); P(single CDR draw < ZNE) 0.61
+  off_copies:near_target T=8192 N=8 s=2048: E|err| 0.0792  (full-budget CDR 0.0529); P(single CDR draw < ZNE) 0.60
+  off_copies:near_target T=8192 N=4 s=4096: E|err| 0.1109  (full-budget CDR 0.0529); P(single CDR draw < ZNE) 0.44
+  off_copies:near_target T=4096 N=10 s=2048: E|err| 0.0751  (full-budget CDR 0.0529); P(single CDR draw < ZNE) 0.61
+  off_copies:near_target T=12288 N=6 s=2048: E|err| 0.0914  (full-budget CDR 0.0529); P(single CDR draw < ZNE) 0.53
+  off_copies:near_target T=16384 N=4 s=2048: E|err| 0.1180  (full-budget CDR 0.0529); P(single CDR draw < ZNE) 0.42
+  off_copies:near_target T=4096 N=20 s=1024: E|err| 0.0707  (full-budget CDR 0.0529); P(single CDR draw < ZNE) 0.65
+ BEST off_copies:near_target (4096, 20, 1024): mean err CDR@24k=0.0707 ZNE=0.1115; diff -0.0408 [95% boot -0.0839,-0.0013]; geo ratio 0.99 [0.59,1.81]; CDR@24k wins 5/8; Wilcoxon 2-sided p=0.195
+      vs raw24: mean err CDR@24k=0.0707 raw24=0.1609; diff -0.0902 [95% boot -0.1551,-0.0317]; geo ratio 0.49 [0.35,0.73]; CDR@24k wins 7/8; Wilcoxon 2-sided p=0.023
+  twirl_native:near_target T=8192 N=20 s=819: E|err| 0.0558  (full-budget CDR 0.0397); P(single CDR draw < ZNE) 0.58
+  twirl_native:near_target T=8192 N=10 s=1638: E|err| 0.0603  (full-budget CDR 0.0397); P(single CDR draw < ZNE) 0.57
+  twirl_native:near_target T=8192 N=8 s=2048: E|err| 0.0681  (full-budget CDR 0.0397); P(single CDR draw < ZNE) 0.54
+  twirl_native:near_target T=8192 N=4 s=4096: E|err| 0.1128  (full-budget CDR 0.0397); P(single CDR draw < ZNE) 0.38
+  twirl_native:near_target T=4096 N=10 s=2048: E|err| 0.0600  (full-budget CDR 0.0397); P(single CDR draw < ZNE) 0.58
+  twirl_native:near_target T=12288 N=6 s=2048: E|err| 0.0841  (full-budget CDR 0.0397); P(single CDR draw < ZNE) 0.49
+  twirl_native:near_target T=16384 N=4 s=2048: E|err| 0.1187  (full-budget CDR 0.0397); P(single CDR draw < ZNE) 0.37
+  twirl_native:near_target T=4096 N=20 s=1024: E|err| 0.0529  (full-budget CDR 0.0397); P(single CDR draw < ZNE) 0.58
+ BEST twirl_native:near_target (4096, 20, 1024): mean err CDR@24k=0.0529 ZNE=0.1115; diff -0.0587 [95% boot -0.1269,-0.0007]; geo ratio 0.86 [0.39,1.85]; CDR@24k wins 4/8; Wilcoxon 2-sided p=0.461
+      vs raw24: mean err CDR@24k=0.0529 raw24=0.1609; diff -0.1080 [95% boot -0.1992,-0.0294]; geo ratio 0.42 [0.25,0.72]; CDR@24k wins 7/8; Wilcoxon 2-sided p=0.023
+  spread:near_target T=8192 N=20 s=819: E|err| 0.1090  (full-budget CDR 0.0679); P(single CDR draw < ZNE) 0.46
+  spread:near_target T=8192 N=16 s=1024: E|err| 0.1059  (full-budget CDR 0.0679); P(single CDR draw < ZNE) 0.47
+  spread:near_target T=8192 N=8 s=2048: E|err| 0.1159  (full-budget CDR 0.0679); P(single CDR draw < ZNE) 0.45
+  spread:near_target T=12288 N=6 s=2048: E|err| 0.1263  (full-budget CDR 0.0679); P(single CDR draw < ZNE) 0.41
+  spread:near_target T=4096 N=20 s=1024: E|err| 0.1027  (full-budget CDR 0.0679); P(single CDR draw < ZNE) 0.48
+ BEST spread:near_target (4096, 20, 1024): mean err CDR@24k=0.1027 ZNE=0.1115; diff -0.0088 [95% boot -0.0409,+0.0149]; geo ratio 1.38 [0.85,2.41]; CDR@24k wins 5/8; Wilcoxon 2-sided p=1.000
+      vs raw24: mean err CDR@24k=0.1027 raw24=0.1609; diff -0.0581 [95% boot -0.1092,-0.0189]; geo ratio 0.68 [0.56,0.84]; CDR@24k wins 7/8; Wilcoxon 2-sided p=0.016
+  twirl_logical:shared_random T=8192 N=20 s=819: E|err| 0.0563  (full-budget CDR 0.0248); P(single CDR draw < ZNE) 0.74
+  twirl_logical:shared_random T=8192 N=10 s=1638: E|err| 0.0750  (full-budget CDR 0.0248); P(single CDR draw < ZNE) 0.62
+  twirl_logical:shared_random T=8192 N=8 s=2048: E|err| 0.0911  (full-budget CDR 0.0248); P(single CDR draw < ZNE) 0.56
+  twirl_logical:shared_random T=8192 N=4 s=4096: E|err| 0.1381  (full-budget CDR 0.0248); P(single CDR draw < ZNE) 0.34
+  twirl_logical:shared_random T=4096 N=10 s=2048: E|err| 0.0750  (full-budget CDR 0.0248); P(single CDR draw < ZNE) 0.62
+  twirl_logical:shared_random T=12288 N=6 s=2048: E|err| 0.1081  (full-budget CDR 0.0248); P(single CDR draw < ZNE) 0.48
+  twirl_logical:shared_random T=16384 N=4 s=2048: E|err| 0.1399  (full-budget CDR 0.0248); P(single CDR draw < ZNE) 0.34
+  twirl_logical:shared_random T=4096 N=20 s=1024: E|err| 0.0522  (full-budget CDR 0.0248); P(single CDR draw < ZNE) 0.72
+ BEST twirl_logical:shared_random (4096, 20, 1024): mean err CDR@24k=0.0522 ZNE=0.1115; diff -0.0593 [95% boot -0.1156,-0.0027]; geo ratio 0.76 [0.35,1.93]; CDR@24k wins 6/8; Wilcoxon 2-sided p=0.148
+      vs raw24: mean err CDR@24k=0.0522 raw24=0.1609; diff -0.1087 [95% boot -0.1851,-0.0385]; geo ratio 0.37 [0.26,0.58]; CDR@24k wins 7/8; Wilcoxon 2-sided p=0.023
+  twirl_native:shared_random T=8192 N=20 s=819: E|err| 0.0637  (full-budget CDR 0.0320); P(single CDR draw < ZNE) 0.63
+  twirl_native:shared_random T=8192 N=10 s=1638: E|err| 0.0783  (full-budget CDR 0.0320); P(single CDR draw < ZNE) 0.57
+  twirl_native:shared_random T=8192 N=8 s=2048: E|err| 0.0914  (full-budget CDR 0.0320); P(single CDR draw < ZNE) 0.53
+  twirl_native:shared_random T=8192 N=4 s=4096: E|err| 0.1315  (full-budget CDR 0.0320); P(single CDR draw < ZNE) 0.34
+  twirl_native:shared_random T=4096 N=10 s=2048: E|err| 0.0783  (full-budget CDR 0.0320); P(single CDR draw < ZNE) 0.56
+  twirl_native:shared_random T=12288 N=6 s=2048: E|err| 0.1060  (full-budget CDR 0.0320); P(single CDR draw < ZNE) 0.46
+  twirl_native:shared_random T=16384 N=4 s=2048: E|err| 0.1345  (full-budget CDR 0.0320); P(single CDR draw < ZNE) 0.34
+  twirl_native:shared_random T=4096 N=20 s=1024: E|err| 0.0597  (full-budget CDR 0.0320); P(single CDR draw < ZNE) 0.63
+ BEST twirl_native:shared_random (4096, 20, 1024): mean err CDR@24k=0.0597 ZNE=0.1115; diff -0.0519 [95% boot -0.1103,+0.0014]; geo ratio 0.92 [0.47,1.96]; CDR@24k wins 5/8; Wilcoxon 2-sided p=0.250
+      vs raw24: mean err CDR@24k=0.0597 raw24=0.1609; diff -0.1012 [95% boot -0.1820,-0.0311]; geo ratio 0.46 [0.31,0.68]; CDR@24k wins 7/8; Wilcoxon 2-sided p=0.023

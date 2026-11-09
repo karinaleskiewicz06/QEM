@@ -1,0 +1,1025 @@
+% Teoria do prezentacji "Gdzie mitygacja błędów przestaje się opłacać"
+% Kompilacja: latexmk -pdf prezentacja_teoria.tex
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{axblue}{HTML}{4AA8F5}
+\definecolor{axbluedk}{HTML}{1565C0}
+\definecolor{axgold}{HTML}{E3B53C}
+\definecolor{axgolddk}{HTML}{8A6A0B}
+\definecolor{axink}{HTML}{111318}
+
+\setlist{itemsep=2pt,topsep=4pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\linespread{1.08}
+
+\titleformat{\section}{\Large\bfseries}{\thesection}{10pt}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{8pt}{}
+\titlespacing*{\subsection}{0pt}{14pt}{4pt}
+
+\newcommand{\PH}{\colorbox{yellow!40}{\texttt{[\_\_]}}}
+\newcommand{\slid}[1]{\hfill{\normalfont\small\ttfamily\color{axbluedk}[#1]}}
+\newcommand{\ev}[1]{\langle #1\rangle}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\Oid}{O_{\mathrm{id}}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{cov}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\PRX}{\mathrm{PRX}}
+\newcommand{\CZ}{\mathrm{CZ}}
+\newcommand{\intu}{\paragraph{Intuicja.}}
+
+\title{\bfseries Gdzie mitygacja błędów przestaje się opłacać\\[4pt]
+\large\normalfont Matematyka, intuicja i metodologia --- w kolejności slajdów}
+\author{Karina Leśkiewicz\\\small KN Axion, Politechnika Wrocławska}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\noindent Tekst idzie w kolejności prezentacji; w nagłówkach podsekcji na niebiesko jest
+identyfikator slajdu, do którego się odnoszą. Pola \PH{} to liczby z okna \texttt{w01}, takie
+same jak żółte pola na slajdach.
+
+\tableofcontents
+\clearpage
+
+% =====================================================================
+\section*{Notacja}
+\addcontentsline{toc}{section}{Notacja}
+
+$O=\bar Z=\frac15\sum_{q=1}^5Z_q$ to obserwabla (średnie $Z$ po pięciu kubitach), $\Oid$ jej
+wartość bezszumowa, $E$ wartość zmierzona na sprzęcie, $\hat O$ wartość po mitygacji. Błąd na
+punkcie to $\varepsilon=|\hat O-\Oid|$. $S$ to liczba shotów na obwód ($8192$), $M$ liczba ramek
+twirlingu lub kopii ($6$), $n_{\text{train}}$ liczba obwodów treningowych CDR ($20$).
+
+Każdy estymator ma błąd średniokwadratowy
+\[
+  \mathrm{MSE}=\E\big[(\hat O-\Oid)^2\big]=B^2+\Var\hat O,\qquad B=\E\hat O-\Oid .
+\]
+Szum sprzętu tworzy obciążenie $B$, skończona liczba shotów tworzy wariancję. Mitygacja
+zmniejsza $B$ kosztem wariancji. Cała praca jest o tym, kiedy ta wymiana się opłaca.
+
+Jeden shot daje $\bar z=\frac15\sum_qz_q$, $z_q\in\{\pm1\}$, z wariancją $V\le1$; dla
+niezależnych kubitów $V=\frac1{25}\sum_q(1-\ev{Z_q}^2)\le0{,}2$. Po $S$ shotach błąd
+standardowy to $\sqrt{V/S}$, czyli przy $S=8192$ około $0{,}005$ (najwyżej $0{,}011$).
+
+% =====================================================================
+\section{QEM, a nie QEC}
+
+\subsection{Czym jest mitygacja \slid{qem\_what}}
+
+Procesor kwantowy nie zwraca $\ev{O}$, tylko ciągi bitów; $\ev{O}$ estymujemy z wielu shotów.
+Zaszumiony procesor realizuje zamiast unitarnej $U_C$ kanał $\tilde{\mathcal C}$, więc zamiast
+$\Oid=\Tr[O\,U_C\rho_0U_C^\dagger]$ estymujemy $E=\Tr[O\,\tilde{\mathcal C}(\rho_0)]$. Metoda
+mitygacji to przepis: wybierz obwody $C_1,\dots,C_K$, zmierz ich $E_k$ i zwróć
+$\hat O=g(E_1,\dots,E_K)$ dla klasycznej funkcji $g$. Stan kwantowy pozostaje zaszumiony;
+poprawiamy tylko liczbę odczytaną na końcu.
+
+\intu Szum ,,ściska'' wynik w stronę pewnej stałej. Informacja o $\Oid$ dalej w nim jest, tylko
+pomniejszona. Mitygacja ją rozciąga z powrotem, a razem z nią rozciąga szum shotów.
+
+\textbf{Dlaczego koszt rośnie wykładniczo.} Przy depolaryzacji z prawdopodobieństwem $p$ na
+bramkę i $N$ bramkach sygnał maleje jak $E=(1-p)^N\Oid\approx e^{-pN}\Oid$. Odzyskanie $\Oid$ to
+dzielenie przez $e^{-pN}$; szum shotów dzielimy tak samo, więc wariancja rośnie jak $e^{2pN}$, a
+z nią liczba shotów potrzebnych do ustalonej precyzji. Takagi i~in.\ (2022) oraz Quek i~in.\
+(2024) pokazali, że to cecha każdej metody QEM, nie tylko tej prostej: koszt w ogólności rośnie
+wykładniczo z głębokością. Punkt, w którym mitygacja przestaje się opłacać, zawsze więc
+istnieje. Dla skali: 57 CZ po $\sim1\%$ błędu to $pN\approx0{,}57$, sygnał ściśnięty do
+$e^{-0{,}57}\approx0{,}57$, a wariancja po pełnej korekcie co najmniej $e^{1{,}14}\approx3$ razy
+większa.
+
+\subsection{Dlaczego nie korekcja \slid{why\_not\_qec}}
+
+Korekcja koduje kubit logiczny w wielu fizycznych i na bieżąco poprawia błędy. Błąd logiczny
+kodu o odległości $d$ skaluje się jak
+\[
+  p_L\approx A\,(p/p_{\text{th}})^{\lfloor(d+1)/2\rfloor}.
+\]
+Poniżej progu $p_{\text{th}}$ większy kod wykładniczo tłumi błąd, powyżej wykładniczo go
+wzmacnia. Kod powierzchniowy zużywa $\sim d^2$ kubitów fizycznych na logiczny, a każdy kod
+wymaga pomiaru syndromów w trakcie obwodu i sprzężenia zwrotnego. Pięć kubitów nie wystarcza
+nawet na najmniejszy kod korygujący dowolny błąd jednokubitowy ($[[5,1,3]]$ zużywa wszystkie
+pięć na jeden kubit logiczny i nic nie zostaje na pomiar syndromów). QEM nie ma progu: działa przy
+każdym szumie, dopóki zostaje sygnał, i potrzebuje tylko pomiaru na końcu. Płaci shotami zamiast
+kubitami.
+
+Wcześniej testowaliśmy kod detekcyjny $[[4,2,2]]$: wykrywa jeden błąd i odrzuca shoty z
+niezerowym syndromem. Koszt efektywny to $1/\text{akceptacja}$ i rośnie z głębokością, więc
+jakościowo nie zmienia obrazu.
+
+% =====================================================================
+\section{Metody}
+
+\subsection{Trzy narzędzia \slid{methods}}
+
+\textbf{ZNE} nie wie nic o idealnym wyniku: mierzy, jak wynik zmienia się przy \emph{większym}
+szumie, i cofa się po tej krzywej do zera. \textbf{CDR} korzysta z obwodów prawie takich
+samych jak nasz, których ideał umiemy policzyć (Cliffordy), i uczy się z nich mapy
+zaszumione$\to$idealne. \textbf{Twirling Pauliego} sam niczego nie mityguje: nie zmienia
+średniego błędu, zmienia jego kształt (koherentny na stochastyczny), tak żeby pasował do modelu,
+który zakłada CDR.
+
+\subsection{Model szumu: szum ściska sygnał \slid{noise}}
+
+Kanał depolaryzujący na $n$ kubitach to $\mathcal D_p(\rho)=(1-p)\rho+p\,I/2^n$. Dla
+obserwabli $\Tr[O\mathcal D_p(\rho)]=(1-p)\ev{O}+p f$ z $f=\Tr O/2^n$. Globalna depolaryzacja
+komutuje z każdą unitarną, więc $N$ takich kanałów rozsianych po obwodzie można zebrać na
+końcu:
+\[
+  E=f+(1-p)^N(\Oid-f)\approx f+(\Oid-f)e^{-pN}.
+\]
+Jeśli szum wzmocnimy $\lambda$ razy ($N\to\lambda N$) i oznaczymy $\gamma=pN$:
+\[
+  \boxed{E(\lambda)=f+(\Oid-f)\,e^{-\gamma\lambda}}
+\]
+$f$ to \emph{podłoga}: wartość przy pełnym zaszumieniu. Dla średniego $Z$ w czystej
+depolaryzacji $f=0$, ale relaksacja $T_1$ ciągnie kubity do $\ket0$, czyli $Z=+1$, więc na
+transmonach $f>0$. Dlatego $f$ mierzymy, a nie zakładamy. Obciążenie surowego pomiaru:
+\[
+  B=E(1)-\Oid=(\Oid-f)(e^{-\gamma}-1)\approx-\gamma(\Oid-f).
+\]
+Model jest dokładny tylko dla globalnej depolaryzacji. Szum lokalny, korelacje i błędy
+koherentne go psują: dla ZNE krzywa nie jest dokładnie wykładnicza, dla CDR mapa nie jest
+dokładnie liniowa. To źródło obu granic, o których mówimy dalej.
+
+\begin{center}
+\begin{tikzpicture}[x=1.3cm,y=2.6cm]
+  \draw[-{Latex},thick] (0,0)--(5.6,0) node[right]{$\lambda$};
+  \draw[-{Latex},thick] (0,0)--(0,1.15) node[above]{$E(\lambda)$};
+  \draw[dashed,axgolddk] (0,0.15)--(5.3,0.15) node[right]{\small $f$};
+  \draw[very thick,axbluedk,domain=0:5.2,samples=60] plot(\x,{0.15+0.8*exp(-0.45*\x)});
+  \foreach \l in {1,3,5} \fill[axblue,draw=axink] (\l,{0.15+0.8*exp(-0.45*\l)}) circle (2.5pt);
+  \fill[axgold,draw=axink] (0,0.95) circle (3pt) node[left]{\small $\Oid$};
+  \foreach \l in {1,3,5} \node[below] at (\l,0){\small\l};
+\end{tikzpicture}
+\end{center}
+
+\subsection{ZNE: folding i Richardson \slid{zne\_fold}}
+
+\textbf{Folding.} $U\to U(U^\dagger U)^k$. Bez szumu to wciąż $U$, ale bramek jest
+$\lambda=2k+1$ razy więcej, więc szum rośnie $\lambda$ razy. Używamy $\lambda\in\{1,3,5\}$.
+Składamy obwód \emph{już skompilowany} do bramek natywnych i nie kompilujemy go ponownie, bo
+optymalizator skróciłby $U^\dagger U$ albo przetrasował go inaczej i skala przestałaby być skalą.
+Kopie rozdzielamy barierami.
+
+\textbf{Ekstrapolacja.} Przez punkty $(\lambda_k,E_k)$ prowadzimy wielomian Lagrange'a i bierzemy
+jego wartość w zerze:
+\[
+  \hat E(0)=\sum_kc_kE(\lambda_k),\qquad c_k=\prod_{j\ne k}\frac{\lambda_j}{\lambda_j-\lambda_k}.
+\]
+Dla $\{1,3,5\}$: $c_1=\frac{3\cdot5}{2\cdot4}=\frac{15}8$, $c_3=\frac{1\cdot5}{(-2)\cdot2}=-\frac54$,
+$c_5=\frac{1\cdot3}{(-4)(-2)}=\frac38$. Zawsze $\sum c_k=1$ (stała jest odtwarzana dokładnie), więc
+$f$ przechodzi przez ekstrapolację nietknięte.
+
+\textbf{Ile obciążenia zostaje.} Błąd interpolacji Lagrange'a w zerze:
+\[
+  E(0)-\hat E(0)=\frac{E'''(\xi)}{3!}\prod_k(0-\lambda_k)=-\tfrac{15}{6}E'''(\xi),\qquad\xi\in(0,5).
+\]
+Dla $E=f+(\Oid-f)e^{-\gamma\lambda}$ mamy $|E'''|\le\gamma^3|\Oid-f|$, więc
+\[
+  |B_{\text{ZNE}}|\lesssim2{,}5\,\gamma^3|\Oid-f|\quad\text{wobec}\quad|B|\approx\gamma|\Oid-f| .
+\]
+Przy małym $\gamma$ ZNE zbija obciążenie z rzędu $\gamma$ do rzędu $\gamma^3$. Przy dużym
+wielomian przestaje przybliżać wykładniczy zanik i zysk znika.
+
+\subsection{Dolna granica ZNE: stała $\kappa$ \slid{zne\_kappa}}
+
+\intu Ekstrapolacja to dźwignia: współczynniki są duże i mają różne znaki, więc mały szum shotów
+w punktach pomiarowych zamienia się w duży szum w $\lambda=0$. Przy małej liczbie shotów ZNE
+szkodzi, przy dużej pomaga.
+
+\textbf{Podział równy.} Budżet $S$ dzielimy po równo na $|\Lambda|$ skal. Pomiary są niezależne,
+więc
+\[
+  \Var\hat E_{\text{ZNE}}=\sum_kc_k^2\frac{V}{S/|\Lambda|}=|\Lambda|\Big(\sum_kc_k^2\Big)\frac VS,
+  \qquad \Var E_{\text{raw}}=\frac VS,
+\]
+\[
+  \mathrm{MSE}_{\text{ZNE}}-\mathrm{MSE}_{\text{raw}}=\kappa\frac VS+\big(B_{\text{ZNE}}^2-B^2\big),
+  \qquad \kappa=|\Lambda|\sum_kc_k^2-1 .
+\]
+$\kappa$ mówi, ile razy więcej shotów ZNE potrzebuje do tej samej wariancji co pomiar surowy.
+ZNE pomaga, gdy różnica jest ujemna:
+\[
+  S>S^*=\frac{\kappa V}{B^2-B_{\text{ZNE}}^2}.
+\]
+Im mniejsze surowe obciążenie (płytszy obwód), tym większe $S^*$. Dla skali: $V=0{,}2$,
+$B=0{,}1$, $B_{\text{ZNE}}\approx0$ daje $S^*\approx290$; przy $B=0{,}02$ już $S^*\approx7300$.
+
+\textbf{Podział Neymana.} Dajemy $n_k$ shotów na skalę $k$, $\sum n_k=S$, i minimalizujemy
+$\sum_kc_k^2\sigma_k^2/n_k$. Mnożnik Lagrange'a daje $c_k^2\sigma_k^2/n_k^2=\mu$, czyli
+$n_k\propto|c_k|\sigma_k$, i po podstawieniu
+\[
+  \Var_{\text{opt}}=\frac{(\sum_k|c_k|\sigma_k)^2}{S},\qquad
+  \kappa_{\text{opt}}=\Big(\frac{\sum_k|c_k|\sigma_k}{\sigma_1}\Big)^2-1 .
+\]
+Więcej shotów idzie tam, gdzie dźwignia jest największa.
+
+\begin{center}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+$\Lambda$ & $c_k$ & $\sum c_k^2$ & $\kappa$ (równy) & $\kappa_{\text{opt}}$ (równe $\sigma$) \\
+\midrule
+$\{1,3\}$ & $\tfrac32,-\tfrac12$ & $2{,}5$ & $4{,}00$ & $3{,}0$ \\
+$\{1,3,5\}$ & $\tfrac{15}8,-\tfrac54,\tfrac38$ & $5{,}22$ & $14{,}66$ & $11{,}25$ \\
+$\{1,3,5,7\}$ & $\tfrac{35}{16},-\tfrac{35}{16},\tfrac{21}{16},-\tfrac5{16}$ & $11{,}39$ & $44{,}56$ & $35{,}0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Każdy dodatkowy węzeł obniża obciążenie o rząd, ale mniej więcej potraja $\kappa$. Kluczowe:
+$\kappa$ zależy tylko od węzłów i podziału shotów, nie od obwodu. To przewidywanie da się
+sfalsyfikować. Mierzymy je jako wyraz wolny regresji
+$(\mathrm{MSE}_{\text{ZNE}}-\mathrm{MSE}_{\text{raw}})\cdot S$ względem $S$ (podzielony przez $V$).
+
+\subsection{Górna granica ZNE: zanik sygnału \slid{zne\_collapse}}
+
+Gdy obwód jest tak głęboki, że $E(3)=E(5)=f$, to z $\sum c_k=1$:
+\[
+  \hat E(0)=c_1E_1+(1-c_1)f=\tfrac{15}8E_1-\tfrac78f .
+\]
+To nie jest ekstrapolacja, tylko przeskalowanie jednego pomiaru. Dla $f=0$ to $1{,}875\,E_1$;
+gdy ściśnięcie przy $\lambda=1$ wynosiło akurat około $0{,}53$, wynik wygląda na świetną
+mitygację, choć szum nie został poprawnie wzmocniony. Köster i Mauerer (2026) pokazali to na
+54-kubitowym procesorze IQM. Ze skalarnego $\hat E$ tego nie widać, więc mamy trzy kontrole.
+
+\textbf{Garbage folding.} $U(V^\dagger U)^k$, gdzie $V$ ma ten sam szkielet CZ i tę samą liczbę
+PRX co $U$, ale losowe kąty. Koszt identyczny, funkcja zniszczona, więc $E(\lambda>1)$ jest z
+założenia śmieciem. Zysk, który przetrwa tę kontrolę, jest artefaktem. Odwrotna kontrola,
+\emph{identity folding}: ten sam koszt, a funkcja zachowana (każda bramka 1q w połówce $U^\dagger$
+sparowana ze swoją odwrotnością, CZ komutują i dają identyczność). Ten wariant powinien zachowywać
+się jak zwykły folding.
+
+\textbf{Ujemna masa.} Richardsona stosujemy do każdego z $2^5=32$ prawdopodobieństw stanów:
+\[
+  \hat P(s)=\sum_kc_kP_s(\lambda_k),\qquad W_{\text{neg}}=\sum_s\max\big(0,-\hat P(s)\big).
+\]
+Normalizacja zawsze się zgadza ($\sum c_k=1$), ale prawdziwy rozkład nie ma ujemnych wpisów. Duża
+ujemna masa oznacza, że krzywe $P_s(\lambda)$ nie są gładkie tak, jak zakłada Richardson. Szum
+shotów, wzmocniony przez $c_3=-\frac54$, daje trochę ujemnej masy nawet przy idealnym szumie, więc
+próg $W_{\text{neg}}\le0{,}02$ wzięliśmy z symulacji zerowej (depolaryzacja, 8192 shoty;
+99.\ percentyl $0{,}014$).
+
+\textbf{SNR.} $\mathrm{SNR}=|E(\lambda_{\max})|/\sqrt{V/N}$. Poniżej $\sim2$ największa skala jest
+nieodróżnialna od zera.
+
+Razem: ZNE ma \emph{okno}. Od dołu ogranicza je wariancja ($S>S^*$), od góry zanik sygnału
+(SNR, $W_{\text{neg}}$, garbage).
+
+\subsection{CDR \slid{cdr}}
+
+\textbf{Cliffordy i Gottesman--Knill.} Bramki Clifforda przeprowadzają operatory Pauliego na
+operatory Pauliego. Obwód Clifforda na $\ket0^{\otimes n}$ daje stan stabilizatorowy, opisany
+przez $n$ generatorów, i symuluje się go w czasie wielomianowym. Dla takiego stanu
+$\ev{P}\in\{-1,0,1\}$ dla każdego Pauliego $P$.
+
+$\PRX(\theta,\varphi)=e^{-i\frac\theta2(\cos\varphi X+\sin\varphi Y)}$ jest Cliffordem, gdy
+$\varphi$ i $\theta$ są wielokrotnościami $\pi/2$: oś to $\pm X$ lub $\pm Y$, obrót o
+wielokrotność ćwierćobrotu. CZ jest Cliffordem.
+
+\textbf{Zbiór treningowy.} Na skompilowanym obwodzie celu zastępujemy kąty każdej PRX wartościami
+z $\{0,\frac\pi2,\pi,\frac{3\pi}2\}$. Obwód 0 dostaje kąty najbliższe; pozostałe losują je z wagą
+$\propto e^{-d^2/\sigma^2}$, gdzie $d$ to odległość kątowa od oryginału, $\sigma=\pi/4$
+(\texttt{near\_target}). Zbiór leży więc blisko celu i fit interpoluje zamiast ekstrapolować.
+Szkielet CZ jest identyczny z celem z konstrukcji, więc obwody treningowe widzą ten sam szum CZ.
+Ideał każdego liczymy symulatorem stabilizatorowym.
+
+\textbf{Dlaczego prosta.} Dla depolaryzacji $E=(1-p)\Oid+pf$, więc
+\[
+  \Oid=aE+b,\qquad a=\frac1{1-p},\quad b=-\frac{pf}{1-p},
+\]
+\emph{ta sama} prosta dla każdego obwodu o tym samym szumie. Nauczona na Cliffordach przenosi się
+na cel. Błąd odczytu też jest afiniczny: $\ev Z_{\text{zm}}=(1-p_{01}-p_{10})\ev Z+(p_{10}-p_{01})$,
+więc CDR koryguje go przy okazji (dokładnie, gdy kubity mają podobne błędy odczytu).
+
+\textbf{Fit.} Dla par $(x_i,y_i)=(E_i,O_{\mathrm{id},i})$:
+\[
+  a=\frac{\Cov(x,y)}{\Var x},\qquad b=\bar y-a\bar x,\qquad\hat O=aE_{\text{cel}}+b .
+\]
+
+\textbf{Gdzie to pęka.} Błąd koherentny nie ściska wyniku o stały czynnik. Jego efekt zależy od
+interferencji w \emph{konkretnym} obwodzie: dla jednego błędy się dodają, dla innego znoszą.
+Punkty $(x_i,y_i)$ rozjeżdżają się wokół prostej, $r^2$ spada, a prosta z Cliffordów gorzej
+pasuje do celu.
+
+\textbf{Rozcieńczenie regresji.} $x_i$ to średnie ze skończonej liczby shotów,
+$x_i=x_i^\star+\eta_i$, $\Var\eta_i=\sigma_{x,i}^2$. Wtedy
+$\E a_{\text{OLS}}\approx a\cdot\Var x^\star/(\Var x^\star+\bar\sigma_x^2)<a$: nachylenie jest
+zaniżone i CDR niedokorygowuje. Poprawka errors-in-variables odejmuje znaną wariancję:
+\[
+  a_{\text{EIV}}=\frac{\Cov(x,y)}{\Var x-\bar\sigma_x^2}.
+\]
+Gdy prawdziwe $x$ prawie się nie różnią, mianownik dąży do zera i nachylenie wybucha; dlatego
+poprawkę ograniczamy do $4\times$ względem OLS i raportujemy oba fity.
+
+\subsection{Twirling Pauliego \slid{twirl}}
+
+\intu Błąd koherentny to systematyczne przekręcenie o mały kąt, zawsze w tę samą stronę: przy
+kolejnych bramkach dodają się amplitudy. Twirling przed każdą bramką losowo zmienia układ
+odniesienia, a za nią go przywraca. Bramka robi to samo, ale błąd raz wypada w jedną stronę, raz
+w drugą. Po uśrednieniu zostaje losowe rozmycie, w którym dodają się prawdopodobieństwa, nie
+amplitudy.
+
+\textbf{Funkcja bez zmian.} Dla Pauliego $A$ ($A^2=I$) i Clifforda CZ operator
+$B=\CZ\,A\,\CZ^\dagger$ jest Paulim i
+\[
+  B\,\CZ\,A=\CZ\,A\,\CZ^\dagger\CZ\,A=\CZ\,A^2=\CZ .
+\]
+Np.\ $A=X\otimes I$ daje $B=X\otimes Z$.
+
+\textbf{Szum po uśrednieniu.} Zaszumiona bramka to $\Lambda\circ\mathcal{CZ}$. Zakładamy bezbłędne
+ramki (ich błąd $\sim0{,}1\%$ jest dziesięć razy mniejszy niż CZ). Gdy $A$ przebiega 16
+Pauliego, $B$ też przebiega wszystkie, więc
+\[
+  \overline{\mathcal B\circ\Lambda\circ\mathcal{CZ}\circ\mathcal A}
+  =\Big(\tfrac1{16}\textstyle\sum_B\mathcal B\circ\Lambda\circ\mathcal B\Big)\circ\mathcal{CZ}
+  =\Lambda_{\text{tw}}\circ\mathcal{CZ}.
+\]
+Zapiszmy $\Lambda(\rho)=\sum_{\alpha\beta}\chi_{\alpha\beta}P_\alpha\rho P_\beta$. Diagonala
+$\chi_{\alpha\alpha}$ to prawdopodobieństwa błędów Pauliego, elementy pozadiagonalne to
+interferencja ścieżek błędu, czyli część koherentna. Ponieważ
+$P_kP_\alpha P_k=(-1)^{\langle k,\alpha\rangle}P_\alpha$,
+\[
+  \Lambda_{\text{tw}}(\rho)=\sum_{\alpha\beta}\Big[\tfrac1{4^n}\textstyle\sum_k(-1)^{\langle k,\alpha\rangle+\langle k,\beta\rangle}\Big]\chi_{\alpha\beta}P_\alpha\rho P_\beta=\sum_\alpha\chi_{\alpha\alpha}P_\alpha\rho P_\alpha ,
+\]
+bo średnia znaków to $1$ dla $\alpha=\beta$ i $0$ w przeciwnym razie (połowa Pauliego komutuje z
+$P_\alpha P_\beta$, połowa antykomutuje). Twirling zachowuje diagonalę, a więc i wierność, i
+\emph{zeruje} część koherentną.
+
+\textbf{Przykład $ZZ$.} $U=e^{-i\frac\theta2ZZ}=\cos\frac\theta2I-i\sin\frac\theta2ZZ$. Po
+twirlingu: $\Lambda_{\text{tw}}(\rho)=\cos^2\frac\theta2\,\rho+\sin^2\frac\theta2\,ZZ\rho ZZ$.
+$N$ powtórzeń błędu koherentnego to obrót o $N\theta$, niewierność
+$\sin^2\frac{N\theta}2\approx N^2\theta^2/4$; po twirlingu $\approx N\theta^2/4$. Kwadratowo kontra
+liniowo.
+
+\textbf{W praktyce} losujemy $M=6$ ramek (niezależny Pauli dla każdego CZ) i uśredniamy. Każda ramka
+to osobny obwód, więc koszt pomiarowy rośnie $M$ razy (stąd równy budżet).
+
+\textbf{Dlaczego to pomaga CDR.} CDR zakłada jedną liniową mapę szumu dla wszystkich obwodów o tym
+samym szkielecie. Szum koherentny zależy od obwodu i łamie to założenie; po twirlingu szum jest
+kanałem Pauliego, którego wpływ jest bliższy wspólnemu ściśnięciu. Ostrożnie: twirling działa
+empirycznie, ale mechanizm wykracza poza prosty błąd $ZZ$ na CZ. Model z samym koherentnym $ZZ$
+nie odtwarza tego, co widzimy na szczeblach z routingiem.
+
+\subsection{Logiczny vs natywny \slid{twirl\_kinds}}
+
+Różnica to kolejność kroków. \emph{Logiczny}: ramki wokół bramek splątujących obwodu
+logicznego, potem kompilacja. CZ, które kompilator dokłada w SWAP-ach, zostają bez ramki.
+\emph{Natywny}: najpierw kompilacja, potem ramka wokół każdego fizycznego CZ.
+
+\begin{center}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+wzorzec & logiczne bramki 2q & CZ po routingu & CZ ze SWAP-ów & owinięte w logicznym \\
+\midrule
+star & 12 & 12 & 0 & 100\% \\
+linear & 12 & 30 & 18 & 40\% \\
+circular & 15 & 39 & 24 & 38\% \\
+all-to-all & 30 & 57 & 27 & 53\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Na szczeblach z routingiem twirling logiczny obejmuje tylko 40--50\% CZ, więc jego zysk jest
+dolnym ograniczeniem pełnego twirlingu. W wariancie logicznym Pauli to zwykłe bramki 1q przed
+kompilacją, więc optymalizator łączy je z sąsiednimi obrotami. Porównanie obu (H3) robimy na
+wspólnym zbiorze treningowym, żeby różnica wynikała tylko z miejsca ramek.
+
+\subsection{Scalanie bramek 1q \slid{merge}}
+
+Ramki to też bramki. Wstawione jako osobne impulsy wydłużają obwód: przy 57 CZ z 71 do 202 PRX.
+Wtedy testujemy ,,twirling plus dodatkowy szum'' i stąd wziął się nasz pierwszy, ujemny wynik
+natywnego twirlingu.
+
+Naprawa korzysta z trzech faktów.
+\begin{enumerate}
+  \item Każde $U\in SU(2)$ to $R_Z(\alpha)\,\PRX(\theta,\varphi)$ z dokładnością do fazy (rozkład
+  Eulera i $\PRX(\theta,\varphi)=R_Z(\varphi)R_X(\theta)R_Z(-\varphi)$). Ciąg dowolnie wielu
+  bramek 1q to więc jeden PRX i jeden obrót $Z$.
+  \item Obrót $Z$ nie wymaga impulsu: $R_Z(\alpha)\PRX(\theta,\varphi)R_Z(-\alpha)=\PRX(\theta,\varphi+\alpha)$,
+  więc wchłaniamy go w fazę następnych PRX (,,wirtualne $Z$''). CZ i $R_Z$ są diagonalne i
+  komutują, więc $R_Z$ przechodzi przez CZ do następnego ciągu.
+  \item Pomiar jest w bazie $Z$, a $R_Z$ zmienia tylko fazy, więc końcowy obrót $Z$ odrzucamy.
+\end{enumerate}
+Po scaleniu między dwoma CZ na każdym kubicie jest co najwyżej jeden PRX (sprawdzane w kodzie:
+najdłuższy ciąg bramek 1q ma długość 1; górne ograniczenie to $2N_{CZ}+n$ PRX). Szkielet CZ się
+nie zmienia. Narzut twirlingu spada z $2{,}4$--$2{,}8\times$ do $1{,}23$--$1{,}35\times$ (przy 57
+CZ: 92--95 PRX). Scalamy we \emph{wszystkich} ramionach, żeby liczby bramek były porównywalne.
+
+\subsection{Równy budżet \slid{budget}}
+
+Ramię z twirlingiem mierzy każdy obwód w $M$ ramkach. Porównane z CDR mierzonym raz wygrywa samym
+uśrednianiem. Dlatego każde ramię wydaje na punkt ewaluacyjny
+\[
+  B=(n_{\text{train}}+1)\,M\,S=21\cdot6\cdot8192=1\,032\,192\ \text{shotów},
+\]
+a różnią się tylko tym, jak ten budżet dzielą (cel zawsze $M$ razy):
+
+\begin{center}
+\begin{tabular}{@{}llcl@{}}
+\toprule
+ramię & obwody treningowe & twirling & rola \\
+\midrule
+\texttt{off\_copies} & $n_{\text{train}}$ obwodów $\times$ $M$ identycznych kopii & nie & kontrola \\
+\texttt{twirl\_logical} & $n_{\text{train}}\times M$ ramek, ramki przed kompilacją & tak & wariant \\
+\texttt{twirl\_native} & $n_{\text{train}}\times M$ ramek, po kompilacji, scalone & tak & główny test \\
+\texttt{spread\_off} & $n_{\text{train}}M$ różnych obwodów $\times$ 1 kopia & nie & kontrola \\
+\texttt{spread} & $n_{\text{train}}M$ różnych obwodów $\times$ 1 ramka & tak & propozycja \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Średnia z $M$ pomiarów po $S$ shotów ma wariancję $V/(MS)$ niezależnie od tego, czy to kopie, czy
+ramki. \texttt{off\_copies} kupuje więc tę samą redukcję wariancji co twirling, tylko bez
+twirlingu, a różnica \texttt{twirl\_native}$-$\texttt{off\_copies} to czysty efekt twirlingu.
+(Ramki dodają jeszcze wariancję między ramkami, więc porównanie jest raczej na niekorzyść
+twirlingu.)
+
+\subsection{Spread \slid{spread}}
+
+Ten sam budżet można wydać na 20 obwodów po 6 pomiarów albo na 120 różnych po jednym. Przy
+głębokich obwodach przeważa drugie.
+
+\textbf{Dlaczego ideały są zwykle zerowe.} Dla stanu stabilizatorowego $\ev{Z_q}=\pm1$ tylko wtedy,
+gdy $\pm Z_q$ należy do grupy stabilizatorów. Głęboki obwód Clifforda rozprasza stabilizatory na
+operatory wielokubitowe, więc prawie zawsze $\ev{Z_q}=0$ i $\bar Z=0$. Przy 57 CZ dotyczy to
+około 80\% obwodów treningowych.
+
+\textbf{Degeneracja fitu.} Punkt z $y_i=0$ prawie nic nie mówi o nachyleniu. Jeśli niezerowy ideał
+ma każdy obwód z prawdopodobieństwem $q\approx0{,}2$, liczba informatywnych punktów to
+$\mathrm{Bin}(n,q)$. Dla $n=20$: średnio 4, a
+$P(\le1)=0{,}8^{20}+20\cdot0{,}2\cdot0{,}8^{19}\approx0{,}07$, czyli w co czternastym punkcie
+ewaluacyjnym prosta opiera się na najwyżej jednym niezerowym punkcie. Dla $n=120$: średnio 24,
+$P(\le1)\sim10^{-10}$.
+
+\textbf{Cena.} Punkt spread jest mierzony raz, więc jego wariancja to $V/S$ plus wariancja między
+ramkami, zamiast $V/(MS)$. Rozcieńczenie regresji jest silniejsze i poprawka EIV ważniejsza.
+Wariancji pojedynczego punktu nie da się zmierzyć, więc bierzemy model shotów
+$\Var\bar Z\approx(1-\ev O^2)/(nS)$ plus wariancję między ramkami zmierzoną na celu.
+
+% =====================================================================
+\section{Obciążenie: model i obwód}
+
+Ta sekcja rozwija slajdy \texttt{dataset}, \texttt{workload} i \texttt{odra}.
+
+\subsection{Dane \slid{dataset}}
+
+Zbiór \emph{two curves} z pakietu \texttt{qml\_benchmarks} (Bowles, Ahmed, Schuld 2024). Parametr
+$t$ jest odwzorowany przez dwa wielomiany stopnia 8 w $\mathbb R^8$; druga krzywa jest przesunięta
+o $0{,}1$, a do punktów dodany szum gaussowski $0{,}01$. Klasa $y\in\{-1,+1\}$ mówi, do której
+krzywej należy punkt. Małe przesunięcie (wersja ,,trudna'') sprawia, że wiele punktów leży blisko
+granicy decyzji, co jest potrzebne do pytania, czy mitygacja zmienia decyzje.
+
+300 próbek, cechy przeskalowane do $[-\pi,\pi]$ (to kąty obrotów), podział warstwowy 180/120
+(\texttt{test\_size}$=0{,}4$, ziarno 42). Z części testowej zamrażamy 100 punktów referencyjnych,
+zbalansowanych klasowo.
+
+\subsection{Ansatz: hardware-efficient z data re-uploadingiem \slid{workload}}
+
+\textbf{Hardware-efficient ansatz} (Kandala i~in.\ 2017) to obwód zbudowany z warstw, które
+łatwo wykonać na sprzęcie: obroty jednokubitowe i bramki dwukubitowe na sąsiednich kubitach, bez
+struktury wynikającej z problemu. Jest płytki i ekspresywny przy małej liczbie bramek; ceną jest
+brak indukcyjnego obciążenia i (dla głębokich, szerokich wersji) jałowe plateau gradientu. Przy 5
+kubitach, 3 warstwach i obserwabli będącej sumą jednokubitowych $Z$ plateau nie jest problemem.
+
+\textbf{Data re-uploading} (Pérez-Salinas i~in.\ 2020) to kodowanie danych \emph{w każdej warstwie},
+a nie tylko na początku. Pojedyncze kodowanie $R_X(x)$ daje funkcję $x$ zawierającą tylko
+częstotliwości $\{-1,0,1\}$, czyli $a+b\cos x+c\sin x$. Ogólnie (Schuld, Sweke, Meyer 2021)
+model jest szeregiem Fouriera
+\[
+  f(x)=\sum_{\omega\in\Omega}c_\omega e^{i\omega x},
+\]
+gdzie widmo $\Omega$ tworzą różnice wartości własnych generatorów kodowania. Kodowanie
+$R_X(w_jx)=e^{-iw_jxX/2}$ ma wartości własne generatora $\pm w_j/2$, więc daje różnice
+$\{-w_j,0,w_j\}$, a kilka kodowań tej samej cechy daje
+$\Omega=\{\sum_jk_jw_j:\ k_j\in\{-1,0,1\}\}$. Więcej kodowań to bogatsze widmo; trenowane skale
+$w_j$ pozwalają dostroić częstotliwości do danych. Współczynniki $c_\omega$ ustalają trenowane
+obroty.
+
+\textbf{Dokładna budowa.} $n=5$ kubitów, $L=3$ warstwy, $d=8$ cech. Warstwa $\ell$:
+\begin{enumerate}
+  \item \emph{kodowanie}: na kubicie $q$ bramka $R_X(w^{\text{enc}}_{\ell q}\,x_{k\bmod 8})$, gdzie
+  $k=5\ell+q$ to bieżący indeks (cechy idą cyklicznie po kubitach i warstwach);
+  \item \emph{trenowane obroty}: $R_Y(w_{\ell q})\,R_Z(w'_{\ell q})$ na każdym kubicie;
+  \item \emph{blok splątania}: bramki CX na parach z wzorca.
+\end{enumerate}
+Na końcu jeszcze jedna warstwa $R_YR_Z$. 15 slotów kodowania na 8 cech: $x_1,\dots,x_7$ są
+kodowane dwukrotnie, $x_8$ raz. Liczba wag:
+\[
+  \underbrace{Ln}_{\text{skale}}+\underbrace{2Ln}_{R_Y,R_Z}+\underbrace{2n}_{\text{końcowe}}=15+30+10=55,
+\]
+taka sama dla każdego wzorca. Pojemność modeli jest więc dopasowana, a różni je tylko splątanie.
+
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=0.62cm,
+  g/.style={draw=axink,thick,fill=white,minimum width=1.25cm,minimum height=0.48cm,font=\scriptsize,inner sep=1pt},
+  e/.style={draw=axink,thick,fill=axblue!40,minimum width=1.25cm,minimum height=0.48cm,font=\scriptsize,inner sep=1pt}]
+  \foreach \q in {0,...,4} {
+    \draw[thick] (-0.6,-\q)--(8.2,-\q);
+    \node[left,font=\small] at (-0.6,-\q) {$q_\q$};
+    \node[e] at (0.5,-\q) {$R_X(w x_k)$};
+    \node[g] at (2.1,-\q) {$R_Y(w)$};
+    \node[g] at (3.6,-\q) {$R_Z(w)$};
+  }
+  \foreach \t/\x in {1/5.0,2/5.8,3/6.6,4/7.4} {
+    \draw[thick] (\x,0)--(\x,-\t);
+    \fill (\x,0) circle (2.5pt);
+    \draw[thick,fill=white] (\x,-\t) circle (5pt);
+    \draw[thick] (\x,-\t+0.28)--(\x,-\t-0.28);
+    \draw[thick] (\x-0.17,-\t)--(\x+0.17,-\t);
+  }
+  \node[font=\small] at (3.8,1.0) {jedna warstwa (powtarzana $L=3$ razy); wzorzec star, hub $q_0$};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Wzorce splątania} (pary w jednym bloku): star $(0,q)$ dla $q=1..4$ (4 pary), linear
+$(q,q{+}1)$ (4), circular linear plus $(4,0)$ (5), all-to-all wszystkie $\binom52=10$ par.
+
+\textbf{Wyjście i decyzja.} $f(x)=\ev{\bar Z}\in[-1,1]$, decyzja $\hat y=\mathrm{sign}\,f(x)$.
+Margines punktu to $|\Oid|$, czyli odległość idealnego wyjścia od granicy decyzji.
+
+\textbf{Trening.} Bezszumowo (\texttt{StatevectorEstimator}), funkcja straty MSE między $f(x)$ a
+etykietą $\pm1$, cały zbiór treningowy w każdym kroku, Adam z $\eta=0{,}08$, 60 epok, wagi
+początkowe $0{,}1\cdot\mathcal N(0,1)$, ziarno 42. Gradient z reguły przesunięcia parametru: dla
+bramki $e^{-i\theta P/2}$
+\[
+  \frac{\partial\ev O}{\partial\theta}=\frac12\Big[\ev O_{\theta+\pi/2}-\ev O_{\theta-\pi/2}\Big],
+\]
+dokładnie, nie jako różnica skończona; dla kodowania $R_X(wx)$ dochodzi czynnik $x$ z reguły
+łańcuchowej. Każdy wzorzec ma osobny trening na tych samych danych; wagi są potem zamrożone.
+
+\begin{center}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+ & star & linear & circular & all-to-all \\
+\midrule
+logiczne bramki 2q & 12 & 12 & 15 & 30 \\
+dokładność trening / test (bez szumu) & 0,778 / 0,725 & 0,744 / 0,692 & 0,733 / 0,675 & 0,772 / 0,767 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+To cztery modele o tej samej architekturze, a nie jeden model na czterech topologiach. Dzięki
+temu każdy szczebel jest prawdziwym klasyfikatorem, a nie wagami gwiazdy przeniesionymi na inne
+splątanie. 0,725 na slajdzie to model star.
+
+\subsection{Bramki natywne i kompilacja \slid{odra}}
+
+ODRA wykonuje $\PRX(\theta,\varphi)$ (impuls mikrofalowy o fazie $\varphi$, obrót o $\theta$ wokół
+osi w płaszczyźnie $xy$) i CZ. Obroty $Z$ realizujemy wirtualnie, zmieniając fazę kolejnych
+impulsów. Bramki ansatzu tłumaczą się tak:
+\[
+  R_X(\alpha)=\PRX(\alpha,0),\quad R_Y(\alpha)=\PRX(\alpha,\tfrac\pi2),\quad
+  R_Z\ \text{wirtualne},\quad \mathrm{CX}=(I\otimes H)\,\CZ\,(I\otimes H),
+\]
+a $H$ to PRX i obrót $Z$. Po scaleniu każda warstwa daje na kubicie jeden PRX przed blokiem
+splątania (dowolna unitarna 1q to jeden PRX), plus PRX z rozkładu CX.
+
+Kompilacja ma jedną ścieżkę: \texttt{transpile} do bazy $\{\texttt{r},\texttt{cz}\}$ na mapie
+gwiazdy, układ logiczny $=$ fizyczny (logiczny kubit 0 to hub QB3), \texttt{optimization\_level=1},
+routing z ustalonym \texttt{seed\_transpiler=42}, potem scalanie PRX. Wynik jest deterministyczny
+co do bitu. (Bez ustalonego ziarna ten sam obwód kompilował się za każdym razem do innego
+szkieletu, a drabina wychodziła 12/27/36/54.)
+
+\textbf{Routing na gwieździe.} CZ działa tylko na krawędziach z hubem. Bramka między dwoma liśćmi
+wymaga SWAP, a $\mathrm{SWAP}=\mathrm{CX}_{12}\mathrm{CX}_{21}\mathrm{CX}_{12}$ to 3 CZ. Tak powstaje
+drabina 12/30/39/57 CZ: ta sama architektura, rosnący koszt dwukubitowy.
+
+\textbf{Parametry urządzenia.} Błąd CZ z interleaved RB to $0{,}7$--$1{,}2\%$, błąd PRX z RB
+$\sim0{,}1\%$, czyli dziesięć razy mniej, więc oś badania to liczba CZ. $T_2^*$ wynosi 3--6\,$\mu$s.
+Kubity czekające na hub tracą w tym czasie koherencję jak $e^{-t/T_2^*}$.
+
+% =====================================================================
+\section{Metodologia}
+
+Pełny opis eksperymentu w formie, w jakiej trafi do artykułu. Odpowiada slajdom \texttt{problem}
+i \texttt{methodology}.
+
+\subsection{Pytanie i projekt \slid{problem}}
+
+Dla metody $m$, budżetu $B$ i liczby CZ $N$ wyznaczamy $\varepsilon_m(B,N)$ i pytamy, przy jakim
+$N$ zmienia się kolejność metod. Ramiona CDR porównujemy \emph{przy tym samym} $B$
+($1\,032\,192$ shoty na punkt); ZNE ($24\,576$ shotów na punkt) i pomiar surowy mają inny koszt, który
+raportujemy obok błędu, a nie wyrównujemy. Czynniki projektu:
+\begin{itemize}
+  \item \textbf{szczebel} (12, 30, 39, 57 CZ), wewnątrz obiektu: każdy punkt jest mierzony na
+  każdym szczeblu;
+  \item \textbf{metoda}: pięć ramion CDR (tabela w sekcji o budżecie), ZNE w trzech wariantach
+  foldingu (genuine, identity, garbage) i pomiar surowy;
+  \item \textbf{punkt ewaluacyjny}: czynnik blokujący; wszystkie porównania są parowane po
+  (szczebel, punkt).
+\end{itemize}
+
+\subsection{Punkty ewaluacyjne}
+
+Ze 100 zamrożonych punktów referencyjnych wybieramy 24, warstwowo po marginesie $|\Oid|$ modelu
+star: cztery kwartyle, po 6 punktów równo rozmieszczonych w randze wewnątrz kwartyla. Wybór jest
+deterministyczny i zapisany w \texttt{campaign/eval\_points.json}. Okno używa 8 z nich (zestaw 0:
+indeksy 0, 3, 6, \dots, 21, po 2 z kwartyla), kolejne okna rotują zestawy. Warstwowanie
+gwarantuje, że w każdym oknie są punkty łatwe i trudne. Wcześniejsze kampanie brały pierwsze 4
+punkty i nie miały rozkładu błędu na punkt.
+
+\subsection{Okno pomiarowe i noce \slid{methodology}}
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+noc & szczeble & zawartość \\
+\midrule
+A & star (12), circular (39) & 5 ramion CDR, ZNE $\{1,3,5\}$ $\times$ 3 warianty foldingu \\
+P5 & star z wstawkami, L6/L9/L13 & tylko \texttt{off\_copies}, bez ZNE \\
+B & linear (30), all-to-all (57) & jak A \\
+\bottomrule
+\end{tabular}
+\end{center}
+Wszystkie ramiona danego szczebla są w tej samej nocy, czyli w tej samej kalibracji. Szczeble są
+łączone w pary płytki + głęboki, żeby każda noc pokrywała zakres osi.
+
+\textbf{Randomizacja bloków.} Blok to (szczebel, ramię). Kolejność bloków w nocy jest losowana
+ziarnem okna i zapisana w manifeście, więc dryf urządzenia w ciągu nocy nie ustawia się
+systematycznie przeciwko któremuś ramieniu.
+
+\textbf{Kontrola kalibracji.} Przed i po każdym bloku odczytujemy identyfikator zestawu kalibracji
+(\texttt{calibration\_set\_id}). Jeśli zmienia się w trakcie bloku albo względem pierwszego bloku
+nocy, okno jest oznaczane jako \texttt{split}. Analiza główna zostawia blok, analiza wrażliwości
+usuwa szczeble, których to dotyczy.
+
+\subsection{Konfiguracja metod}
+
+\textbf{Pomiar surowy}: cel w $M=6$ kopiach po $S=8192$ shotów. \textbf{ZNE}: skale $\{1,3,5\}$,
+folding globalny na obwodzie natywnym, Richardson bez obcinania (wartości poza $[-1,1]$ są
+raportowane jako niefizyczne, nie poprawiane), trzy warianty foldingu o identycznym koszcie.
+\textbf{CDR}: $n_{\text{train}}=20$ (z kotwicą), próbnik \texttt{near\_target} albo
+\texttt{shared\_random} (jeden losowy zbiór wspólny dla ramion, do porównania logiczny vs natywny),
+fit OLS jako główny, EIV jako drugorzędny. Zbiór treningowy jest losowany ziarnem zależnym od
+(ziarno bazowe, punkt, okno), więc każdy punkt ma własny zbiór.
+
+\subsection{Estymacja}
+
+Z każdego shotu liczymy $\bar z$; wartość obwodu to średnia po shotach, a dla ramion z kopiami lub
+ramkami średnia po $M$ obwodach (zliczenia ramek łączymy). Brak osobnej korekty błędu odczytu: CDR
+koryguje jego afiniczną część, a ZNE go nie usuwa (pomiar jest jeden, więc błąd odczytu przechodzi
+przez Richardsona jak stała).
+
+\textbf{Metryka główna} to $\varepsilon=|\hat O-\Oid|$ na punkcie. Dokładność (zgodność znaku) jest
+drugorzędna, bo jest dyskretna i przy 8 punktach na okno bardzo zaszumiona.
+
+\subsection{Analiza statystyczna}
+
+\textbf{Pary i logarytm.} Porównując ramiona A i B, liczymy dla każdego (szczebel, punkt)
+$d_i=\log\varepsilon_{A,i}-\log\varepsilon_{B,i}$; noce A i B dają $n=32$ pary. Logarytm, bo efekty
+są multiplikatywne, a błędy skośne. Błąd równy 0 podłogujemy na $10^{-4}$. Wielkość efektu to
+średnia geometryczna ilorazu $\exp(\bar d)$.
+
+\textbf{Test Wilcoxona znakowanych rang.} Rangujemy $|d_i|$ i sumujemy rangi dodatnich różnic,
+$W^+$. Przy $H_0$ (rozkład $d$ symetryczny wokół zera) znaki są losowe, więc
+$\E W^+=n(n+1)/4=264$ i $\mathrm{sd}\,W^+=\sqrt{n(n+1)(2n+1)/24}\approx53{,}6$. Test jest
+jednostronny, w kierunku hipotezy. Wilcoxon nie zakłada normalności, tylko symetrię różnic, co na
+skali logarytmicznej jest rozsądne.
+
+\textbf{Korekta Holma.} Rodzina pięciu testów głównych. Bez korekty szansa choćby jednego
+fałszywego wyniku sięga $1-0{,}95^5\approx23\%$. Holm: sortujemy $p_{(1)}\le\dots\le p_{(5)}$ i
+odrzucamy, dopóki $p_{(i)}\le0{,}05/(6-i)$ (progi $0{,}01$; $0{,}0125$; $0{,}0167$; $0{,}025$;
+$0{,}05$). Kontroluje to błąd rodzinny na poziomie $5\%$ i jest mocniejsze niż Bonferroni.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lp{5.1cm}p{4.6cm}p{3.6cm}@{}}
+\toprule
+id & hipoteza & porównanie & kryterium \\
+\midrule
+H1 & twirling obniża błąd CDR przy równym budżecie & \texttt{twirl\_native} vs \texttt{off\_copies} (\texttt{near\_target}) & $p_{\text{Holm}}<0{,}05$ i iloraz $<1$ \\
+H3 & natywny co najmniej tak dobry jak logiczny & \texttt{twirl\_native} vs \texttt{twirl\_logical} (\texttt{shared\_random}) & $p_{\text{Holm}}<0{,}05$; inaczej iloraz i 95\% CI bootstrap \\
+H6 & spread lepszy niż CDR z twirlingiem & \texttt{spread} vs \texttt{twirl\_native} & $p_{\text{Holm}}<0{,}05$ i iloraz $<1$ \\
+H7a & przy stałym czasie więcej CZ to większy błąd & regresja P5, współczynnik $n_{CZ}$ & $>0$, $p_{\text{Holm}}<0{,}05$ \\
+H7b & przy stałych bramkach dłuższy czas to większy błąd & regresja P5, współczynnik czasu & $>0$, $p_{\text{Holm}}<0{,}05$ \\
+\midrule
+H4 & okno ZNE na szczeblu (dodatkowa) & ZNE vs raw i vs garbage; $W_{\text{neg}}$, SNR & wszystkie 4 warunki \\
+H5 & zmiany decyzji tylko przy małym marginesie (dodatkowa) & McNemar, raw vs \texttt{twirl\_native} & zmiany poniżej mediany $|\Oid|$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+H4 jest spełniona na szczeblu, gdy: ZNE ma mniejszy błąd niż raw (jednostronny Wilcoxon po 8
+punktach, $p<0{,}05$ bez korekty), mniejszy niż garbage na tym samym szczeblu, mediana
+$W_{\text{neg}}\le0{,}02$ i mediana SNR przy $\lambda=5$ $\ge2$. Przewidywanie zapisane z góry: ZNE
+płaci przy 12 CZ, a przy 57 CZ nie. Stabilności między kalibracjami ani $\kappa$ w tym oknie nie
+testujemy; wartości $\kappa$ pochodzą z pilota i są eksploracyjne.
+
+\textbf{Wykluczenia.} Żadnego punktu nie wykluczamy ze względu na wartość. Szczebel bez któregoś
+ramienia wypada tylko z porównania z tym ramieniem (raportujemy zmniejszone $n$). Obwody
+powtórzone po przerwanym zadaniu mają te same ziarna i są używane tak, jak zapisano; niepełne
+rekordy odkładamy. Jeśli noc się nie skończy, testujemy to, co zmierzono, i raportujemy braki.
+
+\subsection{Pre-rejestracja}
+
+Plan analizy (\texttt{preregistration.md}) i kod, który go wykonuje (\texttt{analysis/prereg\_w01.py}),
+zostały zacommitowane i oznaczone tagiem \texttt{prereg-v1} przed policzeniem czegokolwiek z
+\texttt{w01}. Zapisane są hipotezy, testy, kryteria sukcesu, wykluczenia i progi. Chroni to przed
+dobieraniem testu, podzbioru albo metryki po zobaczeniu danych. Każde odstępstwo raportujemy jako
+odstępstwo.
+
+Status, uczciwie: to plan analizy, a nie rejestracja przed zebraniem danych, bo noc A już trwała,
+gdy plan powstawał. Żaden błąd, iloraz, fit ani test z \texttt{w01} nie był wtedy liczony. Okna
+pilotażowe były analizowane i z nich pochodzą hipotezy; są eksploracyjne i nie wchodzą do testów
+potwierdzających.
+
+\subsection{Odtwarzalność}
+
+Każdy obwód ma deterministyczny identyfikator i własne ziarno (ramki, bliźniaki garbage, zbiory
+treningowe). Zapisujemy surowe zliczenia każdego obwodu (\texttt{counts.jsonl}) oraz manifest z
+commitem, kolejnością bloków i ID kalibracji. Dla obwodów z twirlingiem zapisujemy ramkę (listę
+Pauliego dla każdego CZ), z której razem z obwodem natywnym da się odtworzyć dokładnie wykonany
+obwód. Tabele \texttt{cdr.csv} i \texttt{zne.csv} są pochodne i odtwarzane ze zliczeń. Ten sam
+obwód można puścić w symulatorze z modelem szumu z kalibracji.
+
+\subsection{Noc P5: co napędza degradację}
+
+Głębszy obwód zmienia naraz liczbę CZ, liczbę PRX i czas trwania. Rozdzielamy je na jednym modelu
+(star, 12 CZ). \texttt{cz\_pairs}: wstawiamy $k\in\{6,12,20\}$ par $\CZ\cdot\CZ=I$ na krawędziach
+istniejących CZ (24, 36, 52 CZ; funkcja i PRX bez zmian, czas dłuższy o $2k$ czasów CZ).
+\texttt{idle\_matched}: w tych samych miejscach przerwa o długości dwóch CZ na obu kubitach
+(bramki bez zmian, czas jak w \texttt{cz\_pairs}). Pary są otoczone barierami, żeby nic ich nie
+skasowało, a miejsca wstawienia zależą tylko od indeksu CZ, więc trafiają w to samo miejsce w celu
+i w obwodach treningowych. L6/L9/L13 dokładają PRX (to inne klasyfikatory, dlatego analiza główna
+jest na samych L3). Kontrasty:
+\[
+  \texttt{cz\_pairs}-\texttt{idle\_matched}=\text{efekt CZ przy stałym czasie},\qquad
+  \texttt{idle\_matched}-\texttt{base}=\text{efekt czasu przy stałych bramkach}.
+\]
+Model:
+\[
+  \log\varepsilon_{ij}=\alpha_i+\beta_{CZ}\frac{n_{CZ,j}}{10}+\beta_t\,t_j[\mu\mathrm s]+u_{ij},
+\]
+z efektami stałymi punktu $\alpha_i$ i błędami standardowymi klastrowanymi po punkcie. $e^{\beta}$
+to mnożnik błędu na $+10$ CZ albo $+1\,\mu$s. Czas $t_j$ to długość z harmonogramu ASAP (bramki
+równoległe liczone raz, oczekiwanie wliczone), bo to ten czas widzi relaksacja. Postać
+log-liniowa wynika z modelu ściśnięcia: czynnik $e^{-\sum p}$ jest wykładniczy w liczbie bramek i
+w czasie.
+
+% =====================================================================
+\section{Wyniki}
+
+Stan danych: okno \texttt{w01}, noc A (12 i 39 CZ, po 8 punktów) i noc P5 są zmierzone w całości.
+Noc B (30 i 57 CZ) jest w toku, więc testy pre-rejestrowane H1, H3, H6 (32 pary, Holm) jeszcze nie
+są policzone. Liczby z nocy A to opis połowy danych, nie test. H7 (P5) jest już rozstrzygnięte.
+Kalibracja w nocy A była stała; w P5 zmieniła się w trakcie bloku \texttt{star\_cz52} (okno
+\texttt{split}; analiza główna go zostawia, analiza wrażliwości usunie).
+
+\subsection{Twirling i CDR \slid{res\_twirl}}
+
+\begin{center}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+CZ & \texttt{off\_copies} & \texttt{twirl\_native} & wygrane pary & iloraz geom. \\
+\midrule
+12 & 0,022 & 0,015 & 4/8 & 1,41 \\
+39 & 0,053 & 0,040 & 7/8 & 0,68 \\
+30, 57 & \PH & \PH & \PH & \PH \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Przy 39 CZ twirling obniża błąd CDR o około 30\% przy identycznym budżecie (7 z 8 par, test znaków
+$p=0{,}035$, Wilcoxon $p=0{,}07$). Przy 12 CZ efektu nie ma: średni błąd spada, ale iloraz
+geometryczny rośnie. To spodziewane: błąd CDR przy 12 CZ to około $0{,}02$, a szum shotów celu
+($\sqrt{V/(MS)}\approx0{,}002$) mnożony przez nachylenie fitu i szum samego fitu daje błąd tego samego
+rzędu. Twirling usuwa błąd systematyczny, a tu zostaje głównie statystyczny. Razem na 16 parach:
+11 wygranych, $p=0{,}35$ --- test rozstrzygnie noc B, gdzie są głębsze szczeble.
+
+Logiczny vs natywny na wspólnym zbiorze (\texttt{shared\_random}): logiczny $0{,}019$ / $0{,}025$,
+natywny $0{,}031$ / $0{,}032$ (12 / 39 CZ), natywny wygrał 7 z 16 par. Przewagi natywnego (H3) na
+razie nie ma. Pilot (3 okna): 11 z 12 par, iloraz $0{,}51$ (logiczny) i $0{,}54$ (natywny).
+
+\subsection{Która metoda kiedy \slid{res\_methods}}
+
+\begin{center}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+CZ & raw & ZNE & ZNE garbage & CDR + twirl & spread \\
+\midrule
+12 & 0,074 & 0,045 & 0,137 & 0,015 & 0,012 \\
+39 & 0,161 & 0,112 & 0,103 & 0,040 & 0,068 \\
+shoty / punkt & 8\,192 & 24\,576 & 24\,576 & 1\,032\,192 & 1\,032\,192 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Ważne dla metodologii: koszt.} Równy budżet obowiązuje \emph{między ramionami CDR}
+(wszystkie po $1\,032\,192$ shoty na punkt). ZNE $\{1,3,5\}$ zużywa $3\cdot8192=24\,576$ shotów na
+punkt, czyli około 42 razy mniej niż CDR. Porównanie ZNE z CDR nie jest więc porównaniem przy
+równym koszcie; koszt raportujemy obok błędu. Na slajdzie ,,problem'' tytuł brzmi teraz
+,,Porównujmy metody, licząc ten koszt'', a nie ,,przy tym samym koszcie''.
+
+\textbf{ZNE i H4.} Przy 12 CZ ZNE jest prawdziwe: genuine jest wyraźnie lepsze od garbage
+($0{,}045$ vs $0{,}137$, $p=0{,}01$), mediana $W_{\text{neg}}=0{,}005$, SNR $=23$. Poprawa względem
+raw ($0{,}069\to0{,}045$) jest jednak na 8 punktach nieistotna ($p=0{,}47$). Przy 39 CZ ZNE jest
+istotnie lepsze od raw ($p=0{,}004$), ale garbage daje to samo ($0{,}103$ vs $0{,}112$). To dokładnie
+degeneracja z sekcji o górnej granicy: przy zaniku sygnału Richardson ,,poprawia'' wynik bez względu
+na to, co jest w obwodach $\lambda=3,5$. Ważna obserwacja: $W_{\text{neg}}=0$ i SNR $=4$ tego
+\emph{nie wykryły}; wykryła to tylko kontrola garbage. Formalnie H4 nie jest spełniona na żadnym
+z dwóch szczebli (przy 12 CZ brak warunku ZNE $<$ raw, przy 39 CZ brak warunku ZNE $<$ garbage).
+
+\textbf{Test degeneracji (floor tracking).} Liczymy, jak daleko $\hat E$ leży od przewidywania
+degeneracji $c_1E_1+(1-c_1)f$ przy zmierzonej podłodze $f$. Przy 39 CZ mediana odległości to
+$0{,}016$ (retencja sygnału $0{,}24$), czyli ZNE praktycznie \emph{jest} przeskalowanym pierwszym
+pomiarem. Przy 12 CZ odległość to $0{,}17$ (retencja $0{,}82$): tam ekstrapolacja faktycznie
+korzysta z $\lambda=3,5$. To ilościowe potwierdzenie wniosku z kontroli garbage.
+
+\textbf{Identity folding nie jest dobrą kontrolą.} Wariant identity ma tę samą liczbę CZ i PRX co
+genuine na każdej skali (sprawdzone w zapisanych obwodach), a w symulacji bezszumowej daje dokładnie
+ideał. Na sprzęcie $\ev O$ ucieka jednak w stronę $+1$: przy 12 CZ $0{,}16$ i $0{,}28$, przy 39 CZ
+$0{,}40$ i $0{,}57$ dla $\lambda=3,5$ (genuine zostaje przy ideale bliskim $0$). Powód leży w
+konstrukcji: połowa bloku to same CZ bez bramek 1q pomiędzy, a druga połowa to pary
+bramka--odwrotność. Bramki diagonalne nie mieszają populacji, więc błędy fazowe są tam niewidoczne w
+pomiarze $Z$, a relaksacja $T_1$ (ciągnąca do $\ket0$, czyli $Z=+1$) działa bez przeszkód. Blok
+identity ma więc ten sam koszt w bramkach, ale \emph{inny} szum niż $U^\dagger U$. Nie używamy go
+do wniosków; kontrolą, która działa, jest garbage.
+
+\textbf{CDR i spread.} CDR z twirlingiem ma najmniejszy błąd na obu szczeblach (przy wspomnianym
+koszcie). Spread jest najlepszy przy 12 CZ, ale przy 39 CZ gorszy od twirlingu ($0{,}068$ vs
+$0{,}040$, mediana $r^2$ $0{,}69$ wobec $0{,}92$). Przewidywana przewaga spread dotyczy głównie
+najgłębszych szczebli (degeneracja fitu przy 57 CZ), więc H6 rozstrzygnie noc B.
+
+\subsection{Co napędza degradację \slid{res\_depth}}
+
+\begin{center}
+\begin{tabular}{@{}llccc@{}}
+\toprule
+wynik & czynnik & zmiana błędu & 95\% CI & $p$ \\
+\midrule
+surowy & $+10$ CZ (stały czas) & $\times0{,}96$ & $0{,}77$--$1{,}19$ & $0{,}68$ \\
+surowy & $+1\,\mu$s (stałe bramki) & $\times1{,}43$ & $1{,}30$--$1{,}58$ & $<0{,}0001$ \\
+surowy & $+10$ PRX (z L6--L13) & $\times1{,}12$ & $0{,}81$--$1{,}56$ & $0{,}50$ \\
+po CDR & $+10$ CZ & $\times1{,}34$ & $1{,}11$--$1{,}61$ & $0{,}002$ \\
+po CDR & $+1\,\mu$s & $\times1{,}32$ & $0{,}77$--$2{,}27$ & $0{,}31$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+H7b potwierdzona: przy stałych bramkach każda mikrosekunda podnosi surowy błąd o około 43\%. Przy
+$p<0{,}0001$ przejdzie każdy próg Holma. H7a niepotwierdzona ($p=0{,}68$). W parach punkt po punkcie
+dodatkowe CZ podnoszą surowy błąd w 6 z 8 punktów na każdym poziomie (zwykle o 20--50\%), ale 1--2
+punkty z przypadkowo bliskim zera błędem surowym (np.\ iloraz $0{,}03$) ściągają log-regresję. Uczciwe
+sformułowanie: wpływ CZ przy stałym czasie jest mały i niejednoznaczny, wpływ czasu duży i
+jednoznaczny.
+
+\textbf{Analiza wrażliwości (pre-rejestracja).} Bez bloku \texttt{star\_cz52}, w którym zmieniła
+się kalibracja: surowy błąd $+1\,\mu$s $\times1{,}48$ ($p<0{,}0001$), $+10$ CZ $\times1{,}03$
+($p=0{,}89$); po CDR $+10$ CZ $\times1{,}59$ ($p=0{,}0001$). Wnioski się nie zmieniają.
+
+\textbf{Fit EIV (drugorzędny).} Prawie wszędzie daje to samo co OLS (różnice $\le0{,}007$). Wyjątek:
+spread przy 39 CZ, gdzie EIV pogarsza błąd ($0{,}098$ wobec $0{,}068$). Mała prawdziwa rozpiętość $x$
+przy dużym szumie pojedynczego pomiaru to dokładnie sytuacja, w której poprawka EIV jest niestabilna
+(stąd limit $4\times$). OLS zostaje fitem głównym, tak jak w planie.
+
+Po CDR obraz się odwraca. Zanik w czasie (relaksacja, defazowanie) zachowuje się jak globalne
+ściśnięcie sygnału, które CDR koryguje prostą. Zostaje część od CZ, której CDR nie usuwa. To spójne z
+tym, że twirling (który działa na szum CZ) pomaga CDR przy głębszych szczeblach. Modele L6/L9/L13
+wypadają gorzej niż wstawki CZ o tej samej liczbie CZ i podobnym czasie (po CDR przy 36 CZ: L9
+$0{,}135$, \texttt{cz36} $0{,}072$), co potwierdza wniosek z pilota.
+
+\subsection{Stała $\kappa$ \slid{res\_kappa}}
+
+Pilot ODRA (star, 12 CZ). ,,Przewidziane'' dla podziału równego to czysta liczba z węzłów; dla
+Neymana to $\kappa_{\text{opt}}$ ze zmierzonymi $\sigma_k$. Stąd $3{,}06$ i $11{,}6$ zamiast $3{,}0$
+i $11{,}25$: na większych skalach $\ev O$ jest bliżej zera, więc wariancja shotu jest inna.
+
+\begin{center}
+\begin{tabular}{@{}llccc@{}}
+\toprule
+węzły & podział & zmierzone & przewidziane & różnica \\
+\midrule
+$\{1,3,5\}$ & równy & $15{,}8\pm1{,}7$ & $14{,}66$ & $0{,}7\sigma$ \\
+$\{1,3,5\}$ & Neyman & $12{,}5\pm1{,}1$ & $11{,}6$ & $0{,}8\sigma$ \\
+$\{1,3\}$ & Neyman & $1{,}3\pm1{,}3$ & $3{,}06$ & $1{,}4\sigma$ \\
+$\{1,3,5,7\}$ & Neyman & $26{,}0\pm3{,}3$; $25{,}7\pm11{,}3$ & $\sim37$ & $>3\sigma$ (pierwsze okno) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Dla $\{1,3,5\}$ teoria się zgadza, a Neyman obniża $\kappa$ o około 20\%; o tyle samo spada próg
+$S^*$. $\{1,3\}$ ma zbyt duży rozrzut na wniosek. $\{1,3,5,7\}$ jest wyraźnie poniżej
+przewidywania; możliwe przyczyny to model wariancji przy $\lambda=7$, korelacje między skalami w
+jednym oknie albo nieliniowość zależności MSE od $S$. To pytanie otwarte.
+
+\subsection{Decyzje klasyfikatora \slid{res\_decisions}}
+
+Decyzja to znak $\ev O$. Zmienia się z $E$ na $\hat O$ tylko wtedy, gdy $|\hat O-E|\ge|E|$; korekta
+jest ograniczona, więc zmiany są możliwe tylko przy małych $|E|$, czyli małych marginesach.
+
+\textbf{McNemar.} Każdy punkt ma dwie decyzje, każda zgodna lub nie z decyzją idealnego
+klasyfikatora. Liczą się tylko pary niezgodne: $b$ (mitygacja zepsuła) i $c$ (naprawiła). Przy $H_0$
+każda niezgodność to rzut monetą, $b\sim\mathrm{Bin}(b+c,\frac12)$:
+\[
+  p=\min\Big(1,\ 2\sum_{j=0}^{\min(b,c)}\binom{b+c}j2^{-(b+c)}\Big).
+\]
+Pilot (100 punktów na szczebel), CDR: 12 CZ $4/1$, $p=0{,}375$; 30 CZ $0/5$, $p=0{,}0625$; 39 CZ
+$0/10$, $p=0{,}002$; 57 CZ $2/9$, $p=0{,}065$ (bez korekty). Wszystkie 31 zmian przy CDR i 18 przy
+ZNE wypadło w połowie punktów o marginesie poniżej mediany; przy niezależności od marginesu szansa
+byłaby rzędu $2^{-31}$.
+
+\textbf{w01 noc A:} 16 punktów, zgodność raw $15/16$, po CDR $16/16$, po ZNE $16/16$. Jedyna zmiana
+decyzji (naprawa) dotyczy punktu z marginesem $0{,}028$, przy medianie marginesu $0{,}16$--$0{,}31$.
+Ten sam wzór co w pilocie.
+
+\section{Wnioski i ograniczenia}
+
+\subsection{Mapa reżimów \slid{conclusions}}
+
+Na podstawie nocy A i P5 (noc B w toku):
+\begin{enumerate}
+  \item \textbf{Twirling przy równym budżecie} obniża błąd CDR przy 39 CZ o około 30\% (7/8 par); przy
+  12 CZ nie ma efektu, bo błąd jest już na poziomie szumu. Wynik pilota (połowa błędu) jest więc
+  prawdopodobnie napędzany głębszymi szczeblami; rozstrzygnie noc B.
+  \item \textbf{ZNE} jest prawdziwe przy 12 CZ (lepsze od garbage), a przy 39 CZ jego zysk jest taki
+  sam jak z garbage, czyli jest artefaktem zaniku sygnału. $W_{\text{neg}}$ i SNR tego nie wykryły,
+  tylko kontrola garbage. ZNE jest za to około 42 razy tańsze od CDR.
+  \item \textbf{CDR z twirlingiem} ma najmniejszy błąd na obu szczeblach; spread pomaga przy 12 CZ, przy
+  39 CZ jeszcze nie.
+  \item \textbf{Surowy błąd napędza czas obwodu} ($\times1{,}43$ na $\mu$s), nie sama liczba CZ; po CDR
+  zostaje część od CZ ($\times1{,}34$ na 10 CZ).
+\end{enumerate}
+Dwie osie z teorii nadal obowiązują: wzdłuż budżetu próg $S^*=\kappa V/(B^2-B_{\text{ZNE}}^2)$,
+wzdłuż głębokości zanik sygnału zamykający okno ZNE. O mechanizmie twirlingu: działa empirycznie, a
+mechanizm wykracza poza prosty błąd $ZZ$ na CZ.
+
+\subsection{Ograniczenia \slid{limitations}}
+
+\textbf{Jedno urządzenie.} Granice zależą od $\gamma$ i od tego, ile CZ dokłada routing. Na kracie
+(Garnet, Emerald) ta sama funkcja kosztuje inną liczbę CZ, a szum ma inną strukturę (przesłuchy z
+wieloma sąsiadami). Liczby się przesuną, metoda wyznaczania granic pozostaje.
+\textbf{Jedno zadanie.} Średnie $Z$ ma specyficzną podłogę ($T_1$) i ideały Clifforda w zbiorze
+$\{-1,-0{,}8,\dots,1\}$, często zero. Inna obserwabla zmieni i $f$, i rozkład ideałów.
+\textbf{CDR przy głębokich obwodach.} Degeneracja fitu to ograniczenie metody dla tej obserwabli,
+nie naszej realizacji; motywuje spread.
+
+\subsection{Co dalej \slid{next}}
+
+Ten sam protokół na kratach IQM (Garnet 20, Emerald 54 kubity). Emerald jest za duży na symulację
+($2^{54}$ amplitud), ale CDR nadal działa, bo ideały Clifforda liczy symulator stabilizatorowy.
+Inne obwody i obserwable, w tym jednokubitowe, dla których ideał rzadziej jest zerem.
+
+% =====================================================================
+\clearpage
+\appendix
+\section*{Ściąga wzorów}
+\addcontentsline{toc}{section}{Ściąga wzorów}
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{@{}p{3.6cm}p{11.4cm}@{}}
+\toprule
+model szumu & $E(\lambda)=f+(\Oid-f)e^{-\gamma\lambda}$, $B\approx-\gamma(\Oid-f)$ \\
+Richardson & $\hat E=\sum c_kE_k$, $c_k=\prod_{j\ne k}\frac{\lambda_j}{\lambda_j-\lambda_k}$; $\{1,3,5\}$: $(\frac{15}8,-\frac54,\frac38)$ \\
+obciążenie ZNE & $|B_{\text{ZNE}}|\lesssim2{,}5\gamma^3|\Oid-f|$ \\
+$\kappa$ & równy $|\Lambda|\sum c_k^2-1$ (4 / 14,66 / 44,56); Neyman $(\sum|c_k|\sigma_k/\sigma_1)^2-1$ (3 / 11,25 / 35) \\
+próg & $S^*=\kappa V/(B^2-B_{\text{ZNE}}^2)$ \\
+zanik & $E(\lambda>1)=f\Rightarrow\hat E=c_1E_1+(1-c_1)f$ \\
+$W_{\text{neg}}$, SNR & $\sum_s\max(0,-\sum_kc_kP_s(\lambda_k))\le0{,}02$; $|E(\lambda_{\max})|/\sqrt{V/N}\ge2$ \\
+CDR & $\hat O=aE+b$, $a=\Cov/\Var$; EIV $a=\Cov/(\Var x-\bar\sigma_x^2)$, limit $4\times$ \\
+twirling & $B\,\CZ\,A=\CZ$; $\Lambda_{\text{tw}}=\sum_\alpha\chi_{\alpha\alpha}P_\alpha\cdot P_\alpha$; koherentny $N^2\theta^2/4$ vs $N\theta^2/4$ \\
+budżet & $(n_{\text{train}}+1)MS=1\,032\,192$ \\
+ansatz & $[R_X(wx)\,R_YR_Z\,\text{splątanie}]^{3}\,R_YR_Z$, 55 wag, $f(x)=\sum_{\omega}c_\omega e^{i\omega x}$ \\
+parameter shift & $\partial_\theta\ev O=\frac12[\ev O_{\theta+\pi/2}-\ev O_{\theta-\pi/2}]$ \\
+McNemar & $p=2\sum_{j\le\min(b,c)}\binom{b+c}j2^{-(b+c)}$ \\
+Holm & odrzucaj, dopóki $p_{(i)}\le\alpha/(m-i+1)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Literatura}
+\addcontentsline{toc}{section}{Literatura}
+\small
+\begin{itemize}[leftmargin=*]
+  \item K.~Temme, S.~Bravyi, J.~Gambetta, PRL 119, 180509 (2017) --- ZNE.
+  \item T.~Giurgica-Tiron i in., IEEE QCE (2020) --- cyfrowy folding.
+  \item P.~Czarnik, A.~Arrasmith, P.~J.~Coles, L.~Cincio, Quantum 5, 592 (2021) --- CDR.
+  \item J.~J.~Wallman, J.~Emerson, PRA 94, 052325 (2016) --- randomized compiling.
+  \item R.~Takagi i in., npj Quantum Inf.\ 8, 114 (2022); Y.~Quek i in., Nat.\ Phys.\ (2024) --- granice kosztu QEM.
+  \item A.~Kandala i in., Nature 549, 242 (2017) --- hardware-efficient ansatz.
+  \item A.~Pérez-Salinas i in., Quantum 4, 226 (2020) --- data re-uploading.
+  \item M.~Schuld, R.~Sweke, J.~J.~Meyer, PRA 103, 032430 (2021) --- modele kwantowe jako szeregi Fouriera.
+  \item J.~Bowles, S.~Ahmed, M.~Schuld, arXiv:2403.07059 (2024) --- benchmarki QML.
+  \item D.~Gottesman (1998); S.~Aaronson, D.~Gottesman, PRA 70, 052328 (2004) --- symulacja Cliffordów.
+  \item Köster, Mauerer, arXiv:2607.09360 (2026) --- degeneracja ZNE.
+  \item Scavino Alfaro, arXiv:2605.08251 (2026) --- $\kappa$ i alokacja Neymana.
+  \item F.~Wilcoxon (1945); S.~Holm (1979); Q.~McNemar (1947).
+\end{itemize}
+
+\end{document}

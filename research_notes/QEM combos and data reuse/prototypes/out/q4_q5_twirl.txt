@@ -1,0 +1,28 @@
+[ols err] twirl=twirl_native: twirl effect @12CZ x1.41 [t-CI 0.63,3.16; boot 0.60,3.52]; @39CZ x0.68 [boot 0.47,1.08]; interaction (ratio of ratios) x0.48 [t-CI 0.15,1.52; boot 0.18,1.25], p_t=0.195
+[ols err_raw] twirl=twirl_native: twirl effect @12CZ x0.90 [t-CI 0.56,1.46; boot 0.50,1.42]; @39CZ x1.01 [boot 0.79,1.27]; interaction (ratio of ratios) x1.12 [t-CI 0.57,2.22; boot 0.67,2.13], p_t=0.720
+[ols err] twirl=spread: twirl effect @12CZ x1.00 [t-CI 0.35,2.83; boot 0.45,3.76]; @39CZ x1.20 [boot 0.77,1.93]; interaction (ratio of ratios) x1.19 [t-CI 0.27,5.18; boot 0.29,3.29], p_t=0.799
+[ols err_raw] twirl=spread: twirl effect @12CZ x1.16 [t-CI 0.72,1.86; boot 0.70,2.09]; @39CZ x1.04 [boot 0.90,1.22]; interaction (ratio of ratios) x0.90 [t-CI 0.46,1.75; boot 0.49,1.52], p_t=0.737
+[eiv err] twirl=twirl_native: twirl effect @12CZ x1.48 [t-CI 0.53,4.13; boot 0.66,3.37]; @39CZ x0.45 [boot 0.17,1.10]; interaction (ratio of ratios) x0.31 [t-CI 0.07,1.30; boot 0.09,1.01], p_t=0.101
+[eiv err_raw] twirl=twirl_native: twirl effect @12CZ x0.90 [t-CI 0.56,1.46; boot 0.50,1.41]; @39CZ x1.01 [boot 0.79,1.27]; interaction (ratio of ratios) x1.12 [t-CI 0.57,2.22; boot 0.67,2.12], p_t=0.720
+[eiv err] twirl=spread: twirl effect @12CZ x0.57 [t-CI 0.20,1.65; boot 0.23,1.42]; @39CZ x1.13 [boot 0.46,2.84]; interaction (ratio of ratios) x1.99 [t-CI 0.44,8.98; boot 0.56,7.20], p_t=0.344
+[eiv err_raw] twirl=spread: twirl effect @12CZ x1.16 [t-CI 0.72,1.86; boot 0.70,2.08]; @39CZ x1.04 [boot 0.90,1.22]; interaction (ratio of ratios) x0.90 [t-CI 0.46,1.75; boot 0.49,1.51], p_t=0.737
+
+CDR fit r^2 (OLS), mean [min,max] over 8 points:
+  star     off_copies:near_target   r2 0.972 [0.929,0.992]  slope a OLS 1.22, EIV 1.22
+  star     twirl_native:near_target   r2 0.989 [0.982,0.996]  slope a OLS 1.27, EIV 1.28
+  star     spread:near_target   r2 0.965 [0.954,0.979]  slope a OLS 1.26, EIV 1.31
+  star     twirl_logical:shared_random r2 0.971 [0.957,0.985]  slope a OLS 1.25, EIV 1.29
+  star     twirl_native:shared_random r2 0.969 [0.961,0.980]  slope a OLS 1.22, EIV 1.25
+  circular off_copies:near_target   r2 0.789 [0.498,0.903]  slope a OLS 2.50, EIV 2.51
+  circular twirl_native:near_target   r2 0.905 [0.752,0.951]  slope a OLS 3.23, EIV 3.44
+  circular spread:near_target   r2 0.677 [0.594,0.747]  slope a OLS 2.39, EIV 4.77
+  circular twirl_logical:shared_random r2 0.893 [0.827,0.961]  slope a OLS 3.36, EIV 3.64
+  circular twirl_native:shared_random r2 0.927 [0.894,0.954]  slope a OLS 3.27, EIV 3.50
+  star: r2 twirl_native - off_copies = +0.017 (twirl higher 7/8, Wilcoxon p=0.016)
+  circular: r2 twirl_native - off_copies = +0.116 (twirl higher 8/8, Wilcoxon p=0.008)
+
+Q5 frame vs copy variance (means over 8 points):
+  star     off_copies   target var/shot-var    0.8 (target SD across M 0.0043 vs shot SD 0.0049); training var/shot-var   0.9; |a|*SE(target mean) 0.0022 vs CDR err 0.0216 (share of err^2 0.005); regression dilution factor 0.9998
+  star     twirl_native target var/shot-var   28.9 (target SD across M 0.0266 vs shot SD 0.0050); training var/shot-var  31.3; |a|*SE(target mean) 0.0138 vs CDR err 0.0150 (share of err^2 0.554); regression dilution factor 0.9940
+  circular off_copies   target var/shot-var    0.8 (target SD across M 0.0047 vs shot SD 0.0055); training var/shot-var   1.0; |a|*SE(target mean) 0.0047 vs CDR err 0.0529 (share of err^2 0.005); regression dilution factor 0.9966
+  circular twirl_native target var/shot-var   12.3 (target SD across M 0.0182 vs shot SD 0.0054); training var/shot-var  13.1; |a|*SE(target mean) 0.0239 vs CDR err 0.0397 (share of err^2 0.251); regression dilution factor 0.9371

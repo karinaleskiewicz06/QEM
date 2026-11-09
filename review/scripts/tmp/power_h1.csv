@@ -1,0 +1,7 @@
+scenariusz,bootstrap,H1,H1_raw_p<0.05,H1_p<0.0125,median_p_H1
+noc B jak 12 CZ (star),zwykły,0.0005,0.0035,0.0005,0.6999245487811407
+noc B jak 12 CZ (star),wygładzony,0.0,0.00475,0.0,0.6335590544622391
+noc B jak 39 CZ (circular),zwykły,0.1595,0.5975,0.1595,0.042466755217388116
+noc B jak 39 CZ (circular),wygładzony,0.16875,0.55925,0.16875,0.04185544163919985
+noc B jak cała noc A (mieszanka),zwykły,0.0055,0.06425,0.0055,0.2809669542077602
+noc B jak cała noc A (mieszanka),wygładzony,0.00625,0.0725,0.00625,0.2898193576838821

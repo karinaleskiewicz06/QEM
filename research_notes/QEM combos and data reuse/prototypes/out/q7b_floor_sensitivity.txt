@@ -1,0 +1,4 @@
+star: geo ratio twirl/off by floor:  floor 0.0001: x1.41 [0.60,3.52]  floor 0.001: x0.99 [0.55,1.79]  floor 0.003: x0.84 [0.52,1.36]  floor 0.005: x0.83 [0.52,1.33]  floor 0.01: x0.85 [0.54,1.32]
+   arithmetic ratio 0.69; RMS ratio 0.60; paired abs diff: mean err twirl=0.0150 off=0.0216; diff -0.0066 [95% boot -0.0193,+0.0050]; geo ratio 1.41 [0.60,3.48]; twirl wins 4/8; Wilcoxon 2-sided p=0.547
+circular: geo ratio twirl/off by floor:  floor 0.0001: x0.68 [0.48,1.07]  floor 0.001: x0.68 [0.48,1.07]  floor 0.003: x0.68 [0.48,1.07]  floor 0.005: x0.71 [0.50,1.09]  floor 0.01: x0.80 [0.55,1.23]
+   arithmetic ratio 0.75; RMS ratio 0.74; paired abs diff: mean err twirl=0.0397 off=0.0529; diff -0.0132 [95% boot -0.0384,+0.0113]; geo ratio 0.68 [0.48,1.08]; twirl wins 7/8; Wilcoxon 2-sided p=0.148

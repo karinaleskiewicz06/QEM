@@ -1,0 +1,55 @@
+P5 idle family: log(CDR slope) per us = 0.084 (SE 0.015) -> signal attenuation x0.920 per us; mean slopes by rung: star 1.190@0.80us, star_idle24 1.283@1.52us, star_idle36 1.383@2.24us, star_idle52 1.458@3.20us
+
+## star off_copies: mean training-target duration gap -0.197 us, PRX gap -9.8
+  D0 plain           0.0216
+  D1 +dur            0.0543  | mean err var=0.0543 plain=0.0216; diff +0.0327 [95% boot +0.0151,+0.0490]; geo ratio 5.51 [1.53,26.20]; var wins 1/8; Wilcoxon 2-sided p=0.016
+  D2 x:dur           0.0734  | mean err var=0.0734 plain=0.0216; diff +0.0518 [95% boot +0.0316,+0.0710]; geo ratio 5.68 [1.67,29.33]; var wins 1/8; Wilcoxon 2-sided p=0.016
+  D3 +prx            0.0543  | mean err var=0.0543 plain=0.0216; diff +0.0327 [95% boot +0.0151,+0.0490]; geo ratio 5.51 [1.53,26.20]; var wins 1/8; Wilcoxon 2-sided p=0.016
+  D4 kernel          0.0223  | mean err var=0.0223 plain=0.0216; diff +0.0007 [95% boot +0.0000,+0.0013]; geo ratio 1.37 [1.00,2.37]; var wins 2/8; Wilcoxon 2-sided p=0.109
+  D5 atten-transfer  0.0210  | mean err var=0.0210 plain=0.0216; diff -0.0006 [95% boot -0.0045,+0.0034]; geo ratio 1.19 [0.37,4.78]; var wins 3/8; Wilcoxon 2-sided p=0.945
+  D6 closest-half    0.0247  | mean err var=0.0247 plain=0.0216; diff +0.0031 [95% boot -0.0023,+0.0086]; geo ratio 2.57 [0.88,9.91]; var wins 3/8; Wilcoxon 2-sided p=0.461
+
+## star twirl_native: mean training-target duration gap -0.109 us, PRX gap -5.4
+  D0 plain           0.0150
+  D1 +dur            0.0167  | mean err var=0.0167 plain=0.0150; diff +0.0017 [95% boot -0.0048,+0.0084]; geo ratio 1.02 [0.42,2.76]; var wins 4/8; Wilcoxon 2-sided p=0.742
+  D2 x:dur           0.0191  | mean err var=0.0191 plain=0.0150; diff +0.0042 [95% boot -0.0063,+0.0135]; geo ratio 1.25 [0.49,2.92]; var wins 3/8; Wilcoxon 2-sided p=0.383
+  D3 +prx            0.0184  | mean err var=0.0184 plain=0.0150; diff +0.0034 [95% boot -0.0069,+0.0143]; geo ratio 1.03 [0.23,4.06]; var wins 4/8; Wilcoxon 2-sided p=0.844
+  D4 kernel          0.0151  | mean err var=0.0151 plain=0.0150; diff +0.0001 [95% boot -0.0006,+0.0008]; geo ratio 0.99 [0.83,1.15]; var wins 4/8; Wilcoxon 2-sided p=1.000
+  D5 atten-transfer  0.0151  | mean err var=0.0151 plain=0.0150; diff +0.0002 [95% boot -0.0021,+0.0021]; geo ratio 1.18 [0.97,1.46]; var wins 2/8; Wilcoxon 2-sided p=0.547
+  D6 closest-half    0.0164  | mean err var=0.0164 plain=0.0150; diff +0.0014 [95% boot -0.0056,+0.0087]; geo ratio 1.02 [0.64,1.57]; var wins 3/8; Wilcoxon 2-sided p=0.641
+
+## star spread: mean training-target duration gap -0.110 us, PRX gap -5.5
+  D0 plain           0.0122
+  D1 +dur            0.0164  | mean err var=0.0164 plain=0.0122; diff +0.0043 [95% boot +0.0002,+0.0083]; geo ratio 1.60 [0.93,2.69]; var wins 2/8; Wilcoxon 2-sided p=0.195
+  D2 x:dur           0.0171  | mean err var=0.0171 plain=0.0122; diff +0.0049 [95% boot -0.0068,+0.0174]; geo ratio 1.40 [0.55,3.62]; var wins 3/8; Wilcoxon 2-sided p=0.547
+  D3 +prx            0.0164  | mean err var=0.0164 plain=0.0122; diff +0.0043 [95% boot +0.0002,+0.0083]; geo ratio 1.60 [0.93,2.69]; var wins 2/8; Wilcoxon 2-sided p=0.195
+  D4 kernel          0.0122  | mean err var=0.0122 plain=0.0122; diff +0.0001 [95% boot -0.0018,+0.0021]; geo ratio 0.68 [0.36,1.18]; var wins 5/8; Wilcoxon 2-sided p=0.945
+  D5 atten-transfer  0.0113  | mean err var=0.0113 plain=0.0122; diff -0.0009 [95% boot -0.0030,+0.0012]; geo ratio 0.75 [0.49,1.15]; var wins 5/8; Wilcoxon 2-sided p=0.383
+  D6 closest-half    0.0146  | mean err var=0.0146 plain=0.0122; diff +0.0024 [95% boot -0.0020,+0.0065]; geo ratio 1.70 [1.04,2.81]; var wins 3/8; Wilcoxon 2-sided p=0.383
+
+## circular off_copies: mean training-target duration gap -0.125 us, PRX gap -6.2
+  D0 plain           0.0529
+  D1 +dur            0.0587  | mean err var=0.0587 plain=0.0529; diff +0.0058 [95% boot -0.0181,+0.0278]; geo ratio 0.98 [0.42,2.03]; var wins 3/8; Wilcoxon 2-sided p=0.641
+  D2 x:dur           0.0729  | mean err var=0.0729 plain=0.0529; diff +0.0199 [95% boot +0.0018,+0.0440]; geo ratio 1.21 [0.80,1.78]; var wins 2/8; Wilcoxon 2-sided p=0.109
+  D3 +prx            0.0587  | mean err var=0.0587 plain=0.0529; diff +0.0058 [95% boot -0.0181,+0.0278]; geo ratio 0.98 [0.42,2.03]; var wins 3/8; Wilcoxon 2-sided p=0.641
+  D4 kernel          0.0558  | mean err var=0.0558 plain=0.0529; diff +0.0029 [95% boot -0.0011,+0.0072]; geo ratio 1.08 [0.99,1.17]; var wins 2/8; Wilcoxon 2-sided p=0.383
+  D5 atten-transfer  0.0520  | mean err var=0.0520 plain=0.0529; diff -0.0010 [95% boot -0.0023,+0.0005]; geo ratio 1.02 [0.96,1.11]; var wins 5/8; Wilcoxon 2-sided p=0.250
+  D6 closest-half    0.1005  | mean err var=0.1005 plain=0.0529; diff +0.0475 [95% boot -0.0053,+0.1343]; geo ratio 1.58 [0.96,2.78]; var wins 3/8; Wilcoxon 2-sided p=0.547
+
+## circular twirl_native: mean training-target duration gap -0.084 us, PRX gap -4.3
+  D0 plain           0.0397
+  D1 +dur            0.0414  | mean err var=0.0414 plain=0.0397; diff +0.0017 [95% boot -0.0078,+0.0101]; geo ratio 1.02 [0.52,1.75]; var wins 3/8; Wilcoxon 2-sided p=0.844
+  D2 x:dur           0.0803  | mean err var=0.0803 plain=0.0397; diff +0.0406 [95% boot +0.0076,+0.0784]; geo ratio 2.18 [1.24,3.93]; var wins 2/8; Wilcoxon 2-sided p=0.078
+  D3 +prx            0.0478  | mean err var=0.0478 plain=0.0397; diff +0.0081 [95% boot -0.0103,+0.0261]; geo ratio 1.69 [0.86,3.55]; var wins 4/8; Wilcoxon 2-sided p=0.461
+  D4 kernel          0.0419  | mean err var=0.0419 plain=0.0397; diff +0.0022 [95% boot -0.0007,+0.0055]; geo ratio 1.21 [0.99,1.74]; var wins 3/8; Wilcoxon 2-sided p=0.383
+  D5 atten-transfer  0.0394  | mean err var=0.0394 plain=0.0397; diff -0.0003 [95% boot -0.0017,+0.0011]; geo ratio 1.01 [0.92,1.15]; var wins 5/8; Wilcoxon 2-sided p=0.641
+  D6 closest-half    0.0698  | mean err var=0.0698 plain=0.0397; diff +0.0301 [95% boot +0.0082,+0.0559]; geo ratio 1.90 [1.24,3.05]; var wins 2/8; Wilcoxon 2-sided p=0.055
+
+## circular spread: mean training-target duration gap -0.086 us, PRX gap -4.3
+  D0 plain           0.0679
+  D1 +dur            0.0740  | mean err var=0.0740 plain=0.0679; diff +0.0062 [95% boot -0.0117,+0.0244]; geo ratio 0.95 [0.52,1.91]; var wins 4/8; Wilcoxon 2-sided p=0.742
+  D2 x:dur           0.0571  | mean err var=0.0571 plain=0.0679; diff -0.0108 [95% boot -0.0329,+0.0098]; geo ratio 0.68 [0.34,1.29]; var wins 4/8; Wilcoxon 2-sided p=0.461
+  D3 +prx            0.0740  | mean err var=0.0740 plain=0.0679; diff +0.0062 [95% boot -0.0117,+0.0244]; geo ratio 0.95 [0.52,1.91]; var wins 4/8; Wilcoxon 2-sided p=0.742
+  D4 kernel          0.0655  | mean err var=0.0655 plain=0.0679; diff -0.0023 [95% boot -0.0167,+0.0090]; geo ratio 0.96 [0.70,1.28]; var wins 4/8; Wilcoxon 2-sided p=0.844
+  D5 atten-transfer  0.0669  | mean err var=0.0669 plain=0.0679; diff -0.0010 [95% boot -0.0015,-0.0005]; geo ratio 0.98 [0.97,1.00]; var wins 7/8; Wilcoxon 2-sided p=0.023
+  D6 closest-half    0.0682  | mean err var=0.0682 plain=0.0679; diff +0.0003 [95% boot -0.0207,+0.0192]; geo ratio 0.92 [0.57,1.45]; var wins 4/8; Wilcoxon 2-sided p=0.844

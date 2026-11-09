@@ -1,0 +1,47 @@
+e01=[0.0066 0.0033 0.0048 0.0053 0.0077], e10=[0.0254 0.0507 0.0347 0.0272 0.0335]; mean-Z offset d=mean(e10-e01)=0.0288, gain g=1-e01-e10 mean 0.9602
+end-of-window SSRO identical to start: True
+
+## star
+uncorrected: raw(λ1) 0.0690, raw(6 copies) 0.0737, ZNE 0.0452
+  ZNE vs raw(λ1) uncorrected: mean err ZNE=0.0452 raw=0.0690; diff -0.0237 [95% boot -0.0612,+0.0125]; geo ratio 0.98 [0.38,2.63]; ZNE wins 4/8; Wilcoxon 2-sided p=0.547
+ [per-qubit (PHYS map)] REM raw(λ1) 0.0492; REM raw(6 copies) 0.0527; REM+ZNE 0.0162; CDR(off) uncorr 0.0216 -> REM 0.0211
+   REM+ZNE vs REM raw(λ1): mean err REM+ZNE=0.0162 REMraw=0.0492; diff -0.0331 [95% boot -0.0676,-0.0017]; geo ratio 0.39 [0.10,1.25]; REM+ZNE wins 4/8; Wilcoxon 2-sided p=0.312
+   REM+ZNE vs raw(λ1) unc.: mean err REM+ZNE=0.0162 raw=0.0690; diff -0.0528 [95% boot -0.0936,-0.0133]; geo ratio 0.29 [0.08,1.09]; REM+ZNE wins 6/8; Wilcoxon 2-sided p=0.078
+   REM+ZNE vs ZNE unc.:     mean err REM+ZNE=0.0162 ZNE=0.0452; diff -0.0291 [95% boot -0.0384,-0.0203]; geo ratio 0.29 [0.19,0.42]; REM+ZNE wins 8/8; Wilcoxon 2-sided p=0.008
+   REM raw vs raw (λ1):     mean err REMraw=0.0492 raw=0.0690; diff -0.0197 [95% boot -0.0360,-0.0021]; geo ratio 0.73 [0.43,1.47]; REMraw wins 6/8; Wilcoxon 2-sided p=0.148
+ [qubit-averaged] REM raw(λ1) 0.0496; REM raw(6 copies) 0.0530; REM+ZNE 0.0162; CDR(off) uncorr 0.0216 -> REM 0.0216
+   REM+ZNE vs REM raw(λ1): mean err REM+ZNE=0.0162 REMraw=0.0496; diff -0.0334 [95% boot -0.0678,-0.0023]; geo ratio 0.43 [0.13,1.23]; REM+ZNE wins 4/8; Wilcoxon 2-sided p=0.312
+   REM+ZNE vs raw(λ1) unc.: mean err REM+ZNE=0.0162 raw=0.0690; diff -0.0527 [95% boot -0.0938,-0.0134]; geo ratio 0.32 [0.10,1.10]; REM+ZNE wins 6/8; Wilcoxon 2-sided p=0.078
+   REM+ZNE vs ZNE unc.:     mean err REM+ZNE=0.0162 ZNE=0.0452; diff -0.0290 [95% boot -0.0384,-0.0200]; geo ratio 0.32 [0.24,0.43]; REM+ZNE wins 8/8; Wilcoxon 2-sided p=0.008
+   REM raw vs raw (λ1):     mean err REMraw=0.0496 raw=0.0690; diff -0.0193 [95% boot -0.0353,-0.0020]; geo ratio 0.74 [0.44,1.49]; REMraw wins 6/8; Wilcoxon 2-sided p=0.148
+ [random wire permutation] REM raw(λ1) 0.0497; REM raw(6 copies) 0.0531; REM+ZNE 0.0163; CDR(off) uncorr 0.0216 -> REM 0.0214
+   REM+ZNE vs REM raw(λ1): mean err REM+ZNE=0.0163 REMraw=0.0497; diff -0.0334 [95% boot -0.0688,-0.0014]; geo ratio 0.39 [0.10,1.29]; REM+ZNE wins 4/8; Wilcoxon 2-sided p=0.312
+   REM+ZNE vs raw(λ1) unc.: mean err REM+ZNE=0.0163 raw=0.0690; diff -0.0526 [95% boot -0.0935,-0.0129]; geo ratio 0.28 [0.08,1.09]; REM+ZNE wins 6/8; Wilcoxon 2-sided p=0.109
+   REM+ZNE vs ZNE unc.:     mean err REM+ZNE=0.0163 ZNE=0.0452; diff -0.0289 [95% boot -0.0383,-0.0199]; geo ratio 0.29 [0.19,0.43]; REM+ZNE wins 8/8; Wilcoxon 2-sided p=0.008
+   REM raw vs raw (λ1):     mean err REMraw=0.0497 raw=0.0690; diff -0.0192 [95% boot -0.0354,-0.0019]; geo ratio 0.72 [0.43,1.45]; REMraw wins 6/8; Wilcoxon 2-sided p=0.148
+  signed (raw λ1 - ideal): [ 0.0459  0.0217  0.017  -0.0033  0.0679  0.1245 -0.0974  0.174 ]
+  signed (ZNE - ideal):    [0.0491 0.0488 0.044  0.0436 0.051  0.0392 0.0095 0.0765]
+  ideal:                   [ 2.000e-04 -6.330e-02  1.388e-01  2.629e-01 -3.594e-01 -4.724e-01
+  5.350e-01 -6.346e-01]
+
+## circular
+uncorrected: raw(λ1) 0.1584, raw(6 copies) 0.1608, ZNE 0.1115
+  ZNE vs raw(λ1) uncorrected: mean err ZNE=0.1115 raw=0.1584; diff -0.0469 [95% boot -0.0681,-0.0258]; geo ratio 0.51 [0.31,0.77]; ZNE wins 8/8; Wilcoxon 2-sided p=0.008
+ [per-qubit (PHYS map)] REM raw(λ1) 0.1485; REM raw(6 copies) 0.1510; REM+ZNE 0.1073; CDR(off) uncorr 0.0529 -> REM 0.0528
+   REM+ZNE vs REM raw(λ1): mean err REM+ZNE=0.1073 REMraw=0.1485; diff -0.0412 [95% boot -0.0692,-0.0119]; geo ratio 1.07 [0.58,2.98]; REM+ZNE wins 7/8; Wilcoxon 2-sided p=0.055
+   REM+ZNE vs raw(λ1) unc.: mean err REM+ZNE=0.1073 raw=0.1584; diff -0.0511 [95% boot -0.0917,-0.0112]; geo ratio 0.74 [0.54,1.00]; REM+ZNE wins 5/8; Wilcoxon 2-sided p=0.109
+   REM+ZNE vs ZNE unc.:     mean err REM+ZNE=0.1073 ZNE=0.1115; diff -0.0042 [95% boot -0.0271,+0.0187]; geo ratio 1.43 [0.82,2.75]; REM+ZNE wins 4/8; Wilcoxon 2-sided p=0.383
+   REM raw vs raw (λ1):     mean err REMraw=0.1485 raw=0.1584; diff -0.0099 [95% boot -0.0257,+0.0118]; geo ratio 0.69 [0.28,1.22]; REMraw wins 5/8; Wilcoxon 2-sided p=0.109
+ [qubit-averaged] REM raw(λ1) 0.1485; REM raw(6 copies) 0.1510; REM+ZNE 0.1074; CDR(off) uncorr 0.0529 -> REM 0.0529
+   REM+ZNE vs REM raw(λ1): mean err REM+ZNE=0.1074 REMraw=0.1485; diff -0.0411 [95% boot -0.0691,-0.0117]; geo ratio 1.13 [0.58,3.44]; REM+ZNE wins 7/8; Wilcoxon 2-sided p=0.055
+   REM+ZNE vs raw(λ1) unc.: mean err REM+ZNE=0.1074 raw=0.1584; diff -0.0510 [95% boot -0.0918,-0.0109]; geo ratio 0.74 [0.54,1.01]; REM+ZNE wins 5/8; Wilcoxon 2-sided p=0.109
+   REM+ZNE vs ZNE unc.:     mean err REM+ZNE=0.1074 ZNE=0.1115; diff -0.0041 [95% boot -0.0271,+0.0191]; geo ratio 1.44 [0.82,2.77]; REM+ZNE wins 4/8; Wilcoxon 2-sided p=0.383
+   REM raw vs raw (λ1):     mean err REMraw=0.1485 raw=0.1584; diff -0.0099 [95% boot -0.0258,+0.0120]; geo ratio 0.66 [0.24,1.23]; REMraw wins 5/8; Wilcoxon 2-sided p=0.109
+ [random wire permutation] REM raw(λ1) 0.1485; REM raw(6 copies) 0.1510; REM+ZNE 0.1074; CDR(off) uncorr 0.0529 -> REM 0.0528
+   REM+ZNE vs REM raw(λ1): mean err REM+ZNE=0.1074 REMraw=0.1485; diff -0.0411 [95% boot -0.0692,-0.0117]; geo ratio 1.09 [0.58,3.16]; REM+ZNE wins 7/8; Wilcoxon 2-sided p=0.055
+   REM+ZNE vs raw(λ1) unc.: mean err REM+ZNE=0.1074 raw=0.1584; diff -0.0510 [95% boot -0.0918,-0.0105]; geo ratio 0.74 [0.53,1.01]; REM+ZNE wins 5/8; Wilcoxon 2-sided p=0.109
+   REM+ZNE vs ZNE unc.:     mean err REM+ZNE=0.1074 ZNE=0.1115; diff -0.0041 [95% boot -0.0275,+0.0194]; geo ratio 1.44 [0.82,2.76]; REM+ZNE wins 4/8; Wilcoxon 2-sided p=0.312
+   REM raw vs raw (λ1):     mean err REMraw=0.1485 raw=0.1584; diff -0.0099 [95% boot -0.0260,+0.0122]; geo ratio 0.67 [0.26,1.23]; REMraw wins 5/8; Wilcoxon 2-sided p=0.109
+  signed (raw λ1 - ideal): [ 0.0861  0.0306 -0.0378 -0.0967  0.3503  0.2991 -0.0694  0.2974]
+  signed (ZNE - ideal):    [ 0.0598 -0.0033 -0.0272 -0.0884  0.2688  0.2169 -0.0172  0.2105]
+  ideal:                   [-0.0797 -0.0284  0.0984  0.1462 -0.4276 -0.3969  0.1733 -0.3883]
