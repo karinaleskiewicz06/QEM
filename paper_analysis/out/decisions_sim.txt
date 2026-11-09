@@ -1,0 +1,17 @@
+dataset    rung         acc id acc raw acc CDR agr raw agr CDR fixed broken      p     s       c  |c|/s flip pred
+two_curves star          0.700   0.710   0.700   0.950   0.980     4      1  0.375  0.81 +0.0298  0.037       5/5
+two_curves linear        0.690   0.740   0.680   0.830   0.930    11      1  0.006  0.48 +0.0680  0.141     16/17
+two_curves circular      0.650   0.710   0.650   0.780   0.940    18      2  0.000  0.33 +0.0627  0.191     22/22
+two_curves all_to_all    0.750   0.690   0.720   0.880   0.930     9      4  0.267  0.26 +0.0470  0.183     10/12
+two_curves star_L6       0.670   0.720   0.690   0.890   0.980     9      0  0.004  0.65 +0.0513  0.079      9/11
+two_curves star_L9       0.770   0.790   0.800   0.860   0.930     8      1  0.039  0.49 +0.0660  0.136     11/14
+two_curves star_L13      0.820   0.800   0.790   0.920   0.970     5      0  0.062  0.40 +0.0701  0.176       7/8
+two_curves star_cz24     0.700   0.690   0.700   0.970   0.980     2      1  1.000  0.71 +0.0240  0.034       3/3
+two_curves star_cz36     0.700   0.700   0.690   0.960   0.970     2      1  1.000  0.62 +0.0196  0.032       3/4
+two_curves star_cz52     0.700   0.710   0.680   0.950   0.960     3      2  1.000  0.52 +0.0133  0.026       2/5
+two_curves star_idle24   0.700   0.700   0.700   0.960   0.980     2      0  0.500  0.69 +0.0232  0.033       3/4
+two_curves star_idle36   0.700   0.700   0.680   0.960   0.960     2      2  1.000  0.61 +0.0196  0.032       2/4
+two_curves star_idle52   0.700   0.710   0.690   0.950   0.950     2      2  1.000  0.51 +0.0130  0.026       2/5
+
+all cells: CDR fixed 77, broke 17 decisions (McNemar p = 2.7e-10)
+flipped raw decisions: 114 of 1300; |O_ideal| of flipped points: median 0.049, max 0.304 (all points median 0.331)
