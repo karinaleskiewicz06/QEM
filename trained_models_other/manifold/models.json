@@ -1,0 +1,26 @@
+{
+  "dataset": "manifold",
+  "n_samples": 300,
+  "n_features": 8,
+  "n_qubits": 5,
+  "n_layers": 3,
+  "seed": 42,
+  "eval_points": 100,
+  "models": {
+    "star": {
+      "train_acc": 0.8944444444444445,
+      "test_acc": 0.9083333333333333,
+      "final_loss": 0.45897868275642395
+    },
+    "circular": {
+      "train_acc": 0.8166666666666667,
+      "test_acc": 0.75,
+      "final_loss": 0.6071451306343079
+    },
+    "all_to_all": {
+      "train_acc": 0.8555555555555555,
+      "test_acc": 0.85,
+      "final_loss": 0.5403488278388977
+    }
+  }
+}
