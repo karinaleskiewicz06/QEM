@@ -1,0 +1,22 @@
+window        rung          arm  n_cz  budget  n_points  raw_bias    cdr  gain_geo  cdr_wins    zne  zne_garbage  zne_budget  breakeven_budget
+  w01A        star   off_copies    12 1032192         8    0.0737 0.0216    5.0843         6 0.0452       0.1373     24576.0             49152
+ w01P5        star   off_copies    12 1032192         8    0.0672 0.0209    2.6283         6    NaN          NaN         NaN             49152
+ w01P5 star_idle24   off_copies    12 1032192         8    0.0899 0.0139   10.4805         7    NaN          NaN         NaN             49152
+ w01P5 star_idle36   off_copies    12 1032192         8    0.1121 0.0313    3.9743         7    NaN          NaN         NaN             49152
+ w01P5 star_idle52   off_copies    12 1032192         8    0.1467 0.0374    4.5151         8    NaN          NaN         NaN             49152
+ w02vn        star   off_copies    12 4128768         8    0.0550 0.0145    3.5144         6    NaN          NaN         NaN            196608
+ w01P5     star_L6   off_copies    24 1032192         8    0.1156 0.0367    3.7885         7    NaN          NaN         NaN             49152
+ w01P5   star_cz24   off_copies    24 1032192         8    0.0938 0.0220    4.2906         7    NaN          NaN         NaN             49152
+  w01B      linear   off_copies    30 1032192         8    0.1098 0.0756    1.5610         6    NaN          NaN         NaN             90112
+ w01P5     star_L9   off_copies    36 1032192         8    0.2266 0.1348    1.5372         6    NaN          NaN         NaN             49152
+ w01P5   star_cz36   off_copies    36 1032192         8    0.1588 0.0723    1.4780         6    NaN          NaN         NaN             49152
+  w01A    circular   off_copies    39 1032192         8    0.1608 0.0529    3.0218         7 0.1115       0.1028     24576.0             49152
+ w01P5    star_L13   off_copies    52 1032192         8    0.2511 0.1847    1.1436         7    NaN          NaN         NaN             49152
+ w01P5   star_cz52   off_copies    52 1032192         8    0.1765 0.0741    1.6300         6    NaN          NaN         NaN             49152
+  w01A        star twirl_native    12 1032192         8    0.0763 0.0150    4.6199         6    NaN          NaN         NaN             49152
+  w01A    circular twirl_native    39 1032192         8    0.1581 0.0397    4.4903         7    NaN          NaN         NaN             49152
+  w01B  all_to_all twirl_native    57 1032192         8    0.2272 0.0529    3.6193         7    NaN          NaN         NaN             49152
+
+CDR gain vs CZ (untwirled, 14 rungs): x0.73 per +10 CZ
+raw bias vs CZ: x1.27 per +10 CZ; CDR error vs CZ: x1.57 per +10 CZ
+wrote /Users/karinaleskiewicz/QEM/paper_analysis/out/frontier.png

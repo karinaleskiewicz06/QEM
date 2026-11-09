@@ -1,0 +1,87 @@
+=== ODRA: decision accuracy (8 points per rung) ===
+method                     CDR  CDR+twirl    ZNE    raw  ideal
+window rung        n_cz                                       
+w01A   circular    39    0.500      0.500  0.500  0.500  0.500
+       star        12    0.625      0.625  0.625  0.625  0.625
+w01B   all_to_all  57      NaN      0.750    NaN    NaN    NaN
+       linear      30    0.500        NaN    NaN  0.500  0.625
+w01P5  star        12    0.625        NaN    NaN  0.625  0.625
+       star_L13    52    0.750        NaN    NaN  0.750  0.750
+       star_L6     24    0.750        NaN    NaN  0.750  0.625
+       star_L9     36    0.750        NaN    NaN  0.750  1.000
+       star_cz24   24    0.500        NaN    NaN  0.625  0.625
+       star_cz36   36    0.500        NaN    NaN  0.625  0.625
+       star_cz52   52    0.500        NaN    NaN  0.625  0.625
+       star_idle24 12    0.500        NaN    NaN  0.625  0.625
+       star_idle36 12    0.500        NaN    NaN  0.625  0.625
+       star_idle52 12    0.500        NaN    NaN  0.500  0.625
+w02vn  star        12    0.500        NaN    NaN  0.625  0.625
+
+agreement with the ideal decision:
+method                     CDR  CDR+twirl  ZNE    raw
+window rung        n_cz                              
+w01A   circular    39    1.000        1.0  1.0  0.750
+       star        12    1.000        1.0  1.0  1.000
+w01B   all_to_all  57      NaN        1.0  NaN    NaN
+       linear      30    0.875        NaN  NaN  0.875
+w01P5  star        12    1.000        NaN  NaN  1.000
+       star_L13    52    0.750        NaN  NaN  0.750
+       star_L6     24    0.875        NaN  NaN  0.875
+       star_L9     36    0.750        NaN  NaN  0.750
+       star_cz24   24    0.875        NaN  NaN  1.000
+       star_cz36   36    0.875        NaN  NaN  1.000
+       star_cz52   52    0.875        NaN  NaN  1.000
+       star_idle24 12    0.875        NaN  NaN  1.000
+       star_idle36 12    0.875        NaN  NaN  1.000
+       star_idle52 12    0.875        NaN  NaN  0.875
+w02vn  star        12    0.875        NaN  NaN  1.000
+
+pooled over all windows and rungs:
+  acc: CDR 0.571 (n=112), CDR+twirl 0.625 (n=24), ZNE 0.562 (n=16), raw 0.625 (n=112)
+  agree: CDR 0.884 (n=112), CDR+twirl 1.000 (n=24), ZNE 1.000 (n=16), raw 0.920 (n=112)
+  agree, points with |O_ideal| above the rung median: CDR 1.000, CDR+twirl 1.000, ZNE 1.000, raw 1.000
+  McNemar raw -> CDR (agree with ideal): n=112, fixed 3, broken 7, p=0.344
+  McNemar raw -> CDR+twirl (agree with ideal): n=16, fixed 2, broken 0, p=0.500
+  McNemar raw -> ZNE (agree with ideal): n=16, fixed 2, broken 0, p=0.500
+
+=== simulation vs ODRA (3 windows, 240 point-method pairs) ===
+  CDR        <O>: Pearson r=0.987, Spearman 0.984 | error: Spearman 0.48 (p=3e-07) | same decision 99% | mean err hw 0.0552 sim 0.0297 (x1.9)
+  CDR+twirl  <O>: Pearson r=0.990, Spearman 0.979 | error: Spearman -0.06 (p=0.8) | same decision 100% | mean err hw 0.0273 sim 0.0252 (x1.1)
+  ZNE        <O>: Pearson r=0.993, Spearman 0.985 | error: Spearman 0.59 (p=0.02) | same decision 88% | mean err hw 0.0784 sim 0.0682 (x1.1)
+  raw        <O>: Pearson r=0.990, Spearman 0.991 | error: Spearman 0.90 (p=1e-38) | same decision 98% | mean err hw 0.1329 sim 0.1243 (x1.1)
+
+per rung-method cell (30 cells):
+  acc   : Pearson r=0.92 (p=9e-13), Spearman 0.95 (p=3e-15); mean hw 0.600 sim 0.588
+  agree : Pearson r=0.82 (p=4e-08), Spearman 0.84 (p=6e-09); mean hw 0.917 sim 0.912
+  err   : Pearson r=0.94 (p=2e-14), Spearman 0.92 (p=1e-12); mean hw 0.089 sim 0.073
+window        rung    method  acc_hw  acc_sim  agree_hw  agree_sim  err_hw  err_sim
+  w01A    circular       CDR   0.500    0.500     1.000      1.000   0.053    0.039
+  w01A    circular CDR+twirl   0.500    0.500     1.000      1.000   0.040    0.039
+  w01A    circular       ZNE   0.500    0.500     1.000      0.750   0.112    0.110
+  w01A    circular       raw   0.500    0.500     0.750      0.750   0.161    0.156
+  w01A        star       CDR   0.625    0.625     1.000      1.000   0.022    0.008
+  w01A        star CDR+twirl   0.625    0.625     1.000      1.000   0.015    0.011
+  w01A        star       ZNE   0.625    0.625     1.000      1.000   0.045    0.027
+  w01A        star       raw   0.625    0.625     1.000      1.000   0.074    0.063
+ w01P5        star       CDR   0.625    0.625     1.000      1.000   0.021    0.003
+ w01P5        star       raw   0.625    0.625     1.000      1.000   0.067    0.062
+ w01P5    star_L13       CDR   0.750    0.625     0.750      0.875   0.185    0.087
+ w01P5    star_L13       raw   0.750    0.750     0.750      0.750   0.251    0.216
+ w01P5     star_L6       CDR   0.750    0.750     0.875      0.875   0.037    0.027
+ w01P5     star_L6       raw   0.750    0.625     0.875      1.000   0.116    0.106
+ w01P5     star_L9       CDR   0.750    0.750     0.750      0.750   0.135    0.091
+ w01P5     star_L9       raw   0.750    0.625     0.750      0.625   0.227    0.222
+ w01P5   star_cz24       CDR   0.500    0.500     0.875      0.875   0.022    0.013
+ w01P5   star_cz24       raw   0.625    0.625     1.000      1.000   0.094    0.093
+ w01P5   star_cz36       CDR   0.500    0.500     0.875      0.875   0.072    0.018
+ w01P5   star_cz36       raw   0.625    0.625     1.000      1.000   0.159    0.118
+ w01P5   star_cz52       CDR   0.500    0.500     0.875      0.875   0.074    0.026
+ w01P5   star_cz52       raw   0.625    0.625     1.000      1.000   0.176    0.146
+ w01P5 star_idle24       CDR   0.500    0.500     0.875      0.875   0.014    0.012
+ w01P5 star_idle24       raw   0.625    0.625     1.000      1.000   0.090    0.095
+ w01P5 star_idle36       CDR   0.500    0.500     0.875      0.875   0.031    0.021
+ w01P5 star_idle36       raw   0.625    0.625     1.000      1.000   0.112    0.122
+ w01P5 star_idle52       CDR   0.500    0.500     0.875      0.875   0.037    0.033
+ w01P5 star_idle52       raw   0.500    0.500     0.875      0.875   0.147    0.152
+ w02vn        star       CDR   0.500    0.500     0.875      0.875   0.015    0.007
+ w02vn        star       raw   0.625    0.625     1.000      1.000   0.055    0.064
