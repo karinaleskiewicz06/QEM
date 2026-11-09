@@ -1,0 +1,22 @@
+                         err_raw  err_sim_rung  err_sim_point  err_cdr  err_cdr_twirl sim_beats_raw sim_beats_cdr
+window rung        n_cz                                                                                          
+w01A   star        12     0.0737        0.0286         0.0236   0.0216         0.0150           7/8           4/8
+w01P5  star        12     0.0672        0.0225         0.0175   0.0209            NaN           7/8           5/8
+       star_idle24 12     0.0899        0.0303         0.0258   0.0139            NaN           8/8           2/8
+       star_idle36 12     0.1121        0.0336         0.0284   0.0313            NaN           8/8           3/8
+       star_idle52 12     0.1467        0.0573         0.0249   0.0374            NaN           8/8           2/8
+       star_L6     24     0.1156        0.0611         0.0556   0.0367            NaN           5/8           2/8
+       star_cz24   24     0.0938        0.0588         0.0552   0.0220            NaN           4/8           3/8
+w01B   linear      30     0.1098        0.0409         0.0633   0.0756         0.0532           7/8           7/8
+w01P5  star_L9     36     0.2266        0.0930         0.1008   0.1348            NaN           7/8           7/8
+       star_cz36   36     0.1588        0.1012         0.1080   0.0723            NaN           5/8           3/8
+w01A   circular    39     0.1608        0.0463         0.0509   0.0529         0.0397           6/8           5/8
+w01P5  star_L13    52     0.2511        0.1615         0.1615   0.1847            NaN           6/8           5/8
+       star_cz52   52     0.1765        0.1122         0.0997   0.0741            NaN           6/8           3/8
+w01B   all_to_all  57     0.2234        0.0798         0.0934   0.1518         0.0529           6/8           4/8
+
+sim line (pooled per rung) vs raw: wins 90/112, geo ratio 0.442, two-sided Wilcoxon p = 4.8e-11
+sim line (per point) vs raw: wins 85/112, geo ratio 0.410, two-sided Wilcoxon p = 2e-10
+sim line (pooled) vs hardware CDR: wins 55/112, geo ratio 1.239, two-sided Wilcoxon p = 0.18
+hardware CDR vs raw (reference): wins 91/112, geo ratio 0.357, two-sided Wilcoxon p = 1.1e-11
+ladder only, sim line vs hardware CDR+twirl: wins 12/32, geo 1.400, p = 0.19

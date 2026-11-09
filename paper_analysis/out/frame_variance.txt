@@ -1,0 +1,44 @@
+
+== role train  (median frame-var / shot-var; median frame SD)
+star
+          off_copies:near_target n=160 M=6 ratio=   0.8 sd=0.0041
+     twirl_logical:shared_random n= 20 M=48 ratio=  21.2 sd=0.0227
+      twirl_native:shared_random n= 20 M=48 ratio=  23.4 sd=0.0225
+        twirl_native:near_target n=160 M=6 ratio=  26.9 sd=0.0230
+linear
+          off_copies:near_target n=160 M=6 ratio=   0.9 sd=0.0045
+     twirl_logical:shared_random n= 20 M=48 ratio=  24.7 sd=0.0238
+      twirl_native:shared_random n= 20 M=48 ratio=  21.9 sd=0.0224
+        twirl_native:near_target n=160 M=6 ratio=  18.7 sd=0.0217
+circular
+          off_copies:near_target n=160 M=6 ratio=   0.9 sd=0.0046
+     twirl_logical:shared_random n= 20 M=48 ratio=  19.5 sd=0.0224
+      twirl_native:shared_random n= 20 M=48 ratio=  17.4 sd=0.0206
+        twirl_native:near_target n=160 M=6 ratio=   9.9 sd=0.0156
+all_to_all
+          off_copies:near_target n=160 M=6 ratio=   0.9 sd=0.0046
+     twirl_logical:shared_random n= 20 M=48 ratio=   9.7 sd=0.0152
+      twirl_native:shared_random n= 20 M=48 ratio=  12.9 sd=0.0176
+        twirl_native:near_target n=160 M=6 ratio=   9.5 sd=0.0151
+
+== role target  (median frame-var / shot-var; median frame SD)
+star
+          off_copies:near_target n=  8 M=6 ratio=   0.9 sd=0.0046
+     twirl_logical:shared_random n=  8 M=6 ratio=  29.1 sd=0.0272
+      twirl_native:shared_random n=  8 M=6 ratio=  30.9 sd=0.0282
+        twirl_native:near_target n=  8 M=6 ratio=  27.0 sd=0.0256
+linear
+          off_copies:near_target n=  8 M=6 ratio=   0.8 sd=0.0051
+     twirl_logical:shared_random n=  8 M=6 ratio=  27.7 sd=0.0297
+      twirl_native:shared_random n=  8 M=6 ratio=  18.8 sd=0.0251
+        twirl_native:near_target n=  8 M=6 ratio=  30.2 sd=0.0322
+circular
+          off_copies:near_target n=  8 M=6 ratio=   0.7 sd=0.0051
+     twirl_logical:shared_random n=  8 M=6 ratio=  17.6 sd=0.0209
+      twirl_native:shared_random n=  8 M=6 ratio=  13.6 sd=0.0189
+        twirl_native:near_target n=  8 M=6 ratio=  10.1 sd=0.0168
+all_to_all
+          off_copies:near_target n=  8 M=6 ratio=   0.6 sd=0.0044
+     twirl_logical:shared_random n=  8 M=6 ratio=  10.9 sd=0.0186
+      twirl_native:shared_random n=  8 M=6 ratio=  18.0 sd=0.0235
+        twirl_native:near_target n=  8 M=6 ratio=  23.0 sd=0.0264
