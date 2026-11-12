@@ -1,0 +1,496 @@
+{
+  "campaign": "odra_campaign",
+  "window_id": "w01B",
+  "seed": 42,
+  "cli_args": {
+    "dry_run": false,
+    "submit": true,
+    "sim_device": null,
+    "analyse": null,
+    "kappa": false,
+    "dd_ablation": false,
+    "window_id": "w01B",
+    "campaign": "odra_campaign",
+    "root": "runs",
+    "points": [
+      "linear",
+      "all_to_all"
+    ],
+    "cdr_arms": [
+      "off_copies:near_target",
+      "twirl_native:near_target",
+      "spread:near_target",
+      "twirl_logical:shared_random",
+      "twirl_native:shared_random"
+    ],
+    "eval_points": 24,
+    "point_set": 0,
+    "night": "B",
+    "n_train": 20,
+    "frames": 6,
+    "shots": 8192,
+    "no_zne": false,
+    "seed": 42,
+    "resume": true,
+    "chunk": 400,
+    "no_qasm": false,
+    "sim_theta": 0.0,
+    "sim_phi": 0.0,
+    "sim_eps": 0.0,
+    "allow_env_mismatch": false
+  },
+  "started_utc": "2026-10-25T09:22:34.336Z",
+  "finished_utc": null,
+  "calibration_set_id": {
+    "start": "0642097d-87ad-47e1-9465-6b14843db5e4",
+    "end": null
+  },
+  "job_ids": [
+    "01a1725e-7610-7640-9405-58749fa49156",
+    "01a17263-ebb6-71c3-90b6-89c21bbe36dd",
+    "01a1726a-8c7a-7131-96c3-0d2e5509a76d",
+    "01a17271-3b1b-7ba3-ba44-3ebbc30de56d",
+    "01a17277-bb73-70f2-a8cd-ecbfe273ba78",
+    "01a1727e-ccaf-70d0-a9fe-1f48e444c09e"
+  ],
+  "device": "odra",
+  "submitted": true,
+  "notes": [],
+  "extra": {
+    "plan": {
+      "block_order": [
+        "all_to_all/cdr/twirl_native/near_target",
+        "all_to_all/cdr/twirl_logical/shared_random",
+        "all_to_all/cdr/twirl_native/shared_random",
+        "linear/cdr/spread/near_target",
+        "all_to_all/cdr/spread/near_target",
+        "linear/cdr/off_copies/near_target",
+        "linear/cdr/twirl_logical/shared_random",
+        "all_to_all/zne",
+        "all_to_all/cdr/off_copies/near_target",
+        "linear/cdr/twirl_native/shared_random",
+        "linear/cdr/twirl_native/near_target",
+        "linear/zne"
+      ],
+      "block_order_seed": 42,
+      "rungs": {
+        "linear": {
+          "n_cz": 30,
+          "skeleton": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          "insertion": null
+        },
+        "all_to_all": {
+          "n_cz": 57,
+          "skeleton": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "insertion": null
+        }
+      },
+      "n_circuits": 10192,
+      "eval_points": [
+        0,
+        3,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21
+      ]
+    },
+    "blocks": []
+  },
+  "environment": {
+    "python": "3.13.9",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "argv": [
+      "campaign/odra_window.py",
+      "--submit",
+      "--window-id",
+      "w01B",
+      "--night",
+      "B",
+      "--point-set",
+      "0",
+      "--resume"
+    ],
+    "packages": {
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3"
+    },
+    "locked": {
+      "python": "3.13.9",
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "qiskit-ibm-runtime": "0.47.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.6",
+      "scikit-learn": "1.7.2",
+      "statsmodels": "0.14.5",
+      "torch": "2.12.0",
+      "qml_benchmarks": "0.1"
+    },
+    "git_commit": "ecaa139ec0f49c0a00158bfe8a33055421342e0a",
+    "git_branch": "paper-odra-campaign",
+    "git_dirty": true,
+    "git_dirty_files": 2
+  },
+  "split_window": false
+}

@@ -1,0 +1,566 @@
+IQMClient.get_calibration_quality_metrics is an experimental method, and the API will likely change in the future with no backwards compatibility.
+Missing fidelity for clifford.xy.QB1
+Missing fidelity for clifford.xy.QB2
+Missing fidelity for clifford.xy.QB3
+Missing fidelity for clifford.xy.QB4
+Missing fidelity for clifford.xy.QB5
+fetching calibration from https://odra5.e-science.pl/ (auth: token) ...
+raw dump -> calibrations/odra_raw_w02vn_start.json
+mapped DeviceCalibration -> calibrations/odra_w02vn_start.json
+unmapped (still placeholder): []
+observations parsed: 462
+OK: all fields mapped from live ODRA calibration.
+hub: 0 t1_us: [17.2, 18.9, 16.38, 22.64, 16.51] p_2q: 0.02367
+[2026-11-05 23:08:12] calibration start saved
+[2026-11-05 23:08:14] RUN w02vn (attempt 1)
+window w02vn: rungs ['star'], 8 points [0, 3, 6, 9, 12, 15, 18, 21], levels ('base', 'cz', 'idle') (+12 pairs), n_train 20, copies 6, S 32768
+  3024 circuits, 99,090,432 shots, ~7.4 h at the pilot rate (night A ran ~1.7x slower because of the queue)
+levels: {'star': {'base': {'n_cz': 12, 't_us': 0.7999999999999998}, 'cz': {'n_cz': 36, 't_us': 2.2399999999999998}, 'idle': {'n_cz': 12, 't_us': 2.2399999999999998}}}
+[provenance] runs/odra_campaign/w02vn
+  [1/8] star/p09: 378 circuits
+    [odra] zgłoszono zadanie 01a1adc1-7842-7f13-9fdd-c6cfa6a8a62b (25 obwodów)
+    [odra] zadanie 01a1adc1-7842-7f13-9fdd-c6cfa6a8a62b | 25 obwodów (25/378)
+    [odra] zgłoszono zadanie 01a1adc6-8cc6-7343-894e-0e53399e9252 (25 obwodów)
+    [odra] zadanie 01a1adc6-8cc6-7343-894e-0e53399e9252 | 25 obwodów (50/378)
+    [odra] zgłoszono zadanie 01a1adcb-a0b2-76d1-9223-7b3123a28f9b (25 obwodów)
+    [odra] zadanie 01a1adcb-a0b2-76d1-9223-7b3123a28f9b | 25 obwodów (75/378)
+    [odra] zgłoszono zadanie 01a1add0-b76f-79f1-85bc-091238d384be (25 obwodów)
+    [odra] zadanie 01a1add0-b76f-79f1-85bc-091238d384be | 25 obwodów (100/378)
+    [odra] zgłoszono zadanie 01a1add5-c9fb-78a1-9a20-88dab731a271 (25 obwodów)
+    [odra] zadanie 01a1add5-c9fb-78a1-9a20-88dab731a271 | 25 obwodów (125/378)
+    [odra] zgłoszono zadanie 01a1adda-e166-72b0-a26b-1b2a3bfb347a (25 obwodów)
+    [odra] zadanie 01a1adda-e166-72b0-a26b-1b2a3bfb347a | 25 obwodów (150/378)
+    [odra] zgłoszono zadanie 01a1addf-f497-7452-a48e-5314b4d800bd (25 obwodów)
+    [odra] zadanie 01a1addf-f497-7452-a48e-5314b4d800bd | 25 obwodów (175/378)
+    [odra] zgłoszono zadanie 01a1ade5-09b4-7e81-8cca-fa7f56b875da (25 obwodów)
+    [odra] zadanie 01a1ade5-09b4-7e81-8cca-fa7f56b875da | 25 obwodów (200/378)
+    [odra] zgłoszono zadanie 01a1adea-1f2f-75a3-8a94-d8aca16ac999 (25 obwodów)
+    [odra] zadanie 01a1adea-1f2f-75a3-8a94-d8aca16ac999 | 25 obwodów (225/378)
+    [odra] zgłoszono zadanie 01a1adef-359b-7233-a0b4-d1ab8196016c (25 obwodów)
+    [odra] zadanie 01a1adef-359b-7233-a0b4-d1ab8196016c | 25 obwodów (250/378)
+    [odra] zgłoszono zadanie 01a1adf4-4822-7f02-8514-4c7ca1992252 (25 obwodów)
+    [odra] zadanie 01a1adf4-4822-7f02-8514-4c7ca1992252 | 25 obwodów (275/378)
+    [odra] zgłoszono zadanie 01a1adf9-5cff-7ff3-a6db-f913289baf83 (25 obwodów)
+    [odra] zadanie 01a1adf9-5cff-7ff3-a6db-f913289baf83 | 25 obwodów (300/378)
+    [odra] zgłoszono zadanie 01a1adfe-73d8-7ae3-b2f8-f68b178ae7a2 (25 obwodów)
+    [odra] zadanie 01a1adfe-73d8-7ae3-b2f8-f68b178ae7a2 | 25 obwodów (325/378)
+    [odra] zgłoszono zadanie 01a1ae03-8a4d-7400-9617-32a1bbf6bcda (25 obwodów)
+    [odra] zadanie 01a1ae03-8a4d-7400-9617-32a1bbf6bcda | 25 obwodów (350/378)
+    [odra] zgłoszono zadanie 01a1ae08-b023-7081-b499-d7bb6f9a8e0c (25 obwodów)
+    [odra] zadanie 01a1ae08-b023-7081-b499-d7bb6f9a8e0c | 25 obwodów (375/378)
+    [odra] zgłoszono zadanie 01a1ae0d-c413-7ff3-b331-dbede9179884 (3 obwodów)
+    [odra] zadanie 01a1ae0d-c413-7ff3-b331-dbede9179884 | 3 obwodów (378/378)
+  [2/8] star/p15: 378 circuits
+    [odra] zgłoszono zadanie 01a1ae0e-6ddb-7471-a5e5-0790e7738434 (25 obwodów)
+    [odra] zadanie 01a1ae0e-6ddb-7471-a5e5-0790e7738434 | 25 obwodów (25/378)
+    [odra] zgłoszono zadanie 01a1ae13-83b9-7051-aee9-70107568d187 (25 obwodów)
+    [odra] zadanie 01a1ae13-83b9-7051-aee9-70107568d187 | 25 obwodów (50/378)
+    [odra] zgłoszono zadanie 01a1ae18-9a01-7970-9b17-08ff0237f848 (25 obwodów)
+    [odra] zadanie 01a1ae18-9a01-7970-9b17-08ff0237f848 | 25 obwodów (75/378)
+    [odra] zgłoszono zadanie 01a1ae1d-b252-7861-b149-a7110761ef69 (25 obwodów)
+    [odra] zadanie 01a1ae1d-b252-7861-b149-a7110761ef69 | 25 obwodów (100/378)
+    [odra] zgłoszono zadanie 01a1ae22-c826-7f72-8527-b78b9aacba1a (25 obwodów)
+    [odra] zadanie 01a1ae22-c826-7f72-8527-b78b9aacba1a | 25 obwodów (125/378)
+    [odra] zgłoszono zadanie 01a1ae27-dc8e-7971-a587-4711df68e619 (25 obwodów)
+    [odra] zadanie 01a1ae27-dc8e-7971-a587-4711df68e619 | 25 obwodów (150/378)
+    [odra] zgłoszono zadanie 01a1ae2c-f235-75c1-ac31-3dc2bc4e86cf (25 obwodów)
+    [odra] zadanie 01a1ae2c-f235-75c1-ac31-3dc2bc4e86cf | 25 obwodów (175/378)
+    [odra] zgłoszono zadanie 01a1ae32-061c-7fb0-a354-989f0ddfc5f2 (25 obwodów)
+    [odra] zadanie 01a1ae32-061c-7fb0-a354-989f0ddfc5f2 | 25 obwodów (200/378)
+    [odra] zgłoszono zadanie 01a1ae37-1b25-7a90-b385-208ad4da36ca (25 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1ae37-1b25-7a90-b385-208ad4da36ca | 25 obwodów (225/378)
+    [odra] zgłoszono zadanie 01a1ae3c-31e3-7a82-8466-f7b86a68aebb (25 obwodów)
+    [odra] zadanie 01a1ae3c-31e3-7a82-8466-f7b86a68aebb | 25 obwodów (250/378)
+    [odra] zgłoszono zadanie 01a1ae41-4710-7b92-b546-2dff17f2f921 (25 obwodów)
+    [odra] zadanie 01a1ae41-4710-7b92-b546-2dff17f2f921 | 25 obwodów (275/378)
+    [odra] zgłoszono zadanie 01a1ae46-5aef-7013-a907-2577987d5d24 (25 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]  [retry] fetch counts 01a1ae46-5aef-7013-a907-2577987d5d24: ConnectTimeout (attempt 1/8) -> waiting 5s
+  [retry] fetch counts 01a1ae46-5aef-7013-a907-2577987d5d24: ValidationError (attempt 2/8) -> waiting 10s
+  [retry] fetch counts 01a1ae46-5aef-7013-a907-2577987d5d24: ValidationError (attempt 3/8) -> waiting 20s
+  [retry] fetch counts 01a1ae46-5aef-7013-a907-2577987d5d24: ValidationError (attempt 4/8) -> waiting 40s
+  [retry] fetch counts 01a1ae46-5aef-7013-a907-2577987d5d24: ValidationError (attempt 5/8) -> waiting 80s
+  [retry] fetch counts 01a1ae46-5aef-7013-a907-2577987d5d24: ValidationError (attempt 6/8) -> waiting 160s
+  [retry] fetch counts 01a1ae46-5aef-7013-a907-2577987d5d24: ValidationError (attempt 7/8) -> waiting 320s
+  [retry] fetch counts 01a1ae46-5aef-7013-a907-2577987d5d24: ValidationError (attempt 8/8) -> waiting 640s
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 189, in _retry
+    return fn()
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 223, in _go
+    job.wait_for_completion(timeout_secs=timeout_s)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 870, in wait_for_completion
+    job_data = self._iqm_server_client._wait_job_completion(
+        self.job_id,
+        progress_callback=get_progress_bar_callback(),
+        timeout_secs=timeout_secs,
+    )
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 469, in _wait_job_completion
+    job_data = self.get_job(job_id)
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 371, in get_job
+    return self._deserialize_response(response, JobData)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 702, in _deserialize_response
+    model = model_class.model_validate_json(response.text)
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JobData
+  Invalid JSON: expected value at line 2 column 1 [type=json_invalid, input_value='\n<!DOCTYPE html>\n<html...>\n\t</body>\n</html>\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/campaign/vncdr_window.py", line 333, in <module>
+    main()
+    ~~~~^^
+  File "/Users/karinaleskiewicz/QEM/campaign/vncdr_window.py", line 325, in main
+    run_window(args, jobs, order, rec, ex)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/campaign/odra_window.py", line 400, in run_window
+    counts = ex.run([j.circuit for j in part], shots, on_job=rec.add_job)
+  File "/Users/karinaleskiewicz/QEM/campaign/odra_window.py", line 367, in run
+    return run_circuits(self.backend, circs, shots, on_job=on_job)
+  File "/Users/karinaleskiewicz/QEM/odra_backend.py", line 132, in run_circuits
+    raw, job_id = fetch_counts(backend.client, job)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 231, in fetch_counts
+    result = _retry(_go, what=f"fetch counts {job_id}", attempts=attempts)
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 198, in _retry
+    raise RuntimeError(f"{what} failed after {attempts} attempts") from last
+RuntimeError: fetch counts 01a1ae46-5aef-7013-a907-2577987d5d24 failed after 8 attempts
+Progress in queue:   0%|          | 0/1 [1:02:15<?, ?it/s]
+[2026-11-06 02:35:45] FAIL w02vn attempt 1 (see log); resuming
+[2026-11-06 02:35:51] ODRA not answering; retry in 10 min
+[2026-11-06 02:45:56] ODRA not answering; retry in 10 min
+[2026-11-06 02:56:02] ODRA not answering; retry in 10 min
+[2026-11-06 03:06:07] ODRA not answering; retry in 10 min
+[2026-11-06 03:16:12] ODRA not answering; retry in 10 min
+[2026-11-06 03:26:20] ODRA not answering; retry in 10 min
+[2026-11-06 03:36:25] ODRA not answering; retry in 10 min
+[2026-11-06 03:46:30] ODRA not answering; retry in 10 min
+[2026-11-06 03:56:36] ODRA not answering; retry in 10 min
+[2026-11-06 04:06:49] ODRA not answering; retry in 10 min
+[2026-11-06 04:16:55] ODRA not answering; retry in 10 min
+[2026-11-06 04:27:01] ODRA not answering; retry in 10 min
+[2026-11-06 04:45:30] ODRA not answering; retry in 10 min
+[2026-11-06 04:55:40] ODRA not answering; retry in 10 min
+[2026-11-06 05:05:45] ODRA not answering; retry in 10 min
+[2026-11-06 05:15:50] ODRA not answering; retry in 10 min
+[2026-11-06 05:25:56] ODRA not answering; retry in 10 min
+[2026-11-06 05:36:02] ODRA not answering; retry in 10 min
+[2026-11-06 06:01:17] ODRA not answering; retry in 10 min
+[2026-11-06 06:11:23] ODRA not answering; retry in 10 min
+[2026-11-06 06:21:28] ODRA not answering; retry in 10 min
+[2026-11-06 06:31:39] ODRA not answering; retry in 10 min
+[2026-11-06 06:41:45] ODRA not answering; retry in 10 min
+[2026-11-06 06:51:51] ODRA not answering; retry in 10 min
+[2026-11-06 07:01:57] ODRA not answering; retry in 10 min
+[2026-11-06 07:27:53] ODRA not answering; retry in 10 min
+[2026-11-06 07:37:58] ODRA not answering; retry in 10 min
+[2026-11-06 07:48:03] ODRA not answering; retry in 10 min
+[2026-11-06 07:58:08] ODRA not answering; retry in 10 min
+[2026-11-06 08:09:27] ODRA not answering; retry in 10 min
+[2026-11-06 08:19:30] ODRA not answering; retry in 10 min
+[2026-11-06 08:34:46] ODRA not answering; retry in 10 min
+[2026-11-06 08:44:49] ODRA not answering; retry in 10 min
+[2026-11-06 08:54:55] ODRA not answering; retry in 10 min
+[2026-11-06 09:15:46] ODRA not answering; retry in 10 min
+[2026-11-06 09:41:17] ODRA not answering; retry in 10 min
+[2026-11-06 13:28:24] ODRA not answering; retry in 10 min
+[2026-11-06 13:55:17] ODRA not answering; retry in 10 min
+[2026-11-06 14:08:24] ODRA not answering; retry in 10 min
+[2026-11-06 14:18:31] ODRA not answering; retry in 10 min
+[2026-11-06 14:28:37] ODRA not answering; retry in 10 min
+[2026-11-06 14:38:43] ODRA not answering; retry in 10 min
+[2026-11-06 14:49:51] ODRA not answering; retry in 10 min
+[2026-11-06 14:59:57] ODRA not answering; retry in 10 min
+[2026-11-06 15:10:04] ODRA not answering; retry in 10 min
+[2026-11-06 17:02:36] ODRA not answering; retry in 10 min
+[2026-11-06 19:49:34] ODRA not answering; retry in 10 min
+[2026-11-06 23:31:52] ODRA not answering; retry in 10 min
+[2026-11-06 23:42:49] ODRA not answering; retry in 10 min
+[2026-11-06 23:52:59] ODRA not answering; retry in 10 min
+[2026-11-07 00:03:05] ODRA not answering; retry in 10 min
+[2026-11-07 04:00:28] ODRA not answering; retry in 10 min
+[2026-11-07 10:34:30] ODRA not answering; retry in 10 min
+[2026-11-07 13:38:47] ODRA not answering; retry in 10 min
+[2026-11-07 13:48:53] ODRA not answering; retry in 10 min
+[2026-11-07 13:58:59] ODRA not answering; retry in 10 min
+[2026-11-07 14:09:05] ODRA not answering; retry in 10 min
+[2026-11-07 14:19:11] ODRA not answering; retry in 10 min
+[2026-11-07 14:29:17] ODRA not answering; retry in 10 min
+[2026-11-07 14:39:23] ODRA not answering; retry in 10 min
+[2026-11-07 14:49:29] ODRA not answering; retry in 10 min
+[2026-11-07 14:59:35] ODRA not answering; retry in 10 min
+[2026-11-07 15:09:41] ODRA not answering; retry in 10 min
+[2026-11-07 15:19:47] ODRA not answering; retry in 10 min
+[2026-11-07 15:46:15] ODRA not answering; retry in 10 min
+[2026-11-07 17:37:30] RUN w02vn (attempt 2)
+window w02vn: rungs ['star'], 8 points [0, 3, 6, 9, 12, 15, 18, 21], levels ('base', 'cz', 'idle') (+12 pairs), n_train 20, copies 6, S 32768
+  3024 circuits, 99,090,432 shots, ~7.4 h at the pilot rate (night A ran ~1.7x slower because of the queue)
+levels: {'star': {'base': {'n_cz': 12, 't_us': 0.7999999999999998}, 'cz': {'n_cz': 36, 't_us': 2.2399999999999998}, 'idle': {'n_cz': 12, 't_us': 2.2399999999999998}}}
+[provenance] runs/odra_campaign/w02vn
+[resume] 378 circuits already recorded
+  [1/8] star/p09: complete, skipped
+  [2/8] star/p15: 378 circuits
+    [odra] zgłoszono zadanie 01a1b6df-6146-77c1-82de-46c6edd04d66 (25 obwodów)
+    [odra] zadanie 01a1b6df-6146-77c1-82de-46c6edd04d66 | 25 obwodów (25/378)
+    [odra] zgłoszono zadanie 01a1b6e4-7553-71b2-bebc-000f78a4a83e (25 obwodów)
+    [odra] zadanie 01a1b6e4-7553-71b2-bebc-000f78a4a83e | 25 obwodów (50/378)
+    [odra] zgłoszono zadanie 01a1b6e9-8903-7a41-9e59-4335285515ae (25 obwodów)
+    [odra] zadanie 01a1b6e9-8903-7a41-9e59-4335285515ae | 25 obwodów (75/378)
+    [odra] zgłoszono zadanie 01a1b6ee-9d50-7bc3-861a-c2337baaa8e4 (25 obwodów)
+    [odra] zadanie 01a1b6ee-9d50-7bc3-861a-c2337baaa8e4 | 25 obwodów (100/378)
+    [odra] zgłoszono zadanie 01a1b6f3-b1ca-7be3-87a0-2f976318c248 (25 obwodów)
+    [odra] zadanie 01a1b6f3-b1ca-7be3-87a0-2f976318c248 | 25 obwodów (125/378)
+    [odra] zgłoszono zadanie 01a1b6f8-c740-73a3-ae0e-4c34ad903478 (25 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1b6f8-c740-73a3-ae0e-4c34ad903478 | 25 obwodów (150/378)
+    [odra] zgłoszono zadanie 01a1b6fd-dc29-71b3-a579-4c59121b0ce0 (25 obwodów)
+    [odra] zadanie 01a1b6fd-dc29-71b3-a579-4c59121b0ce0 | 25 obwodów (175/378)
+    [odra] zgłoszono zadanie 01a1b702-f039-7e73-95bc-33afc711209f (25 obwodów)
+    [odra] zadanie 01a1b702-f039-7e73-95bc-33afc711209f | 25 obwodów (200/378)
+    [odra] zgłoszono zadanie 01a1b708-05ac-75d2-b60f-4142c22832e2 (25 obwodów)
+  [retry] fetch counts 01a1b708-05ac-75d2-b60f-4142c22832e2: ConnectTimeout (attempt 1/8) -> waiting 5s
+  [retry] fetch counts 01a1b708-05ac-75d2-b60f-4142c22832e2: ValidationError (attempt 2/8) -> waiting 10s
+  [retry] fetch counts 01a1b708-05ac-75d2-b60f-4142c22832e2: ValidationError (attempt 3/8) -> waiting 20s
+  [retry] fetch counts 01a1b708-05ac-75d2-b60f-4142c22832e2: ValidationError (attempt 4/8) -> waiting 40s
+  [retry] fetch counts 01a1b708-05ac-75d2-b60f-4142c22832e2: ValidationError (attempt 5/8) -> waiting 80s
+  [retry] fetch counts 01a1b708-05ac-75d2-b60f-4142c22832e2: ValidationError (attempt 6/8) -> waiting 160s
+  [retry] fetch counts 01a1b708-05ac-75d2-b60f-4142c22832e2: ValidationError (attempt 7/8) -> waiting 320s
+  [retry] fetch counts 01a1b708-05ac-75d2-b60f-4142c22832e2: ValidationError (attempt 8/8) -> waiting 640s
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 189, in _retry
+    return fn()
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 223, in _go
+    job.wait_for_completion(timeout_secs=timeout_s)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 870, in wait_for_completion
+    job_data = self._iqm_server_client._wait_job_completion(
+        self.job_id,
+        progress_callback=get_progress_bar_callback(),
+        timeout_secs=timeout_secs,
+    )
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 469, in _wait_job_completion
+    job_data = self.get_job(job_id)
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 371, in get_job
+    return self._deserialize_response(response, JobData)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 702, in _deserialize_response
+    model = model_class.model_validate_json(response.text)
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JobData
+  Invalid JSON: expected value at line 2 column 1 [type=json_invalid, input_value='\n<!DOCTYPE html>\n<html...>\n\t</body>\n</html>\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/campaign/vncdr_window.py", line 333, in <module>
+    main()
+    ~~~~^^
+  File "/Users/karinaleskiewicz/QEM/campaign/vncdr_window.py", line 325, in main
+    run_window(args, jobs, order, rec, ex)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/campaign/odra_window.py", line 400, in run_window
+    counts = ex.run([j.circuit for j in part], shots, on_job=rec.add_job)
+  File "/Users/karinaleskiewicz/QEM/campaign/odra_window.py", line 367, in run
+    return run_circuits(self.backend, circs, shots, on_job=on_job)
+  File "/Users/karinaleskiewicz/QEM/odra_backend.py", line 132, in run_circuits
+    raw, job_id = fetch_counts(backend.client, job)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 231, in fetch_counts
+    result = _retry(_go, what=f"fetch counts {job_id}", attempts=attempts)
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 198, in _retry
+    raise RuntimeError(f"{what} failed after {attempts} attempts") from last
+RuntimeError: fetch counts 01a1b708-05ac-75d2-b60f-4142c22832e2 failed after 8 attempts
+[2026-11-08 09:36:39] FAIL w02vn attempt 2 (see log); resuming
+[2026-11-08 09:36:45] ODRA not answering; retry in 10 min
+[2026-11-08 15:31:05] calibration start already taken
+[2026-11-08 15:31:10] RUN w02vn (attempt 1)
+window w02vn: rungs ['star'], 8 points [0, 3, 6, 9, 12, 15, 18, 21], levels ('base', 'cz', 'idle') (+12 pairs), n_train 20, copies 6, S 32768
+  3024 circuits, 99,090,432 shots, ~7.4 h at the pilot rate (night A ran ~1.7x slower because of the queue)
+levels: {'star': {'base': {'n_cz': 12, 't_us': 0.7999999999999998}, 'cz': {'n_cz': 36, 't_us': 2.2399999999999998}, 'idle': {'n_cz': 12, 't_us': 2.2399999999999998}}}
+[provenance] runs/odra_campaign/w02vn
+[resume] 378 circuits already recorded
+  [1/8] star/p09: complete, skipped
+  [2/8] star/p15: 378 circuits
+    [odra] zgłoszono zadanie 01a1bb92-10dc-70c3-8768-5a91cc639696 (25 obwodów)
+    [odra] zadanie 01a1bb92-10dc-70c3-8768-5a91cc639696 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bb97-2557-7473-a245-aab8425aad03 (25 obwodów)
+    [odra] zadanie 01a1bb97-2557-7473-a245-aab8425aad03 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bb9c-3b99-7213-a0af-a958776ad304 (25 obwodów)
+    [odra] zadanie 01a1bb9c-3b99-7213-a0af-a958776ad304 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bba1-4f16-7cf0-afa7-55ffcf3a5be8 (25 obwodów)
+    [odra] zadanie 01a1bba1-4f16-7cf0-afa7-55ffcf3a5be8 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bba6-60b2-7e53-ad46-cd73d0eced06 (25 obwodów)
+    [odra] zadanie 01a1bba6-60b2-7e53-ad46-cd73d0eced06 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbab-72fd-7a10-b58b-374c3e83ac81 (25 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1bbab-72fd-7a10-b58b-374c3e83ac81 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbb0-89d5-7293-8991-7e64a9efb626 (25 obwodów)
+    [odra] zadanie 01a1bbb0-89d5-7293-8991-7e64a9efb626 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbb5-9c44-7e93-9ca9-d2655642789c (25 obwodów)
+    [odra] zadanie 01a1bbb5-9c44-7e93-9ca9-d2655642789c | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbba-ae5e-79e1-a0ed-048facac9316 (25 obwodów)
+    [odra] zadanie 01a1bbba-ae5e-79e1-a0ed-048facac9316 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbbf-c305-79c1-a24b-d09d88bbb2b4 (25 obwodów)
+    [odra] zadanie 01a1bbbf-c305-79c1-a24b-d09d88bbb2b4 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbc4-d772-7823-a228-5f62269021f6 (25 obwodów)
+    [odra] zadanie 01a1bbc4-d772-7823-a228-5f62269021f6 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbc9-ed5f-7881-b1db-5076c0bbfd09 (25 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:31<?, ?it/s]
+    [odra] zadanie 01a1bbc9-ed5f-7881-b1db-5076c0bbfd09 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbcf-0204-76d2-a27c-63b36344e812 (25 obwodów)
+    [odra] zadanie 01a1bbcf-0204-76d2-a27c-63b36344e812 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbd4-179d-7b41-8ef3-f776a2bf2c31 (25 obwodów)
+    [odra] zadanie 01a1bbd4-179d-7b41-8ef3-f776a2bf2c31 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbd9-2c4c-75c0-ad64-e9555a056922 (25 obwodów)
+    [odra] zadanie 01a1bbd9-2c4c-75c0-ad64-e9555a056922 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbde-3fba-7442-b8c7-b9fae79b753e (3 obwodów)
+    [odra] zadanie 01a1bbde-3fba-7442-b8c7-b9fae79b753e | 3 obwodów (3/3)
+  [3/8] star/p03: 378 circuits
+    [odra] zgłoszono zadanie 01a1bbde-e50a-7360-9d9e-bdfe10bae8ab (25 obwodów)
+    [odra] zadanie 01a1bbde-e50a-7360-9d9e-bdfe10bae8ab | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbe3-f7ca-7b01-8883-596ae2633b53 (25 obwodów)
+    [odra] zadanie 01a1bbe3-f7ca-7b01-8883-596ae2633b53 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbe9-5801-7c81-bfbe-d070dfd3928e (25 obwodów)
+    [odra] zadanie 01a1bbe9-5801-7c81-bfbe-d070dfd3928e | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbee-ec62-7be1-af87-a53c48fc140c (25 obwodów)
+    [odra] zadanie 01a1bbee-ec62-7be1-af87-a53c48fc140c | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbf4-8047-7cb3-8216-aa7974ea9ce4 (25 obwodów)
+    [odra] zadanie 01a1bbf4-8047-7cb3-8216-aa7974ea9ce4 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbfa-179b-79a0-b735-ddc265e5817a (25 obwodów)
+    [odra] zadanie 01a1bbfa-179b-79a0-b735-ddc265e5817a | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bbff-aa23-7283-abe7-45ea0757de40 (25 obwodów)
+    [odra] zadanie 01a1bbff-aa23-7283-abe7-45ea0757de40 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc05-27ff-7020-b124-926e9778547d (25 obwodów)
+    [odra] zadanie 01a1bc05-27ff-7020-b124-926e9778547d | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc0a-8719-7681-9b59-f85a2f34132a (25 obwodów)
+    [odra] zadanie 01a1bc0a-8719-7681-9b59-f85a2f34132a | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc0f-e7be-7cd0-9eea-e065c12e684e (25 obwodów)
+    [odra] zadanie 01a1bc0f-e7be-7cd0-9eea-e065c12e684e | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc15-479d-7250-8edf-8d2f2816ab1e (25 obwodów)
+    [odra] zadanie 01a1bc15-479d-7250-8edf-8d2f2816ab1e | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc1a-ab2a-7f23-83d8-e90b7008a7da (25 obwodów)
+    [odra] zadanie 01a1bc1a-ab2a-7f23-83d8-e90b7008a7da | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc1f-be5b-7da1-a15d-43e36a8d347b (25 obwodów)
+    [odra] zadanie 01a1bc1f-be5b-7da1-a15d-43e36a8d347b | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc24-d1df-7c72-867f-baf5b1baa53f (25 obwodów)
+    [odra] zadanie 01a1bc24-d1df-7c72-867f-baf5b1baa53f | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc29-e5df-7163-8071-6a4ee366e3f6 (25 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1bc29-e5df-7163-8071-6a4ee366e3f6 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc2e-fbee-79b1-b10b-d36a1631cfe2 (3 obwodów)
+    [odra] zadanie 01a1bc2e-fbee-79b1-b10b-d36a1631cfe2 | 3 obwodów (3/3)
+  [4/8] star/p06: 378 circuits
+    [odra] zgłoszono zadanie 01a1bc2f-a1ee-7de2-a68f-276502b6d48a (25 obwodów)
+    [odra] zadanie 01a1bc2f-a1ee-7de2-a68f-276502b6d48a | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc34-b573-7d42-a856-38d7e0dc27b7 (25 obwodów)
+    [odra] zadanie 01a1bc34-b573-7d42-a856-38d7e0dc27b7 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc39-c9c0-7370-9b39-5dc05fc6d626 (25 obwodów)
+    [odra] zadanie 01a1bc39-c9c0-7370-9b39-5dc05fc6d626 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc3e-de59-7360-9063-15cdcd1e0f89 (25 obwodów)
+    [odra] zadanie 01a1bc3e-de59-7360-9063-15cdcd1e0f89 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc43-f1f6-7221-b271-131a0b1cc9a9 (25 obwodów)
+    [odra] zadanie 01a1bc43-f1f6-7221-b271-131a0b1cc9a9 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc49-0611-7aa1-91c0-715d0f3cba34 (25 obwodów)
+    [odra] zadanie 01a1bc49-0611-7aa1-91c0-715d0f3cba34 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc4e-199c-79c2-94a9-f940f644fb00 (25 obwodów)
+    [odra] zadanie 01a1bc4e-199c-79c2-94a9-f940f644fb00 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc53-2f04-7161-b60a-31ed156fa932 (25 obwodów)
+    [odra] zadanie 01a1bc53-2f04-7161-b60a-31ed156fa932 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc58-4174-70c2-9583-8485d9ec5b95 (25 obwodów)
+    [odra] zadanie 01a1bc58-4174-70c2-9583-8485d9ec5b95 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc5d-544e-7a42-a179-7a95453c175d (25 obwodów)
+    [odra] zadanie 01a1bc5d-544e-7a42-a179-7a95453c175d | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc62-6973-7f83-b630-d728326d3827 (25 obwodów)
+    [odra] zadanie 01a1bc62-6973-7f83-b630-d728326d3827 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc67-7d1b-77a1-a9f3-da43bb051bc9 (25 obwodów)
+    [odra] zadanie 01a1bc67-7d1b-77a1-a9f3-da43bb051bc9 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc6c-9281-7403-9066-71dfe226e733 (25 obwodów)
+    [odra] zadanie 01a1bc6c-9281-7403-9066-71dfe226e733 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc71-a87d-7820-8085-c5f7a77ab259 (25 obwodów)
+    [odra] zadanie 01a1bc71-a87d-7820-8085-c5f7a77ab259 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc76-bd43-7923-951d-2c8a4d37dbf3 (25 obwodów)
+    [odra] zadanie 01a1bc76-bd43-7923-951d-2c8a4d37dbf3 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc7b-d286-7d92-ab15-f97ff9823058 (3 obwodów)
+    [odra] zadanie 01a1bc7b-d286-7d92-ab15-f97ff9823058 | 3 obwodów (3/3)
+  [5/8] star/p00: 378 circuits
+    [odra] zgłoszono zadanie 01a1bc7c-77ff-7bc3-b984-0a6ef6383fde (25 obwodów)
+    [odra] zadanie 01a1bc7c-77ff-7bc3-b984-0a6ef6383fde | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc81-8b64-70b3-9fe8-451eb77f1465 (25 obwodów)
+    [odra] zadanie 01a1bc81-8b64-70b3-9fe8-451eb77f1465 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc86-9d9d-7e23-9ee1-3883c0ecb81f (25 obwodów)
+    [odra] zadanie 01a1bc86-9d9d-7e23-9ee1-3883c0ecb81f | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc8b-b100-7243-b4d0-ebfc1460977e (25 obwodów)
+    [odra] zadanie 01a1bc8b-b100-7243-b4d0-ebfc1460977e | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc90-c63d-7142-925a-9a2ec45d3252 (25 obwodów)
+    [odra] zadanie 01a1bc90-c63d-7142-925a-9a2ec45d3252 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc96-03d9-76e2-acc5-a84b13401768 (25 obwodów)
+    [odra] zadanie 01a1bc96-03d9-76e2-acc5-a84b13401768 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bc9b-28d5-7150-9c9d-deb38c5c39e4 (25 obwodów)
+    [odra] zadanie 01a1bc9b-28d5-7150-9c9d-deb38c5c39e4 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bca0-657e-7902-8653-50d9f8f238e6 (25 obwodów)
+    [odra] zadanie 01a1bca0-657e-7902-8653-50d9f8f238e6 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bca5-8d0c-75c0-b09a-048587921d53 (25 obwodów)
+    [odra] zadanie 01a1bca5-8d0c-75c0-b09a-048587921d53 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcaa-c909-7bc0-995b-48d01c82f0e0 (25 obwodów)
+    [odra] zadanie 01a1bcaa-c909-7bc0-995b-48d01c82f0e0 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcaf-fabc-7623-9f60-5caeec6abd8c (25 obwodów)
+    [odra] zadanie 01a1bcaf-fabc-7623-9f60-5caeec6abd8c | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcb5-391a-7100-be0b-e5c2f18e9226 (25 obwodów)
+    [odra] zadanie 01a1bcb5-391a-7100-be0b-e5c2f18e9226 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcba-592a-7f22-a502-0d33842e03a2 (25 obwodów)
+    [odra] zadanie 01a1bcba-592a-7f22-a502-0d33842e03a2 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcbf-9723-72a1-abc8-731b511aebd1 (25 obwodów)
+    [odra] zadanie 01a1bcbf-9723-72a1-abc8-731b511aebd1 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcc4-bb8e-79d3-bff4-13f844623f15 (25 obwodów)
+    [odra] zadanie 01a1bcc4-bb8e-79d3-bff4-13f844623f15 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcc9-f7d3-7842-a251-9caee5512de7 (3 obwodów)
+    [odra] zadanie 01a1bcc9-f7d3-7842-a251-9caee5512de7 | 3 obwodów (3/3)
+  [6/8] star/p21: 378 circuits
+    [odra] zgłoszono zadanie 01a1bcca-bae1-7062-afeb-517d74fc1720 (25 obwodów)
+    [odra] zadanie 01a1bcca-bae1-7062-afeb-517d74fc1720 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bccf-fa63-7373-8ae3-8460e74106be (25 obwodów)
+    [odra] zadanie 01a1bccf-fa63-7373-8ae3-8460e74106be | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcd5-6d0a-7670-895b-3be4490dcf12 (25 obwodów)
+    [odra] zadanie 01a1bcd5-6d0a-7670-895b-3be4490dcf12 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcda-f6aa-7581-9140-f5892a49ef5b (25 obwodów)
+    [odra] zadanie 01a1bcda-f6aa-7581-9140-f5892a49ef5b | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bce0-6ef1-7a30-8461-e10d0419a490 (25 obwodów)
+    [odra] zadanie 01a1bce0-6ef1-7a30-8461-e10d0419a490 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bce5-fcd9-7533-bc30-defbeda146bc (25 obwodów)
+    [odra] zadanie 01a1bce5-fcd9-7533-bc30-defbeda146bc | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bceb-2add-7012-9bbd-c60b626eb8ec (25 obwodów)
+    [odra] zadanie 01a1bceb-2add-7012-9bbd-c60b626eb8ec | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcf0-b5dc-7113-a2af-8b9d3ca9e447 (25 obwodów)
+    [odra] zadanie 01a1bcf0-b5dc-7113-a2af-8b9d3ca9e447 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcf6-2c11-7911-835b-9531f0f374ab (25 obwodów)
+    [odra] zadanie 01a1bcf6-2c11-7911-835b-9531f0f374ab | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bcfb-8c58-7ee3-bfde-17795f48ff06 (25 obwodów)
+    [odra] zadanie 01a1bcfb-8c58-7ee3-bfde-17795f48ff06 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd00-e587-7ef2-9ab8-c6b37d03e2db (25 obwodów)
+    [odra] zadanie 01a1bd00-e587-7ef2-9ab8-c6b37d03e2db | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd05-faed-7733-b2bf-da9ae01eb7c2 (25 obwodów)
+    [odra] zadanie 01a1bd05-faed-7733-b2bf-da9ae01eb7c2 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd0b-53ff-7ce2-b018-de51cc95b533 (25 obwodów)
+    [odra] zadanie 01a1bd0b-53ff-7ce2-b018-de51cc95b533 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd10-ae95-7291-b79c-2c8b668ecfa1 (25 obwodów)
+    [odra] zadanie 01a1bd10-ae95-7291-b79c-2c8b668ecfa1 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd16-0604-72e2-834d-33149817f87d (25 obwodów)
+    [odra] zadanie 01a1bd16-0604-72e2-834d-33149817f87d | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd1b-5fd1-7042-ba06-493598374742 (3 obwodów)
+    [odra] zadanie 01a1bd1b-5fd1-7042-ba06-493598374742 | 3 obwodów (3/3)
+  [7/8] star/p12: 378 circuits
+    [odra] zgłoszono zadanie 01a1bd1c-044b-7f52-a2c9-2934ab8920f5 (25 obwodów)
+    [odra] zadanie 01a1bd1c-044b-7f52-a2c9-2934ab8920f5 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd21-5f11-79d1-8127-74ed4173a64a (25 obwodów)
+    [odra] zadanie 01a1bd21-5f11-79d1-8127-74ed4173a64a | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd26-b8a3-7d82-89a6-5f1eb44276c4 (25 obwodów)
+    [odra] zadanie 01a1bd26-b8a3-7d82-89a6-5f1eb44276c4 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd2c-140f-7b21-854d-fbf3d0e7d614 (25 obwodów)
+    [odra] zadanie 01a1bd2c-140f-7b21-854d-fbf3d0e7d614 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd31-6cd9-7672-bb54-bf7751a9ea75 (25 obwodów)
+    [odra] zadanie 01a1bd31-6cd9-7672-bb54-bf7751a9ea75 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd36-81fa-7591-bc48-fdb097a49753 (25 obwodów)
+    [odra] zadanie 01a1bd36-81fa-7591-bc48-fdb097a49753 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd3b-db6d-72d0-91a7-c6bddf4f5951 (25 obwodów)
+    [odra] zadanie 01a1bd3b-db6d-72d0-91a7-c6bddf4f5951 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd41-3760-74f2-8214-1bd49cbf271c (25 obwodów)
+    [odra] zadanie 01a1bd41-3760-74f2-8214-1bd49cbf271c | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd46-8dd7-7ce3-b696-719aafed8aa4 (25 obwodów)
+    [odra] zadanie 01a1bd46-8dd7-7ce3-b696-719aafed8aa4 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd4b-e866-71e1-9837-42eadbb5a0d0 (25 obwodów)
+    [odra] zadanie 01a1bd4b-e866-71e1-9837-42eadbb5a0d0 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd50-fbc4-7e82-a082-0bee6baac4c5 (25 obwodów)
+    [odra] zadanie 01a1bd50-fbc4-7e82-a082-0bee6baac4c5 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd56-5719-7920-9b4c-71c850d5ea17 (25 obwodów)
+    [odra] zadanie 01a1bd56-5719-7920-9b4c-71c850d5ea17 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd5b-affb-78f1-b0ea-c70f522f1eb0 (25 obwodów)
+    [odra] zadanie 01a1bd5b-affb-78f1-b0ea-c70f522f1eb0 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd61-0b1b-78d0-b6e4-6da534bb1687 (25 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:49<?, ?it/s]
+    [odra] zadanie 01a1bd61-0b1b-78d0-b6e4-6da534bb1687 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd66-627d-70e1-955f-f22c6f7e00f0 (25 obwodów)
+    [odra] zadanie 01a1bd66-627d-70e1-955f-f22c6f7e00f0 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd6b-7880-75a1-94b4-f63ba4fc6062 (3 obwodów)
+    [odra] zadanie 01a1bd6b-7880-75a1-94b4-f63ba4fc6062 | 3 obwodów (3/3)
+  [8/8] star/p18: 378 circuits
+    [odra] zgłoszono zadanie 01a1bd6c-649d-7753-9f48-093a7c2387c7 (25 obwodów)
+    [odra] zadanie 01a1bd6c-649d-7753-9f48-093a7c2387c7 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd71-be76-7d33-b479-5ba246d8d2cd (25 obwodów)
+    [odra] zadanie 01a1bd71-be76-7d33-b479-5ba246d8d2cd | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd77-1848-7091-b0e3-73a8bff23477 (25 obwodów)
+    [odra] zadanie 01a1bd77-1848-7091-b0e3-73a8bff23477 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd7c-7111-72b3-bfc6-e29bb7f25328 (25 obwodów)
+    [odra] zadanie 01a1bd7c-7111-72b3-bfc6-e29bb7f25328 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd81-8542-79d1-9c2f-84ea858ec35f (25 obwodów)
+    [odra] zadanie 01a1bd81-8542-79d1-9c2f-84ea858ec35f | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd86-de4a-72d1-856d-86648d051f63 (25 obwodów)
+    [odra] zadanie 01a1bd86-de4a-72d1-856d-86648d051f63 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd8c-3726-7ba3-b87a-cfa6b142bf1d (25 obwodów)
+    [odra] zadanie 01a1bd8c-3726-7ba3-b87a-cfa6b142bf1d | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd91-93ea-72f0-9aa4-a0bd3c77bbc4 (25 obwodów)
+    [odra] zadanie 01a1bd91-93ea-72f0-9aa4-a0bd3c77bbc4 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd96-ee60-7f83-b5f0-af84142201cc (25 obwodów)
+    [odra] zadanie 01a1bd96-ee60-7f83-b5f0-af84142201cc | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bd9c-0191-7b41-936e-4b2ddcd4246d (25 obwodów)
+    [odra] zadanie 01a1bd9c-0191-7b41-936e-4b2ddcd4246d | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bda1-5b4e-7f02-afb7-9c732a02fcd8 (25 obwodów)
+    [odra] zadanie 01a1bda1-5b4e-7f02-afb7-9c732a02fcd8 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bda6-b751-7483-a21d-947920ea73e4 (25 obwodów)
+    [odra] zadanie 01a1bda6-b751-7483-a21d-947920ea73e4 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bdac-137b-7483-a8df-896d7034d0c6 (25 obwodów)
+    [odra] zadanie 01a1bdac-137b-7483-a8df-896d7034d0c6 | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bdb1-6c0f-7332-8b9a-86c534e6b41e (25 obwodów)
+    [odra] zadanie 01a1bdb1-6c0f-7332-8b9a-86c534e6b41e | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bdb6-7fb3-7462-8971-86480da7c4bf (25 obwodów)
+    [odra] zadanie 01a1bdb6-7fb3-7462-8971-86480da7c4bf | 25 obwodów (25/25)
+    [odra] zgłoszono zadanie 01a1bdbb-db35-7400-b22c-bdc1dd10ce1d (3 obwodów)
+    [odra] zadanie 01a1bdbb-db35-7400-b22c-bdc1dd10ce1d | 3 obwodów (3/3)
+complete points: 8; incomplete (excluded, reported): []
+PRIMARY (H_vn): 2-axis vnCDR (2 copies/level, mean over draws) vs CDR (6 base copies), one-sided Wilcoxon on log error:
+  n=8 wins=4/8 mean 0.0172 vs 0.0145 geo 1.212 [0.432, 3.430] p=0.6289 -> NOT SUPPORTED
+secondary (no claims):
+  vn_t                   vs CDR: wins 4/8 geo 1.051 [0.497, 2.097] p=0.4727
+  vn_t_first             vs CDR: wins 5/8 geo 0.873 [0.318, 1.937] p=0.4727
+  vn_t_noint             vs CDR: wins 5/8 geo 0.953 [0.390, 2.024] p=0.5273
+  vn_t_fullbudget        vs CDR: wins 5/8 geo 0.994 [0.422, 2.091] p=0.4219
+  vn_cz                  vs CDR: wins 4/8 geo 1.219 [0.518, 2.848] p=0.6289
+  vn_cz_first            vs CDR: wins 4/8 geo 1.162 [0.409, 2.954] p=0.5781
+  vn_cz_noint            vs CDR: wins 5/8 geo 0.850 [0.264, 2.766] p=0.4219
+  vn_cz_fullbudget       vs CDR: wins 4/8 geo 1.167 [0.459, 2.831] p=0.5781
+  vn_2ax_first           vs CDR: wins 4/8 geo 1.193 [0.357, 3.684] p=0.6289
+  vn_2ax_noint           vs CDR: wins 5/8 geo 1.204 [0.407, 3.498] p=0.5781
+  vn_2ax_fullbudget      vs CDR: wins 4/8 geo 1.005 [0.289, 3.299] p=0.5273
+  raw                    vs CDR: wins 2/8 geo 3.514 [1.384, 9.595] p=0.9727
+wrote runs/odra_campaign/w02vn/vncdr.csv and runs/odra_campaign/w02vn/vncdr_summary.txt
+[2026-11-09 01:37:07] DONE w02vn
+IQMClient.get_calibration_quality_metrics is an experimental method, and the API will likely change in the future with no backwards compatibility.
+Missing fidelity for clifford.xy.QB1
+Missing fidelity for clifford.xy.QB2
+Missing fidelity for clifford.xy.QB3
+Missing fidelity for clifford.xy.QB4
+Missing fidelity for clifford.xy.QB5
+fetching calibration from https://odra5.e-science.pl/ (auth: token) ...
+raw dump -> calibrations/odra_raw_w02vn_end.json
+mapped DeviceCalibration -> calibrations/odra_w02vn_end.json
+unmapped (still placeholder): []
+observations parsed: 462
+OK: all fields mapped from live ODRA calibration.
+hub: 0 t1_us: [18.39, 18.21, 11.23, 9.07, 19.21] p_2q: 0.02571
+[2026-11-09 01:37:11] calibration end saved
+[2026-11-09 01:37:11] === KONIEC w02vn ===

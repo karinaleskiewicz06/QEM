@@ -1,0 +1,8 @@
+complete points: 16; incomplete (excluded, reported): []
+PRIMARY (H_dd): CDR with DD vs CDR without DD, both rungs pooled, two-sided Wilcoxon on log error:
+  n=16 DD better in 4/16  mean 0.1149 (DD) vs 0.0625 (off)  geo 2.135 [1.063, 4.281] p=0.0654 -> NO DIFFERENCE DETECTED
+secondary (no claims):
+  circular: CDR dd vs off: 2/8 geo 1.320 p=0.5469 | raw dd vs off: 4/8 geo 0.987 p=0.9453 | slope a off 2.07 dd 1.68 | r2 off 0.621 dd 0.343
+    mean err: raw off 0.1638 dd 0.1674 | CDR off 0.1033 dd 0.1376
+  star: CDR dd vs off: 2/8 geo 3.453 p=0.0781 | raw dd vs off: 0/8 geo 3.691 p=0.0078 | slope a off 1.20 dd 1.23 | r2 off 0.974 dd 0.874
+    mean err: raw off 0.0465 dd 0.1251 | CDR off 0.0217 dd 0.0922

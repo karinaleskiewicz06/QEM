@@ -1,0 +1,680 @@
+{
+  "campaign": "odra_campaign",
+  "window_id": "w01B",
+  "seed": 42,
+  "cli_args": {
+    "dry_run": false,
+    "submit": true,
+    "sim_device": null,
+    "analyse": null,
+    "kappa": false,
+    "dd_ablation": false,
+    "window_id": "w01B",
+    "campaign": "odra_campaign",
+    "root": "runs",
+    "points": [
+      "linear",
+      "all_to_all"
+    ],
+    "cdr_arms": [
+      "off_copies:near_target",
+      "twirl_native:near_target",
+      "spread:near_target",
+      "twirl_logical:shared_random",
+      "twirl_native:shared_random"
+    ],
+    "eval_points": 24,
+    "point_set": 0,
+    "night": "B",
+    "n_train": 20,
+    "frames": 6,
+    "shots": 8192,
+    "no_zne": false,
+    "seed": 42,
+    "resume": true,
+    "chunk": 100,
+    "no_qasm": false,
+    "sim_theta": 0.0,
+    "sim_phi": 0.0,
+    "sim_eps": 0.0,
+    "allow_env_mismatch": false
+  },
+  "started_utc": "2026-11-09T12:47:22.569Z",
+  "finished_utc": "2026-11-09T14:49:08.602Z",
+  "calibration_set_id": {
+    "start": "d13a40e8-a372-4c37-aae1-c45c252bf765",
+    "end": "d13a40e8-a372-4c37-aae1-c45c252bf765"
+  },
+  "job_ids": [
+    "01a1c059-57fe-7312-8f1f-5d696874046d",
+    "01a1c05e-9502-73c2-aff1-b4154961d33b",
+    "01a1c09c-a1ba-77d3-98b6-44b925489486",
+    "01a1c0a1-bc5d-7971-b5e8-a8d7c259d198",
+    "01a1c0a6-d7a5-75f0-b4f7-137c4091bbc2",
+    "01a1c0ab-f1a5-7742-ba61-3c056f431ed7",
+    "01a1c0b1-0a5a-76c0-a57c-b66b3d465c00",
+    "01a1c0b6-2375-7dd2-b60e-1c65e8f5e44b",
+    "01a1c0bb-3e98-7523-a8a6-125c14a277fe",
+    "01a1c0c0-5a34-7391-9b33-da167e92fb98",
+    "01a1c0c5-7361-79e1-a0cc-e201356762d8",
+    "01a1c0c5-e54e-7332-bb2c-9931487c5322"
+  ],
+  "device": "odra",
+  "submitted": true,
+  "notes": [],
+  "extra": {
+    "previous_attempts": [
+      {
+        "started_utc": "2026-11-09T00:38:52.876Z",
+        "finished_utc": null,
+        "job_ids": [
+          "01a1bdbe-6860-7350-b063-62cdff384699",
+          "01a1bdc3-87f6-7872-898f-cf914073119f",
+          "01a1bdc8-a99e-71c2-8eee-a506a98f726a",
+          "01a1bdcd-ca5e-7e82-8002-8acf4f863b60",
+          "01a1bdd2-ee27-70f2-9ef8-38e33fdb5f76",
+          "01a1bdd8-1214-7591-b30f-cb64318a79e4",
+          "01a1bddd-578c-7120-85b0-303aa0178ef0",
+          "01a1bde2-8556-79e1-a49f-f16b8360c592",
+          "01a1bde7-cabf-7bf2-afde-7739e13629b1",
+          "01a1bdec-fa39-7570-8f3a-c2371837ba6a",
+          "01a1bdf2-3dd3-79b2-ba1a-2015ef3b321f",
+          "01a1bdf2-d295-7271-981f-188c353120c6",
+          "01a1bdf8-18c6-7221-93a5-bd4bde7c422d",
+          "01a1bdfd-3f89-7a70-8a83-69f8ade683af",
+          "01a1be02-84c8-7653-9055-f2354eba46fa",
+          "01a1be07-b418-7a13-a342-b7e4773fbd87",
+          "01a1be0c-f34d-7801-afab-8721b934b175",
+          "01a1be12-318b-7b01-bf55-b1271eb0ac58",
+          "01a1be17-72a2-76e1-b968-d025ff55fbf7",
+          "01a1be1c-9f9b-7d80-b574-788572483a69",
+          "01a1be21-e3de-7c01-869f-dafc622ea4ef",
+          "01a1be27-136e-7101-a577-8607287ccee8",
+          "01a1be27-b055-7861-bf47-f236b33982ed",
+          "01a1be2c-da4a-7293-af68-aec889a122a0",
+          "01a1be32-225f-7c92-a710-a8f126354188",
+          "01a1be37-4deb-7383-9c7d-a615e63e07e6",
+          "01a1be3c-702a-7412-89a9-5dcf79743ed6",
+          "01a1be41-936f-7be0-8d5c-bb70e733e771",
+          "01a1be46-b2e5-7dd1-a067-169e2e6c430b",
+          "01a1be4b-d51f-7f42-8516-4474efb07ccb",
+          "01a1be50-f765-77a0-9b2f-6da6488843c2",
+          "01a1be56-1a2d-7c82-b706-bfb8a57cbaef",
+          "01a1be5b-3ad3-7520-a217-ea99d052c7ab",
+          "01a1be5b-ac5e-7e51-bbef-e867d7a0c437",
+          "01a1be60-c4c3-73b2-b586-4cbfdf4adeda",
+          "01a1be65-dd40-7a70-a286-ffcb165c3e3e",
+          "01a1be6a-f497-79e0-8a24-19b4a8061481",
+          "01a1be70-0f5a-7460-9a74-f6199348c6ef",
+          "01a1be75-285d-7e31-bada-42a20442b3fc",
+          "01a1be7a-3f9d-7031-82a8-14c54ceb5d51",
+          "01a1be7f-5848-7782-a0b4-665d259c6d99",
+          "01a1be84-7d1c-73b3-881d-2ada89461231",
+          "01a1be89-f12f-7270-973d-ff71d47f4c40",
+          "01a1be8f-0a69-7fe1-aa39-9bfa862f4e03",
+          "01a1be8f-8fa9-73e3-bdbf-2de90a64fb27",
+          "01a1be94-bc9b-7630-b9d3-9b598827fb40",
+          "01a1be9a-7c6e-7053-ad91-ed396b0634f8",
+          "01a1bea0-07d0-73c3-8be3-26b44fe008fc",
+          "01a1bea9-7b5c-7501-afab-c725b39f9b2f",
+          "01a1beb4-bbf5-7760-a5b2-51e23698fc2d",
+          "01a1beba-01fd-7ec1-8bc4-bfea0ed83c42",
+          "01a1bebf-2eac-7e12-ba6f-709267630774",
+          "01a1bec5-00a3-7340-8fb6-75d4984ece29",
+          "01a1becb-2096-7670-9f74-9d641c2ceb5f",
+          "01a1bed6-0712-7980-8f20-651651041996",
+          "01a1beda-8159-7d92-a629-38f7033fe825",
+          "01a1bee2-b4e7-7800-8716-4fe954848c6a",
+          "01a1bee7-ce51-73b2-a7f7-3bf7033a9a43",
+          "01a1beec-e655-7863-9f1a-5afcb6dfd402",
+          "01a1bef2-03ba-7592-82f9-93d7d047d747",
+          "01a1bef7-1e78-7591-9424-4a58e125e2f8",
+          "01a1befc-375e-77c0-af9c-2a20144870a4",
+          "01a1bf01-50a2-7d23-b9dd-05624f3123a1",
+          "01a1bf06-6b28-78e2-9c55-30d58260511d",
+          "01a1bf0b-81f5-7e40-bf93-c8df7af3f818",
+          "01a1bf10-9d77-7032-9613-51b7b49acc11",
+          "01a1bf11-0dbb-70a2-ae7d-253077d3d2b6",
+          "01a1bf16-24f0-70e0-a155-b01ee0b88abb",
+          "01a1bf1b-4081-7063-a460-ae9d6645434a",
+          "01a1bf20-58a2-7771-b1d7-22c55b3997b3",
+          "01a1bf25-9854-7761-aadd-42d5fac6bd69",
+          "01a1bf2a-c08f-7971-a513-735041462053",
+          "01a1bf30-0312-7842-85b4-528c8b9f07f8",
+          "01a1bf35-2a05-7111-aedc-1fabc19c71f4",
+          "01a1bf3a-6c35-7273-9ff5-5377540f5509",
+          "01a1bf3f-a0bb-73b0-92ee-75802f6bfcb4",
+          "01a1bf44-da15-7503-953a-9032d840e7b5",
+          "01a1bf45-5ff1-7fb1-8e16-68e679e779cd",
+          "01a1bf48-7ea9-7e73-a1ef-d1a9a455767b",
+          "01a1bf4d-a88f-7b91-899a-26a23447ff6d",
+          "01a1bf52-e9e7-7633-8db0-195b4c1608ba",
+          "01a1bf58-267b-7ff1-94d4-c39dc0150381",
+          "01a1bf5d-6b85-72f3-a73f-98fbd82fa0c5",
+          "01a1bf62-91e8-73c1-b93d-b4f0d8af5595",
+          "01a1bf67-d677-77e1-b31b-979e9d979b57",
+          "01a1bf72-0fc1-7d60-8f61-fe85846268f9",
+          "01a1bf7c-61b2-7853-b9d3-2b56bb3312e6",
+          "01a1bf86-990a-75d1-aed4-226c98d2b98d",
+          "01a1bf90-e816-7af2-a97b-950fe1481fe3",
+          "01a1bf96-7a70-77d1-8ce9-ab8d939d334a",
+          "01a1bfa0-8f66-7de3-af13-6c40fcda684e",
+          "01a1bfaa-a5f9-7431-864b-45491f721d45",
+          "01a1bfb4-bf85-7571-a81c-2c47f1cc61bb",
+          "01a1bfbe-d31e-78d3-a79f-1a7ce8bc3009",
+          "01a1bfc8-ed71-7572-a40f-dee710c4dc49",
+          "01a1bfd3-d317-7910-bd8e-86506e6f7d73",
+          "01a1bfdd-e77b-77b1-99d8-3b2bc6009690",
+          "01a1bfe8-016d-7762-ae44-a96042560911",
+          "01a1bfed-3cd6-77c1-b9ac-67fb8e1dc429",
+          "01a1bff7-5379-77a2-8a13-ee6c390da627",
+          "01a1bffc-c890-7ad0-8adc-a7276d84fac0"
+        ],
+        "notes": [
+          "calibration set changed during block linear/cdr/off_copies/near_target: 36b9e58f-3f44-4471-8846-528551446d48 -> d13a40e8-a372-4c37-aae1-c45c252bf765",
+          "calibration set changed during block linear/cdr/twirl_logical/shared_random: d13a40e8-a372-4c37-aae1-c45c252bf765 -> d13a40e8-a372-4c37-aae1-c45c252bf765",
+          "calibration set changed during block all_to_all/zne: d13a40e8-a372-4c37-aae1-c45c252bf765 -> d13a40e8-a372-4c37-aae1-c45c252bf765",
+          "calibration set changed during block all_to_all/cdr/off_copies/near_target: d13a40e8-a372-4c37-aae1-c45c252bf765 -> d13a40e8-a372-4c37-aae1-c45c252bf765",
+          "calibration set changed during block linear/cdr/twirl_native/shared_random: d13a40e8-a372-4c37-aae1-c45c252bf765 -> d13a40e8-a372-4c37-aae1-c45c252bf765"
+        ],
+        "cli_args": {
+          "dry_run": false,
+          "submit": true,
+          "sim_device": null,
+          "analyse": null,
+          "kappa": false,
+          "dd_ablation": false,
+          "window_id": "w01B",
+          "campaign": "odra_campaign",
+          "root": "runs",
+          "points": [
+            "linear",
+            "all_to_all"
+          ],
+          "cdr_arms": [
+            "off_copies:near_target",
+            "twirl_native:near_target",
+            "spread:near_target",
+            "twirl_logical:shared_random",
+            "twirl_native:shared_random"
+          ],
+          "eval_points": 24,
+          "point_set": 0,
+          "night": "B",
+          "n_train": 20,
+          "frames": 6,
+          "shots": 8192,
+          "no_zne": false,
+          "seed": 42,
+          "resume": true,
+          "chunk": 100,
+          "no_qasm": false,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "allow_env_mismatch": false
+        },
+        "calibration_set_id": {
+          "start": "36b9e58f-3f44-4471-8846-528551446d48",
+          "end": "d13a40e8-a372-4c37-aae1-c45c252bf765"
+        },
+        "git_commit": "8223c07acd0100a6e35e2844b90303c86896ce49",
+        "git_dirty": true
+      }
+    ],
+    "plan": {
+      "block_order": [
+        "all_to_all/cdr/twirl_native/near_target",
+        "all_to_all/cdr/twirl_logical/shared_random",
+        "all_to_all/cdr/twirl_native/shared_random",
+        "linear/cdr/spread/near_target",
+        "all_to_all/cdr/spread/near_target",
+        "linear/cdr/off_copies/near_target",
+        "linear/cdr/twirl_logical/shared_random",
+        "all_to_all/zne",
+        "all_to_all/cdr/off_copies/near_target",
+        "linear/cdr/twirl_native/shared_random",
+        "linear/cdr/twirl_native/near_target",
+        "linear/zne"
+      ],
+      "block_order_seed": 42,
+      "rungs": {
+        "linear": {
+          "n_cz": 30,
+          "skeleton": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          "insertion": null
+        },
+        "all_to_all": {
+          "n_cz": 57,
+          "skeleton": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "insertion": null
+        }
+      },
+      "n_circuits": 10192,
+      "eval_points": [
+        0,
+        3,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21
+      ]
+    },
+    "blocks": [
+      {
+        "block": "linear/cdr/twirl_native/near_target",
+        "order": 10,
+        "n": 1008,
+        "cal_before": "d13a40e8-a372-4c37-aae1-c45c252bf765",
+        "cal_after": "d13a40e8-a372-4c37-aae1-c45c252bf765",
+        "seconds": 7113.0
+      },
+      {
+        "block": "linear/zne",
+        "order": 11,
+        "n": 56,
+        "cal_before": "d13a40e8-a372-4c37-aae1-c45c252bf765",
+        "cal_after": "d13a40e8-a372-4c37-aae1-c45c252bf765",
+        "seconds": 192.5
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.13.9",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "argv": [
+      "campaign/odra_window.py",
+      "--submit",
+      "--window-id",
+      "w01B",
+      "--night",
+      "B",
+      "--point-set",
+      "0",
+      "--chunk",
+      "100",
+      "--resume"
+    ],
+    "packages": {
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3"
+    },
+    "locked": {
+      "python": "3.13.9",
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "qiskit-ibm-runtime": "0.47.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.6",
+      "scikit-learn": "1.7.2",
+      "statsmodels": "0.14.5",
+      "torch": "2.12.0",
+      "qml_benchmarks": "0.1"
+    },
+    "git_commit": "d53f3f4a29da43e9228f088a1fee258682a1be4d",
+    "git_branch": "paper-odra-campaign",
+    "git_dirty": true,
+    "git_dirty_files": 12
+  },
+  "split_window": false
+}

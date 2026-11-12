@@ -9,6 +9,21 @@ trained_models/
 calibrations/*
 !calibrations/odra_20260803.json
 !calibrations/odra_raw_20260803.json
+# the 9 distinct ODRA calibrations (others are identical re-downloads, see odra_all/README.md)
+!calibrations/odra.json
+!calibrations/odra_raw.json
+!calibrations/odra_w01P5_end.json
+!calibrations/odra_raw_w01P5_end.json
+!calibrations/odra_w02vn_start_aborted.json
+!calibrations/odra_raw_w02vn_start_aborted.json
+!calibrations/odra_w02vn_start.json
+!calibrations/odra_raw_w02vn_start.json
+!calibrations/odra_w02vn_end.json
+!calibrations/odra_raw_w02vn_end.json
+!calibrations/odra_w04m_start.json
+!calibrations/odra_raw_w04m_start.json
+!calibrations/odra_all/
+calibrations/odra_all/odra_calibrations.json
 
 # routing sweep / pilot outputs
 routing_ladder.csv
@@ -58,3 +73,7 @@ prezentacja.pdf
 runs/*/
 !runs/legacy_logs/
 !runs/legacy_failed/
+
+# ODRA campaign raw hardware data: counts kept gzipped (counts.jsonl.gz), originals stay local
+!runs/odra_campaign/
+runs/odra_campaign/**/counts.jsonl

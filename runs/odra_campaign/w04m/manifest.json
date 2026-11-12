@@ -1,0 +1,165 @@
+{
+  "campaign": "odra_campaign",
+  "window_id": "w04m",
+  "seed": 42,
+  "cli_args": {
+    "dry_run": false,
+    "submit": true,
+    "sim_device": null,
+    "analyse": null,
+    "window_id": "w04m",
+    "campaign": "odra_campaign",
+    "root": "runs",
+    "rungs": [
+      "star",
+      "linear",
+      "circular",
+      "all_to_all",
+      "star_L6",
+      "star_L9",
+      "star_L13",
+      "star_cz24",
+      "star_cz36",
+      "star_cz52",
+      "star_idle24",
+      "star_idle36",
+      "star_idle52"
+    ],
+    "max_points": null,
+    "copies": 2,
+    "shots": 8192,
+    "seed": 42,
+    "t_cz": 6e-08,
+    "t_prx": 2e-08,
+    "chunk": 100,
+    "no_qasm": false,
+    "wait_for": null,
+    "attempts": 8,
+    "sim_theta": 0.0,
+    "sim_phi": 0.0,
+    "sim_eps": 0.0,
+    "allow_env_mismatch": false,
+    "resume": true
+  },
+  "started_utc": "2026-11-09T08:19:21.804Z",
+  "finished_utc": "2026-11-09T12:46:15.178Z",
+  "calibration_set_id": {
+    "start": "d13a40e8-a372-4c37-aae1-c45c252bf765",
+    "end": "d13a40e8-a372-4c37-aae1-c45c252bf765"
+  },
+  "job_ids": [
+    "01a1bf63-facb-74c1-97d0-e38318b759b1",
+    "01a1bf6c-fef4-74d3-a3c3-bb3ae5951963",
+    "01a1bf77-4c96-76a0-a46e-a03a2dbfbf78",
+    "01a1bf81-8411-7bb3-aaab-3f4f573240e4",
+    "01a1bf8b-d91f-7b71-a267-324bf1d7c727",
+    "01a1bf96-137a-77c3-8071-47d4ac3256da",
+    "01a1bf9b-8962-7c40-8d8b-900c1ae813ed",
+    "01a1bfa5-9ddc-7f53-9626-12eb5358c0b3",
+    "01a1bfaf-b19c-79a3-bd37-aaf097d8401a",
+    "01a1bfb9-ca33-7143-98ab-fcc0d8b69feb",
+    "01a1bfc3-e630-7da3-9b5c-e6e46c32a6a9",
+    "01a1bfce-c6e0-7ca3-82d9-3c5f4d5ecf00",
+    "01a1bfd8-f006-7e20-a858-7cb3acb159fd",
+    "01a1bfe2-f239-7d73-9a4c-ff9f70a01bb2",
+    "01a1bfe8-3358-7bb2-80d7-f0d1b48b642f",
+    "01a1bff2-47c4-72b3-997d-2731bdeeff5c",
+    "01a1bffc-603a-7721-beae-73c9d4b7e2d5",
+    "01a1c001-d708-7120-aef9-48e49dabd426",
+    "01a1c029-3bd5-7ad0-b6fe-6d4aa81e3f75",
+    "01a1c02e-5529-7661-9b97-6b48753ff530",
+    "01a1c033-6b59-73c3-b3cd-08f28e57e0d2",
+    "01a1c038-8265-7143-add0-e0d95ac92e42",
+    "01a1c03d-9869-7af0-95f9-0e9ba9e49dd9",
+    "01a1c042-e5f6-7ab3-833c-cefe50bfc984",
+    "01a1c048-3064-7222-b67d-f50dd6db1b19",
+    "01a1c04d-7ed5-72a3-996e-cb38446726fe",
+    "01a1c052-caea-7361-a7c6-30c5f64358d6",
+    "01a1c058-1436-71f1-968e-1ef919df75f0"
+  ],
+  "device": "odra",
+  "submitted": true,
+  "notes": [],
+  "extra": {
+    "plan": {
+      "design": "margin-raw-all-rungs",
+      "rungs": {
+        "star": 12,
+        "linear": 30,
+        "circular": 39,
+        "all_to_all": 57,
+        "star_L6": 24,
+        "star_L9": 36,
+        "star_L13": 52,
+        "star_cz24": 24,
+        "star_cz36": 36,
+        "star_cz52": 52,
+        "star_idle24": 12,
+        "star_idle36": 12,
+        "star_idle52": 12
+      },
+      "n_circuits": 2608,
+      "blocks": [
+        "r00",
+        "r01"
+      ]
+    },
+    "blocks": [
+      {
+        "block": "r00",
+        "order": 0,
+        "n": 1304,
+        "cal_before": "d13a40e8-a372-4c37-aae1-c45c252bf765",
+        "cal_after": "d13a40e8-a372-4c37-aae1-c45c252bf765",
+        "seconds": 8664.9
+      },
+      {
+        "block": "r01",
+        "order": 1,
+        "n": 1304,
+        "cal_before": "d13a40e8-a372-4c37-aae1-c45c252bf765",
+        "cal_after": "d13a40e8-a372-4c37-aae1-c45c252bf765",
+        "seconds": 7347.9
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.13.9",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "argv": [
+      "campaign/margin_odra_window.py",
+      "--submit",
+      "--window-id",
+      "w04m"
+    ],
+    "packages": {
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3"
+    },
+    "locked": {
+      "python": "3.13.9",
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "qiskit-ibm-runtime": "0.47.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.6",
+      "scikit-learn": "1.7.2",
+      "statsmodels": "0.14.5",
+      "torch": "2.12.0",
+      "qml_benchmarks": "0.1"
+    },
+    "git_commit": "d53f3f4a29da43e9228f088a1fee258682a1be4d",
+    "git_branch": "paper-odra-campaign",
+    "git_dirty": true,
+    "git_dirty_files": 9
+  },
+  "split_window": false
+}

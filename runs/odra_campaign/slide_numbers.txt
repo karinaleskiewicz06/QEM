@@ -1,0 +1,27 @@
+
+=== SLAJD 25: CDR bez twirlingu vs z twirlingiem (natywny, near_target) ===
+  CZ |  CDR bez | CDR z tw. | wygrane | iloraz | p (1-str.)
+  12 |    0,022 |     0,015 | 4 / 8   |   1.41 | 0.770
+  30 |    0,076 |     0,053 | 4 / 8   |   0.93 | 0.422
+  39 |    0,053 |     0,040 | 7 / 8   |   0.68 | 0.074
+  57 |    0,152 |     0,053 | 5 / 8   |   0.34 | 0.074
+H1 (wszystkie szczeble): 20 z 32 par wygranych, Wilcoxon p = 0.092, test znaków p = 0.108, iloraz 0.75
+logiczny vs natywny (shared_random), średni błąd:
+  12 CZ: logiczny 0,019, natywny 0,031, natywny lepszy w 2/8, p = 0.973
+  30 CZ: logiczny 0,029, natywny 0,036, natywny lepszy w 3/8, p = 0.727
+  39 CZ: logiczny 0,025, natywny 0,032, natywny lepszy w 5/8, p = 0.527
+  57 CZ: logiczny 0,082, natywny 0,088, natywny lepszy w 3/8, p = 0.680
+
+=== SLAJD 26: która metoda kiedy (średni błąd) ===
+  CZ |    raw |    ZNE | garbage | CDR+tw | spread
+  12 |  0,074 |  0,045 |   0,137 |  0,015 |  0,012
+  30 |  0,110 |  0,064 |   0,068 |  0,053 |  0,056
+  39 |  0,161 |  0,112 |   0,103 |  0,040 |  0,068
+  57 |  0,223 |  0,170 |   0,161 |  0,053 |  0,137
+testy ZNE (H4: ZNE < raw, ZNE < garbage, mediana W_neg <= 0,02, mediana SNR >= 2):
+  12 CZ: ZNE<raw p = 0.473; ZNE<garbage p = 0.012; W_neg 0.004; SNR 23.4 -> H4 niespełnione
+  30 CZ: ZNE<raw p = 0.098; ZNE<garbage p = 0.371; W_neg 0.001; SNR 14.4 -> H4 niespełnione
+  39 CZ: ZNE<raw p = 0.004; ZNE<garbage p = 0.844; W_neg 0.000; SNR 4.1 -> H4 niespełnione
+  57 CZ: ZNE<raw p = 0.156; ZNE<garbage p = 0.988; W_neg 0.000; SNR 7.3 -> H4 niespełnione
+
+shoty / punkt: raw 8 192, ZNE 24 576, CDR 1 032 192

@@ -1,0 +1,513 @@
+IQMClient.get_calibration_quality_metrics is an experimental method, and the API will likely change in the future with no backwards compatibility.
+Missing fidelity for clifford.xy.QB1
+Missing fidelity for clifford.xy.QB2
+Missing fidelity for clifford.xy.QB3
+Missing fidelity for clifford.xy.QB4
+Missing fidelity for clifford.xy.QB5
+fetching calibration from https://odra5.e-science.pl/ (auth: token) ...
+raw dump -> calibrations/odra_raw_w01B_start.json
+mapped DeviceCalibration -> calibrations/odra_w01B_start.json
+unmapped (still placeholder): []
+observations parsed: 462
+OK: all fields mapped from live ODRA calibration.
+hub: 0 t1_us: [18.39, 18.21, 11.23, 9.07, 19.21] p_2q: 0.02571
+[2026-11-09 01:37:47] calibration start saved
+[2026-11-09 01:37:49] RUN w01B (night B, point set 0, attempt 1)
+window w01B: 8 points, rungs ['linear', 'all_to_all'], n_train 20 (spread 120), M 6, S 8192, ZNE (1, 3, 5)
+block                                                 circuits        shots   hours
+all_to_all/cdr/twirl_native/near_target                   1008      8257536    0.68
+all_to_all/cdr/twirl_logical/shared_random                1008      8257536    0.68
+all_to_all/cdr/twirl_native/shared_random                 1008      8257536    0.68
+linear/cdr/spread/near_target                             1008      8257536    0.68
+all_to_all/cdr/spread/near_target                         1008      8257536    0.68
+linear/cdr/off_copies/near_target                         1008      8257536    0.68
+linear/cdr/twirl_logical/shared_random                    1008      8257536    0.68
+all_to_all/zne                                              56       458752    0.04
+all_to_all/cdr/off_copies/near_target                     1008      8257536    0.68
+linear/cdr/twirl_native/shared_random                     1008      8257536    0.68
+linear/cdr/twirl_native/near_target                       1008      8257536    0.68
+linear/zne                                                  56       458752    0.04
+TOTAL                                                    10192     83492864    6.88
+  time model: 0.3 s/circuit + 2.6e-04 s/shot (ODRA pilot, 2026-10-23)
+CZ per rung: {'linear': 30, 'all_to_all': 57}
+[provenance] runs/odra_campaign/w01B
+  [1/12] all_to_all/cdr/twirl_native/near_target: 1008 circuits
+    [odra] zgłoszono zadanie 01a1bdbe-6860-7350-b063-62cdff384699 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a1bdbe-6860-7350-b063-62cdff384699 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bdc3-87f6-7872-898f-cf914073119f (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a1bdc3-87f6-7872-898f-cf914073119f | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bdc8-a99e-71c2-8eee-a506a98f726a (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a1bdc8-a99e-71c2-8eee-a506a98f726a | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bdcd-ca5e-7e82-8002-8acf4f863b60 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a1bdcd-ca5e-7e82-8002-8acf4f863b60 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bdd2-ee27-70f2-9ef8-38e33fdb5f76 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a1bdd2-ee27-70f2-9ef8-38e33fdb5f76 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bdd8-1214-7591-b30f-cb64318a79e4 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:43<?, ?it/s]
+    [odra] zadanie 01a1bdd8-1214-7591-b30f-cb64318a79e4 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bddd-578c-7120-85b0-303aa0178ef0 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:37<?, ?it/s]
+    [odra] zadanie 01a1bddd-578c-7120-85b0-303aa0178ef0 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bde2-8556-79e1-a49f-f16b8360c592 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:43<?, ?it/s]
+    [odra] zadanie 01a1bde2-8556-79e1-a49f-f16b8360c592 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bde7-cabf-7bf2-afde-7739e13629b1 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:38<?, ?it/s]
+    [odra] zadanie 01a1bde7-cabf-7bf2-afde-7739e13629b1 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bdec-fa39-7570-8f3a-c2371837ba6a (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:43<?, ?it/s]
+    [odra] zadanie 01a1bdec-fa39-7570-8f3a-c2371837ba6a | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bdf2-3dd3-79b2-ba1a-2015ef3b321f (8 obwodów)
+    [odra] zadanie 01a1bdf2-3dd3-79b2-ba1a-2015ef3b321f | 8 obwodów (8/8)
+  [2/12] all_to_all/cdr/twirl_logical/shared_random: 1008 circuits
+    [odra] zgłoszono zadanie 01a1bdf2-d295-7271-981f-188c353120c6 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:44<?, ?it/s]
+    [odra] zadanie 01a1bdf2-d295-7271-981f-188c353120c6 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bdf8-18c6-7221-93a5-bd4bde7c422d (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a1bdf8-18c6-7221-93a5-bd4bde7c422d | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bdfd-3f89-7a70-8a83-69f8ade683af (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:43<?, ?it/s]
+    [odra] zadanie 01a1bdfd-3f89-7a70-8a83-69f8ade683af | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be02-84c8-7653-9055-f2354eba46fa (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:37<?, ?it/s]
+    [odra] zadanie 01a1be02-84c8-7653-9055-f2354eba46fa | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be07-b418-7a13-a342-b7e4773fbd87 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:42<?, ?it/s]
+    [odra] zadanie 01a1be07-b418-7a13-a342-b7e4773fbd87 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be0c-f34d-7801-afab-8721b934b175 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:42<?, ?it/s]
+    [odra] zadanie 01a1be0c-f34d-7801-afab-8721b934b175 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be12-318b-7b01-bf55-b1271eb0ac58 (100 obwodów)
+    [odra] zadanie 01a1be12-318b-7b01-bf55-b1271eb0ac58 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be17-72a2-76e1-b968-d025ff55fbf7 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:37<?, ?it/s]
+    [odra] zadanie 01a1be17-72a2-76e1-b968-d025ff55fbf7 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be1c-9f9b-7d80-b574-788572483a69 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:43<?, ?it/s]
+    [odra] zadanie 01a1be1c-9f9b-7d80-b574-788572483a69 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be21-e3de-7c01-869f-dafc622ea4ef (100 obwodów)
+    [odra] zadanie 01a1be21-e3de-7c01-869f-dafc622ea4ef | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be27-136e-7101-a577-8607287ccee8 (8 obwodów)
+    [odra] zadanie 01a1be27-136e-7101-a577-8607287ccee8 | 8 obwodów (8/8)
+  [3/12] all_to_all/cdr/twirl_native/shared_random: 1008 circuits
+    [odra] zgłoszono zadanie 01a1be27-b055-7861-bf47-f236b33982ed (100 obwodów)
+    [odra] zadanie 01a1be27-b055-7861-bf47-f236b33982ed | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be2c-da4a-7293-af68-aec889a122a0 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:44<?, ?it/s]
+    [odra] zadanie 01a1be2c-da4a-7293-af68-aec889a122a0 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be32-225f-7c92-a710-a8f126354188 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:37<?, ?it/s]
+    [odra] zadanie 01a1be32-225f-7c92-a710-a8f126354188 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be37-4deb-7383-9c7d-a615e63e07e6 (100 obwodów)
+    [odra] zadanie 01a1be37-4deb-7383-9c7d-a615e63e07e6 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be3c-702a-7412-89a9-5dcf79743ed6 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:35<?, ?it/s]
+    [odra] zadanie 01a1be3c-702a-7412-89a9-5dcf79743ed6 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be41-936f-7be0-8d5c-bb70e733e771 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a1be41-936f-7be0-8d5c-bb70e733e771 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be46-b2e5-7dd1-a067-169e2e6c430b (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a1be46-b2e5-7dd1-a067-169e2e6c430b | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be4b-d51f-7f42-8516-4474efb07ccb (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a1be4b-d51f-7f42-8516-4474efb07ccb | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be50-f765-77a0-9b2f-6da6488843c2 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a1be50-f765-77a0-9b2f-6da6488843c2 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be56-1a2d-7c82-b706-bfb8a57cbaef (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:34<?, ?it/s]
+    [odra] zadanie 01a1be56-1a2d-7c82-b706-bfb8a57cbaef | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be5b-3ad3-7520-a217-ea99d052c7ab (8 obwodów)
+    [odra] zadanie 01a1be5b-3ad3-7520-a217-ea99d052c7ab | 8 obwodów (8/8)
+  [4/12] linear/cdr/spread/near_target: 1008 circuits
+    [odra] zgłoszono zadanie 01a1be5b-ac5e-7e51-bbef-e867d7a0c437 (100 obwodów)
+    [odra] zadanie 01a1be5b-ac5e-7e51-bbef-e867d7a0c437 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be60-c4c3-73b2-b586-4cbfdf4adeda (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1be60-c4c3-73b2-b586-4cbfdf4adeda | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be65-dd40-7a70-a286-ffcb165c3e3e (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1be65-dd40-7a70-a286-ffcb165c3e3e | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be6a-f497-79e0-8a24-19b4a8061481 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a1be6a-f497-79e0-8a24-19b4a8061481 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be70-0f5a-7460-9a74-f6199348c6ef (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1be70-0f5a-7460-9a74-f6199348c6ef | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be75-285d-7e31-bada-42a20442b3fc (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1be75-285d-7e31-bada-42a20442b3fc | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be7a-3f9d-7031-82a8-14c54ceb5d51 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1be7a-3f9d-7031-82a8-14c54ceb5d51 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be7f-5848-7782-a0b4-665d259c6d99 (100 obwodów)
+    [odra] zadanie 01a1be7f-5848-7782-a0b4-665d259c6d99 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be84-7d1c-73b3-881d-2ada89461231 (100 obwodów)
+    [odra] zadanie 01a1be84-7d1c-73b3-881d-2ada89461231 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be89-f12f-7270-973d-ff71d47f4c40 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a1be89-f12f-7270-973d-ff71d47f4c40 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be8f-0a69-7fe1-aa39-9bfa862f4e03 (8 obwodów)
+    [odra] zadanie 01a1be8f-0a69-7fe1-aa39-9bfa862f4e03 | 8 obwodów (8/8)
+  [5/12] all_to_all/cdr/spread/near_target: 1008 circuits
+    [odra] zgłoszono zadanie 01a1be8f-8fa9-73e3-bdbf-2de90a64fb27 (100 obwodów)
+    [odra] zadanie 01a1be8f-8fa9-73e3-bdbf-2de90a64fb27 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be94-bc9b-7630-b9d3-9b598827fb40 (100 obwodów)
+    [odra] zadanie 01a1be94-bc9b-7630-b9d3-9b598827fb40 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1be9a-7c6e-7053-ad91-ed396b0634f8 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [06:01<?, ?it/s]
+    [odra] zadanie 01a1be9a-7c6e-7053-ad91-ed396b0634f8 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bea0-07d0-73c3-8be3-26b44fe008fc (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [10:17<?, ?it/s]
+    [odra] zadanie 01a1bea0-07d0-73c3-8be3-26b44fe008fc | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bea9-7b5c-7501-afab-c725b39f9b2f (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [12:15<?, ?it/s]
+    [odra] zadanie 01a1bea9-7b5c-7501-afab-c725b39f9b2f | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1beb4-bbf5-7760-a5b2-51e23698fc2d (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:43<?, ?it/s]
+    [odra] zadanie 01a1beb4-bbf5-7760-a5b2-51e23698fc2d | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1beba-01fd-7ec1-8bc4-bfea0ed83c42 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:37<?, ?it/s]
+    [odra] zadanie 01a1beba-01fd-7ec1-8bc4-bfea0ed83c42 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bebf-2eac-7e12-ba6f-709267630774 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [06:19<?, ?it/s]
+    [odra] zadanie 01a1bebf-2eac-7e12-ba6f-709267630774 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bec5-00a3-7340-8fb6-75d4984ece29 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [06:39<?, ?it/s]
+    [odra] zadanie 01a1bec5-00a3-7340-8fb6-75d4984ece29 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1becb-2096-7670-9f74-9d641c2ceb5f (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [11:53<?, ?it/s]
+    [odra] zadanie 01a1becb-2096-7670-9f74-9d641c2ceb5f | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bed6-0712-7980-8f20-651651041996 (8 obwodów)
+    [odra] zadanie 01a1bed6-0712-7980-8f20-651651041996 | 8 obwodów (8/8)
+  [6/12] linear/cdr/off_copies/near_target: 1008 circuits
+    [odra] zgłoszono zadanie 01a1beda-8159-7d92-a629-38f7033fe825 (100 obwodów)
+    [odra] zadanie 01a1beda-8159-7d92-a629-38f7033fe825 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bee2-b4e7-7800-8716-4fe954848c6a (100 obwodów)
+    [odra] zadanie 01a1bee2-b4e7-7800-8716-4fe954848c6a | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bee7-ce51-73b2-a7f7-3bf7033a9a43 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1bee7-ce51-73b2-a7f7-3bf7033a9a43 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1beec-e655-7863-9f1a-5afcb6dfd402 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a1beec-e655-7863-9f1a-5afcb6dfd402 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bef2-03ba-7592-82f9-93d7d047d747 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a1bef2-03ba-7592-82f9-93d7d047d747 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bef7-1e78-7591-9424-4a58e125e2f8 (100 obwodów)
+    [odra] zadanie 01a1bef7-1e78-7591-9424-4a58e125e2f8 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1befc-375e-77c0-af9c-2a20144870a4 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1befc-375e-77c0-af9c-2a20144870a4 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf01-50a2-7d23-b9dd-05624f3123a1 (100 obwodów)
+    [odra] zadanie 01a1bf01-50a2-7d23-b9dd-05624f3123a1 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf06-6b28-78e2-9c55-30d58260511d (100 obwodów)
+    [odra] zadanie 01a1bf06-6b28-78e2-9c55-30d58260511d | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf0b-81f5-7e40-bf93-c8df7af3f818 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a1bf0b-81f5-7e40-bf93-c8df7af3f818 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf10-9d77-7032-9613-51b7b49acc11 (8 obwodów)
+    [odra] zadanie 01a1bf10-9d77-7032-9613-51b7b49acc11 | 8 obwodów (8/8)
+  [7/12] linear/cdr/twirl_logical/shared_random: 1008 circuits
+    [odra] zgłoszono zadanie 01a1bf11-0dbb-70a2-ae7d-253077d3d2b6 (100 obwodów)
+    [odra] zadanie 01a1bf11-0dbb-70a2-ae7d-253077d3d2b6 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf16-24f0-70e0-a155-b01ee0b88abb (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a1bf16-24f0-70e0-a155-b01ee0b88abb | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf1b-4081-7063-a460-ae9d6645434a (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1bf1b-4081-7063-a460-ae9d6645434a | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf20-58a2-7771-b1d7-22c55b3997b3 (100 obwodów)
+    [odra] zadanie 01a1bf20-58a2-7771-b1d7-22c55b3997b3 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf25-9854-7761-aadd-42d5fac6bd69 (100 obwodów)
+    [odra] zadanie 01a1bf25-9854-7761-aadd-42d5fac6bd69 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf2a-c08f-7971-a513-735041462053 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:43<?, ?it/s]
+    [odra] zadanie 01a1bf2a-c08f-7971-a513-735041462053 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf30-0312-7842-85b4-528c8b9f07f8 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:36<?, ?it/s]
+    [odra] zadanie 01a1bf30-0312-7842-85b4-528c8b9f07f8 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf35-2a05-7111-aedc-1fabc19c71f4 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:43<?, ?it/s]
+    [odra] zadanie 01a1bf35-2a05-7111-aedc-1fabc19c71f4 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf3a-6c35-7273-9ff5-5377540f5509 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:39<?, ?it/s]
+    [odra] zadanie 01a1bf3a-6c35-7273-9ff5-5377540f5509 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf3f-a0bb-73b0-92ee-75802f6bfcb4 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:41<?, ?it/s]
+    [odra] zadanie 01a1bf3f-a0bb-73b0-92ee-75802f6bfcb4 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf44-da15-7503-953a-9032d840e7b5 (8 obwodów)
+    [odra] zadanie 01a1bf44-da15-7503-953a-9032d840e7b5 | 8 obwodów (8/8)
+  [8/12] all_to_all/zne: 56 circuits
+    [odra] zgłoszono zadanie 01a1bf45-5ff1-7fb1-8e16-68e679e779cd (56 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:22<?, ?it/s]
+    [odra] zadanie 01a1bf45-5ff1-7fb1-8e16-68e679e779cd | 56 obwodów (56/56)
+  [9/12] all_to_all/cdr/off_copies/near_target: 1008 circuits
+    [odra] zgłoszono zadanie 01a1bf48-7ea9-7e73-a1ef-d1a9a455767b (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:36<?, ?it/s]
+    [odra] zadanie 01a1bf48-7ea9-7e73-a1ef-d1a9a455767b | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf4d-a88f-7b91-899a-26a23447ff6d (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:42<?, ?it/s]
+    [odra] zadanie 01a1bf4d-a88f-7b91-899a-26a23447ff6d | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf52-e9e7-7633-8db0-195b4c1608ba (100 obwodów)
+    [odra] zadanie 01a1bf52-e9e7-7633-8db0-195b4c1608ba | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf58-267b-7ff1-94d4-c39dc0150381 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:43<?, ?it/s]
+    [odra] zadanie 01a1bf58-267b-7ff1-94d4-c39dc0150381 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf5d-6b85-72f3-a73f-98fbd82fa0c5 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:36<?, ?it/s]
+    [odra] zadanie 01a1bf5d-6b85-72f3-a73f-98fbd82fa0c5 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf62-91e8-73c1-b93d-b4f0d8af5595 (100 obwodów)
+    [odra] zadanie 01a1bf62-91e8-73c1-b93d-b4f0d8af5595 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf67-d677-77e1-b31b-979e9d979b57 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [11:08<?, ?it/s]
+    [odra] zadanie 01a1bf67-d677-77e1-b31b-979e9d979b57 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf72-0fc1-7d60-8f61-fe85846268f9 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [11:14<?, ?it/s]
+    [odra] zadanie 01a1bf72-0fc1-7d60-8f61-fe85846268f9 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf7c-61b2-7853-b9d3-2b56bb3312e6 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [11:07<?, ?it/s]
+    [odra] zadanie 01a1bf7c-61b2-7853-b9d3-2b56bb3312e6 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf86-990a-75d1-aed4-226c98d2b98d (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [11:14<?, ?it/s]
+    [odra] zadanie 01a1bf86-990a-75d1-aed4-226c98d2b98d | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bf90-e816-7af2-a97b-950fe1481fe3 (8 obwodów)
+    [odra] zadanie 01a1bf90-e816-7af2-a97b-950fe1481fe3 | 8 obwodów (8/8)
+  [10/12] linear/cdr/twirl_native/shared_random: 1008 circuits
+    [odra] zgłoszono zadanie 01a1bf96-7a70-77d1-8ce9-ab8d939d334a (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [10:59<?, ?it/s]
+    [odra] zadanie 01a1bf96-7a70-77d1-8ce9-ab8d939d334a | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bfa0-8f66-7de3-af13-6c40fcda684e (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [10:59<?, ?it/s]
+    [odra] zadanie 01a1bfa0-8f66-7de3-af13-6c40fcda684e | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bfaa-a5f9-7431-864b-45491f721d45 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [11:00<?, ?it/s]
+    [odra] zadanie 01a1bfaa-a5f9-7431-864b-45491f721d45 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bfb4-bf85-7571-a81c-2c47f1cc61bb (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [10:58<?, ?it/s]
+    [odra] zadanie 01a1bfb4-bf85-7571-a81c-2c47f1cc61bb | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bfbe-d31e-78d3-a79f-1a7ce8bc3009 (100 obwodów)
+    [odra] zadanie 01a1bfbe-d31e-78d3-a79f-1a7ce8bc3009 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bfc8-ed71-7572-a40f-dee710c4dc49 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [11:52<?, ?it/s]
+    [odra] zadanie 01a1bfc8-ed71-7572-a40f-dee710c4dc49 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bfd3-d317-7910-bd8e-86506e6f7d73 (100 obwodów)
+    [odra] zadanie 01a1bfd3-d317-7910-bd8e-86506e6f7d73 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bfdd-e77b-77b1-99d8-3b2bc6009690 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [11:00<?, ?it/s]
+    [odra] zadanie 01a1bfdd-e77b-77b1-99d8-3b2bc6009690 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bfe8-016d-7762-ae44-a96042560911 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:41<?, ?it/s]
+    [odra] zadanie 01a1bfe8-016d-7762-ae44-a96042560911 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bfed-3cd6-77c1-b9ac-67fb8e1dc429 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [10:59<?, ?it/s]
+    [odra] zadanie 01a1bfed-3cd6-77c1-b9ac-67fb8e1dc429 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1bff7-5379-77a2-8a13-ee6c390da627 (8 obwodów)
+    [odra] zadanie 01a1bff7-5379-77a2-8a13-ee6c390da627 | 8 obwodów (8/8)
+  [11/12] linear/cdr/twirl_native/near_target: 1008 circuits
+    [odra] zgłoszono zadanie 01a1bffc-c890-7ad0-8adc-a7276d84fac0 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [01:16<?, ?it/s]
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/campaign/odra_window.py", line 645, in <module>
+    main()
+    ~~~~^^
+  File "/Users/karinaleskiewicz/QEM/campaign/odra_window.py", line 636, in main
+    run_window(args, jobs, order, rec, ex)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/campaign/odra_window.py", line 400, in run_window
+    counts = ex.run([j.circuit for j in part], shots, on_job=rec.add_job)
+  File "/Users/karinaleskiewicz/QEM/campaign/odra_window.py", line 367, in run
+    return run_circuits(self.backend, circs, shots, on_job=on_job)
+  File "/Users/karinaleskiewicz/QEM/odra_backend.py", line 132, in run_circuits
+    raw, job_id = fetch_counts(backend.client, job)
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 231, in fetch_counts
+    result = _retry(_go, what=f"fetch counts {job_id}", attempts=attempts)
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 189, in _retry
+    return fn()
+  File "/Users/karinaleskiewicz/QEM/run_hardware.py", line 226, in _go
+    cmc_batch = client.get_job_measurement_counts(job_id)
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_client/iqm_client.py", line 404, in get_job_measurement_counts
+    return self._iqm_server_client.get_job_artifact_measurement_counts(job_id)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 417, in get_job_artifact_measurement_counts
+    response = self._send_request(requests.get, f"jobs/{job_id}/artifacts/measurement_counts")
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/iqm_server_client/iqm_server_client.py", line 604, in _send_request
+    iqm_server_error.raise_exception(response.status_code)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.13/site-packages/iqm/station_control/interface/errors.py", line 128, in raise_exception
+    raise error_class(message=self.message, error_code=self.error_code)
+exa.common.errors.iqm_error.NotFoundError: Job 01a1bffc-c890-7ad0-8adc-a7276d84fac0 does not have artifact: measurement_counts
+[2026-11-09 12:07:35] FAIL w01B attempt 1 (see log); resuming
+[2026-11-09 12:07:38] RUN w01B (night B, point set 0, attempt 2)
+window w01B: 8 points, rungs ['linear', 'all_to_all'], n_train 20 (spread 120), M 6, S 8192, ZNE (1, 3, 5)
+block                                                 circuits        shots   hours
+all_to_all/cdr/twirl_native/near_target                   1008      8257536    0.68
+all_to_all/cdr/twirl_logical/shared_random                1008      8257536    0.68
+all_to_all/cdr/twirl_native/shared_random                 1008      8257536    0.68
+linear/cdr/spread/near_target                             1008      8257536    0.68
+all_to_all/cdr/spread/near_target                         1008      8257536    0.68
+linear/cdr/off_copies/near_target                         1008      8257536    0.68
+linear/cdr/twirl_logical/shared_random                    1008      8257536    0.68
+all_to_all/zne                                              56       458752    0.04
+all_to_all/cdr/off_copies/near_target                     1008      8257536    0.68
+linear/cdr/twirl_native/shared_random                     1008      8257536    0.68
+linear/cdr/twirl_native/near_target                       1008      8257536    0.68
+linear/zne                                                  56       458752    0.04
+TOTAL                                                    10192     83492864    6.88
+  time model: 0.3 s/circuit + 2.6e-04 s/shot (ODRA pilot, 2026-10-23)
+Traceback (most recent call last):
+  File "/Users/karinaleskiewicz/QEM/campaign/odra_window.py", line 645, in <module>
+    main()
+    ~~~~^^
+  File "/Users/karinaleskiewicz/QEM/campaign/odra_window.py", line 622, in main
+    jobs, info = build_plan(args, points)
+                 ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/campaign/odra_window.py", line 202, in build_plan
+    tr_nat = build_training_set(natives[pi], n_train=n_dist, sampler="near_target",
+                                base_seed=args.seed, target_index=eix,
+                                window_id=args.window_id)
+  File "/Users/karinaleskiewicz/QEM/qem/cdr_training.py", line 202, in build_training_set
+    circuits.append(snap_native_to_clifford(target_native, fn, rng))
+                    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/QEM/qem/cdr_training.py", line 130, in snap_native_to_clifford
+    out.append(RGate(theta, phi), qubits)
+               ~~~~~^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/.local/lib/python3.13/site-packages/qiskit/circuit/library/standard_gates/r.py", line 66, in __init__
+    super().__init__("r", 1, [theta, phi], label=label)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/.local/lib/python3.13/site-packages/qiskit/circuit/gate.py", line 44, in __init__
+    super().__init__(name, num_qubits, 0, params, label=label)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/karinaleskiewicz/.local/lib/python3.13/site-packages/qiskit/circuit/instruction.py", line 93, in __init__
+    if not hasattr(self, "_label"):
+           ~~~~~~~^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+[2026-11-09 13:46:17] calibration start already taken
+[2026-11-09 13:46:19] RUN w01B (night B, point set 0, attempt 1)
+window w01B: 8 points, rungs ['linear', 'all_to_all'], n_train 20 (spread 120), M 6, S 8192, ZNE (1, 3, 5)
+block                                                 circuits        shots   hours
+all_to_all/cdr/twirl_native/near_target                   1008      8257536    0.68
+all_to_all/cdr/twirl_logical/shared_random                1008      8257536    0.68
+all_to_all/cdr/twirl_native/shared_random                 1008      8257536    0.68
+linear/cdr/spread/near_target                             1008      8257536    0.68
+all_to_all/cdr/spread/near_target                         1008      8257536    0.68
+linear/cdr/off_copies/near_target                         1008      8257536    0.68
+linear/cdr/twirl_logical/shared_random                    1008      8257536    0.68
+all_to_all/zne                                              56       458752    0.04
+all_to_all/cdr/off_copies/near_target                     1008      8257536    0.68
+linear/cdr/twirl_native/shared_random                     1008      8257536    0.68
+linear/cdr/twirl_native/near_target                       1008      8257536    0.68
+linear/zne                                                  56       458752    0.04
+TOTAL                                                    10192     83492864    6.88
+  time model: 0.3 s/circuit + 2.6e-04 s/shot (ODRA pilot, 2026-10-23)
+CZ per rung: {'linear': 30, 'all_to_all': 57}
+[provenance] runs/odra_campaign/w01B
+[resume] 9128 circuits already recorded
+  [1/12] all_to_all/cdr/twirl_native/near_target: complete, skipped
+  [2/12] all_to_all/cdr/twirl_logical/shared_random: complete, skipped
+  [3/12] all_to_all/cdr/twirl_native/shared_random: complete, skipped
+  [4/12] linear/cdr/spread/near_target: complete, skipped
+  [5/12] all_to_all/cdr/spread/near_target: complete, skipped
+  [6/12] linear/cdr/off_copies/near_target: complete, skipped
+  [7/12] linear/cdr/twirl_logical/shared_random: complete, skipped
+  [8/12] all_to_all/zne: complete, skipped
+  [9/12] all_to_all/cdr/off_copies/near_target: complete, skipped
+  [10/12] linear/cdr/twirl_native/shared_random: complete, skipped
+  [11/12] linear/cdr/twirl_native/near_target: 1008 circuits
+    [odra] zgłoszono zadanie 01a1c059-57fe-7312-8f1f-5d696874046d (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:42<?, ?it/s]
+    [odra] zadanie 01a1c059-57fe-7312-8f1f-5d696874046d | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1c05e-9502-73c2-aff1-b4154961d33b (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [1:07:45<?, ?it/s]
+  [retry] fetch counts 01a1c05e-9502-73c2-aff1-b4154961d33b: ConnectTimeout (attempt 1/8) -> waiting 5s
+  [retry] fetch counts 01a1c05e-9502-73c2-aff1-b4154961d33b: ConnectionError (attempt 2/8) -> waiting 10s
+  [retry] fetch counts 01a1c05e-9502-73c2-aff1-b4154961d33b: ConnectionError (attempt 3/8) -> waiting 20s
+  [retry] fetch counts 01a1c05e-9502-73c2-aff1-b4154961d33b: ConnectionError (attempt 4/8) -> waiting 40s
+  [retry] fetch counts 01a1c05e-9502-73c2-aff1-b4154961d33b: ValidationError (attempt 5/8) -> waiting 80s
+  [retry] fetch counts 01a1c05e-9502-73c2-aff1-b4154961d33b: ValidationError (attempt 6/8) -> waiting 160s
+  [retry] fetch counts 01a1c05e-9502-73c2-aff1-b4154961d33b: ValidationError (attempt 7/8) -> waiting 320s
+    [odra] zadanie 01a1c05e-9502-73c2-aff1-b4154961d33b | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1c09c-a1ba-77d3-98b6-44b925489486 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a1c09c-a1ba-77d3-98b6-44b925489486 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1c0a1-bc5d-7971-b5e8-a8d7c259d198 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a1c0a1-bc5d-7971-b5e8-a8d7c259d198 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1c0a6-d7a5-75f0-b4f7-137c4091bbc2 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1c0a6-d7a5-75f0-b4f7-137c4091bbc2 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1c0ab-f1a5-7742-ba61-3c056f431ed7 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1c0ab-f1a5-7742-ba61-3c056f431ed7 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1c0b1-0a5a-76c0-a57c-b66b3d465c00 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:32<?, ?it/s]
+    [odra] zadanie 01a1c0b1-0a5a-76c0-a57c-b66b3d465c00 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1c0b6-2375-7dd2-b60e-1c65e8f5e44b (100 obwodów)
+    [odra] zadanie 01a1c0b6-2375-7dd2-b60e-1c65e8f5e44b | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1c0bb-3e98-7523-a8a6-125c14a277fe (100 obwodów)
+    [odra] zadanie 01a1c0bb-3e98-7523-a8a6-125c14a277fe | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1c0c0-5a34-7391-9b33-da167e92fb98 (100 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [05:33<?, ?it/s]
+    [odra] zadanie 01a1c0c0-5a34-7391-9b33-da167e92fb98 | 100 obwodów (100/100)
+    [odra] zgłoszono zadanie 01a1c0c5-7361-79e1-a0cc-e201356762d8 (8 obwodów)
+    [odra] zadanie 01a1c0c5-7361-79e1-a0cc-e201356762d8 | 8 obwodów (8/8)
+  [12/12] linear/zne: 56 circuits
+    [odra] zgłoszono zadanie 01a1c0c5-e54e-7332-bb2c-9931487c5322 (56 obwodów)
+Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [00:00<?, ?it/s]Progress in queue:   0%|          | 0/1 [03:10<?, ?it/s]
+    [odra] zadanie 01a1c0c5-e54e-7332-bb2c-9931487c5322 | 56 obwodów (56/56)
+wrote runs/odra_campaign/w01B/cdr.csv runs/odra_campaign/w01B/zne.csv
+
+CDR mean |error| (OLS) by rung x arm:
+arm              off_copies      spread twirl_logical twirl_native              
+train_set       near_target near_target shared_random  near_target shared_random
+n_cz rung                                                                       
+30   linear          0.0756      0.0564        0.0287       0.0532        0.0359
+57   all_to_all      0.1518      0.1368        0.0821       0.0529        0.0883
+raw: {'all_to_all': 0.2281, 'linear': 0.1246}
+
+ZNE mean |error| by rung x variant (w_neg in brackets):
+                err_zne                    w_neg                 
+variant         garbage genuine identity garbage genuine identity
+n_cz rung                                                        
+30   linear      0.0676  0.0643   0.1657  0.0310  0.0015   0.0368
+57   all_to_all  0.1613  0.1701   0.3194  0.0049  0.0004   0.0905
+[2026-11-09 15:49:09] DONE w01B
+IQMClient.get_calibration_quality_metrics is an experimental method, and the API will likely change in the future with no backwards compatibility.
+Missing fidelity for clifford.xy.QB1
+Missing fidelity for clifford.xy.QB2
+Missing fidelity for clifford.xy.QB3
+Missing fidelity for clifford.xy.QB4
+Missing fidelity for clifford.xy.QB5
+fetching calibration from https://odra5.e-science.pl/ (auth: token) ...
+raw dump -> calibrations/odra_raw_w01B_end.json
+mapped DeviceCalibration -> calibrations/odra_w01B_end.json
+unmapped (still placeholder): []
+observations parsed: 462
+OK: all fields mapped from live ODRA calibration.
+hub: 0 t1_us: [17.65, 12.63, 14.95, 19.8, 12.87] p_2q: 0.02455
+[2026-11-09 15:49:14] calibration end saved
+wrote runs/odra_campaign/w01B/cdr.csv runs/odra_campaign/w01B/zne.csv
+
+CDR mean |error| (OLS) by rung x arm:
+arm              off_copies      spread twirl_logical twirl_native              
+train_set       near_target near_target shared_random  near_target shared_random
+n_cz rung                                                                       
+30   linear          0.0756      0.0564        0.0287       0.0532        0.0359
+57   all_to_all      0.1518      0.1368        0.0821       0.0529        0.0883
+raw: {'all_to_all': 0.2281, 'linear': 0.1246}
+
+ZNE mean |error| by rung x variant (w_neg in brackets):
+                err_zne                    w_neg                 
+variant         garbage genuine identity garbage genuine identity
+n_cz rung                                                        
+30   linear      0.0676  0.0643   0.1657  0.0310  0.0015   0.0368
+57   all_to_all  0.1613  0.1701   0.3194  0.0049  0.0004   0.0905
+[2026-11-09 15:49:15] === KONIEC w01B ===

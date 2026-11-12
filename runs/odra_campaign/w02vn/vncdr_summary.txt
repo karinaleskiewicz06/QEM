@@ -1,0 +1,16 @@
+complete points: 8; incomplete (excluded, reported): []
+PRIMARY (H_vn): 2-axis vnCDR (2 copies/level, mean over draws) vs CDR (6 base copies), one-sided Wilcoxon on log error:
+  n=8 wins=4/8 mean 0.0172 vs 0.0145 geo 1.212 [0.432, 3.430] p=0.6289 -> NOT SUPPORTED
+secondary (no claims):
+  vn_t                   vs CDR: wins 4/8 geo 1.051 [0.497, 2.097] p=0.4727
+  vn_t_first             vs CDR: wins 5/8 geo 0.873 [0.318, 1.937] p=0.4727
+  vn_t_noint             vs CDR: wins 5/8 geo 0.953 [0.390, 2.024] p=0.5273
+  vn_t_fullbudget        vs CDR: wins 5/8 geo 0.994 [0.422, 2.091] p=0.4219
+  vn_cz                  vs CDR: wins 4/8 geo 1.219 [0.518, 2.848] p=0.6289
+  vn_cz_first            vs CDR: wins 4/8 geo 1.162 [0.409, 2.954] p=0.5781
+  vn_cz_noint            vs CDR: wins 5/8 geo 0.850 [0.264, 2.766] p=0.4219
+  vn_cz_fullbudget       vs CDR: wins 4/8 geo 1.167 [0.459, 2.831] p=0.5781
+  vn_2ax_first           vs CDR: wins 4/8 geo 1.193 [0.357, 3.684] p=0.6289
+  vn_2ax_noint           vs CDR: wins 5/8 geo 1.204 [0.407, 3.498] p=0.5781
+  vn_2ax_fullbudget      vs CDR: wins 4/8 geo 1.005 [0.289, 3.299] p=0.5273
+  raw                    vs CDR: wins 2/8 geo 3.514 [1.384, 9.595] p=0.9727

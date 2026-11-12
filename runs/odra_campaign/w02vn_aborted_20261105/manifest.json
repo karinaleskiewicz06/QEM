@@ -1,0 +1,311 @@
+{
+  "campaign": "odra_campaign",
+  "window_id": "w02vn",
+  "seed": 42,
+  "cli_args": {
+    "dry_run": false,
+    "submit": true,
+    "sim_device": null,
+    "analyse": null,
+    "window_id": "w02vn",
+    "campaign": "odra_campaign",
+    "root": "runs",
+    "rungs": [
+      "star"
+    ],
+    "point_sets": [
+      0
+    ],
+    "max_points": null,
+    "pairs": 12,
+    "n_train": 20,
+    "copies": 6,
+    "shots": 32768,
+    "seed": 42,
+    "t_cz": 6e-08,
+    "t_prx": 2e-08,
+    "resume": true,
+    "chunk": 400,
+    "no_qasm": false,
+    "sim_theta": 0.0,
+    "sim_phi": 0.0,
+    "sim_eps": 0.0,
+    "allow_env_mismatch": false
+  },
+  "started_utc": "2026-11-05T00:43:28.359Z",
+  "finished_utc": null,
+  "calibration_set_id": {
+    "start": "88bfa985-253f-40da-9287-ac057334571d",
+    "end": null
+  },
+  "job_ids": [
+    "01a1a929-2ae3-7b33-b887-88ebe5405b13",
+    "01a1a944-5941-75e3-9227-fc46da9a322a",
+    "01a1a959-0a7a-7a93-8925-013f3c0e40e1"
+  ],
+  "device": "odra",
+  "submitted": true,
+  "notes": [],
+  "extra": {
+    "previous_attempts": [
+      {
+        "started_utc": "2026-11-04T22:12:46.059Z",
+        "finished_utc": null,
+        "job_ids": [
+          "01a1a89f-335a-7601-b8ed-516fd311bd2f",
+          "01a1a8ba-4dcc-7850-bd10-ba09c7976712"
+        ],
+        "notes": [],
+        "cli_args": {
+          "dry_run": false,
+          "submit": true,
+          "sim_device": null,
+          "analyse": null,
+          "window_id": "w02vn",
+          "campaign": "odra_campaign",
+          "root": "runs",
+          "rungs": [
+            "star"
+          ],
+          "point_sets": [
+            0
+          ],
+          "max_points": null,
+          "pairs": 12,
+          "n_train": 20,
+          "copies": 6,
+          "shots": 32768,
+          "seed": 42,
+          "t_cz": 6e-08,
+          "t_prx": 2e-08,
+          "resume": true,
+          "chunk": 400,
+          "no_qasm": false,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "allow_env_mismatch": false
+        },
+        "calibration_set_id": {
+          "start": "88bfa985-253f-40da-9287-ac057334571d",
+          "end": null
+        },
+        "git_commit": "c2f87f6f81ebed873daf0703dc07c0659ff7850d",
+        "git_dirty": true
+      },
+      {
+        "started_utc": "2026-11-04T23:12:42.533Z",
+        "finished_utc": null,
+        "job_ids": [
+          "01a1a8d6-13f4-7ea3-8dbc-5ae625af4226"
+        ],
+        "notes": [],
+        "cli_args": {
+          "dry_run": false,
+          "submit": true,
+          "sim_device": null,
+          "analyse": null,
+          "window_id": "w02vn",
+          "campaign": "odra_campaign",
+          "root": "runs",
+          "rungs": [
+            "star"
+          ],
+          "point_sets": [
+            0
+          ],
+          "max_points": null,
+          "pairs": 12,
+          "n_train": 20,
+          "copies": 6,
+          "shots": 32768,
+          "seed": 42,
+          "t_cz": 6e-08,
+          "t_prx": 2e-08,
+          "resume": true,
+          "chunk": 400,
+          "no_qasm": false,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "allow_env_mismatch": false
+        },
+        "calibration_set_id": {
+          "start": "88bfa985-253f-40da-9287-ac057334571d",
+          "end": null
+        },
+        "git_commit": "c2f87f6f81ebed873daf0703dc07c0659ff7850d",
+        "git_dirty": true
+      },
+      {
+        "started_utc": "2026-11-04T23:43:04.360Z",
+        "finished_utc": null,
+        "job_ids": [
+          "01a1a8f1-f4ca-7ab0-b0d4-3ad9985e8feb"
+        ],
+        "notes": [],
+        "cli_args": {
+          "dry_run": false,
+          "submit": true,
+          "sim_device": null,
+          "analyse": null,
+          "window_id": "w02vn",
+          "campaign": "odra_campaign",
+          "root": "runs",
+          "rungs": [
+            "star"
+          ],
+          "point_sets": [
+            0
+          ],
+          "max_points": null,
+          "pairs": 12,
+          "n_train": 20,
+          "copies": 6,
+          "shots": 32768,
+          "seed": 42,
+          "t_cz": 6e-08,
+          "t_prx": 2e-08,
+          "resume": true,
+          "chunk": 400,
+          "no_qasm": false,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "allow_env_mismatch": false
+        },
+        "calibration_set_id": {
+          "start": "88bfa985-253f-40da-9287-ac057334571d",
+          "end": null
+        },
+        "git_commit": "c2f87f6f81ebed873daf0703dc07c0659ff7850d",
+        "git_dirty": true
+      },
+      {
+        "started_utc": "2026-11-05T00:13:19.307Z",
+        "finished_utc": null,
+        "job_ids": [
+          "01a1a90d-90f0-71e1-a8bb-c23f5e5ccf90"
+        ],
+        "notes": [],
+        "cli_args": {
+          "dry_run": false,
+          "submit": true,
+          "sim_device": null,
+          "analyse": null,
+          "window_id": "w02vn",
+          "campaign": "odra_campaign",
+          "root": "runs",
+          "rungs": [
+            "star"
+          ],
+          "point_sets": [
+            0
+          ],
+          "max_points": null,
+          "pairs": 12,
+          "n_train": 20,
+          "copies": 6,
+          "shots": 32768,
+          "seed": 42,
+          "t_cz": 6e-08,
+          "t_prx": 2e-08,
+          "resume": true,
+          "chunk": 400,
+          "no_qasm": false,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "allow_env_mismatch": false
+        },
+        "calibration_set_id": {
+          "start": "88bfa985-253f-40da-9287-ac057334571d",
+          "end": null
+        },
+        "git_commit": "c2f87f6f81ebed873daf0703dc07c0659ff7850d",
+        "git_dirty": true
+      }
+    ],
+    "plan": {
+      "design": "vncdr-interleaved",
+      "block_order": [
+        "star/p09",
+        "star/p15",
+        "star/p03",
+        "star/p06",
+        "star/p00",
+        "star/p21",
+        "star/p12",
+        "star/p18"
+      ],
+      "levels": {
+        "star": {
+          "base": {
+            "n_cz": 12,
+            "t_us": 0.7999999999999998
+          },
+          "cz": {
+            "n_cz": 36,
+            "t_us": 2.2399999999999998
+          },
+          "idle": {
+            "n_cz": 12,
+            "t_us": 2.2399999999999998
+          }
+        }
+      },
+      "n_circuits": 3024,
+      "eval_points": [
+        0,
+        3,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21
+      ]
+    },
+    "blocks": []
+  },
+  "environment": {
+    "python": "3.13.9",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "argv": [
+      "campaign/vncdr_window.py",
+      "--submit",
+      "--window-id",
+      "w02vn",
+      "--resume"
+    ],
+    "packages": {
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3"
+    },
+    "locked": {
+      "python": "3.13.9",
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "qiskit-ibm-runtime": "0.47.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.6",
+      "scikit-learn": "1.7.2",
+      "statsmodels": "0.14.5",
+      "torch": "2.12.0",
+      "qml_benchmarks": "0.1"
+    },
+    "git_commit": "c2f87f6f81ebed873daf0703dc07c0659ff7850d",
+    "git_branch": "paper-odra-campaign",
+    "git_dirty": true,
+    "git_dirty_files": 8
+  },
+  "split_window": false
+}

@@ -1,0 +1,530 @@
+{
+  "campaign": "odra_campaign",
+  "window_id": "w01A",
+  "seed": 42,
+  "cli_args": {
+    "dry_run": false,
+    "submit": true,
+    "sim_device": null,
+    "analyse": null,
+    "kappa": false,
+    "dd_ablation": false,
+    "window_id": "w01A",
+    "campaign": "odra_campaign",
+    "root": "runs",
+    "points": [
+      "star",
+      "circular"
+    ],
+    "cdr_arms": [
+      "off_copies:near_target",
+      "twirl_native:near_target",
+      "spread:near_target",
+      "twirl_logical:shared_random",
+      "twirl_native:shared_random"
+    ],
+    "eval_points": 24,
+    "point_set": 0,
+    "night": "A",
+    "n_train": 20,
+    "frames": 6,
+    "shots": 8192,
+    "no_zne": false,
+    "seed": 42,
+    "resume": true,
+    "chunk": 400,
+    "no_qasm": false,
+    "sim_theta": 0.0,
+    "sim_phi": 0.0,
+    "sim_eps": 0.0,
+    "allow_env_mismatch": false
+  },
+  "started_utc": "2026-10-24T19:31:56.299Z",
+  "finished_utc": "2026-10-24T20:39:20.646Z",
+  "calibration_set_id": {
+    "start": "b1b5d2a8-b846-4505-99e3-3a708233d32b",
+    "end": "b1b5d2a8-b846-4505-99e3-3a708233d32b"
+  },
+  "job_ids": [
+    "01a16f65-fc65-76a2-8d4b-0a83ddcdcf42",
+    "01a16f6b-0d2a-7fd2-bfbd-5aa05cdfe450",
+    "01a16f70-1ead-7803-8214-d16a6504bcbe",
+    "01a16f70-8d8f-7513-9108-75a041d90831",
+    "01a16f75-9f8b-77d1-a300-9ca3c63bfe57",
+    "01a16f7a-b27e-7111-aa65-ce95d705e976",
+    "01a16f7f-c34b-7f41-8f30-550a9b764cb6",
+    "01a16f84-d4be-7532-8b24-957ac42f13fc",
+    "01a16f89-e6ad-75f0-bc37-5010b65cd3ff",
+    "01a16f8e-f852-7042-891c-7aae968469bb",
+    "01a16f94-0a78-7251-a437-a6cda720b8cc",
+    "01a16f99-1c1e-7f63-a81f-3d0268d7c1fd",
+    "01a16f9e-2c4c-7fb1-ba77-6d8bf06e83c2",
+    "01a16fa3-4177-7d62-822d-6088e00c8787"
+  ],
+  "device": "odra",
+  "submitted": true,
+  "notes": [],
+  "extra": {
+    "previous_attempts": [
+      {
+        "started_utc": "2026-10-24T07:57:32.680Z",
+        "finished_utc": null,
+        "job_ids": [
+          "01a16cea-4106-71a0-8ed2-6653cf2dc691",
+          "01a16cef-5ea8-7af3-9ea3-e092d97307f3",
+          "01a16cf4-7c80-7873-8d63-5b3ad5ed2cbf",
+          "01a16cf9-ac13-74b0-92ce-8f06cfe96629",
+          "01a16cfe-c9c0-7351-9331-bbf3bf8bd117",
+          "01a16d04-385c-7253-abed-0182a476c36d",
+          "01a16d09-cd06-73f0-9c02-b0341d3dbc88",
+          "01a16d0e-ec6d-7cd3-aa9b-4060c789b9db",
+          "01a16d14-0a56-72e2-b992-841e702e6ef5",
+          "01a16d19-25ed-7d12-8fdb-4a3736d565da",
+          "01a16d1e-3f37-7a92-ac02-2dc74a90f84a",
+          "01a16d1e-b135-7482-b61d-e161937b78f1",
+          "01a16d23-cc11-7f80-8280-7f2a63dfeede",
+          "01a16d28-df78-7c61-b839-e0e8951a1e14",
+          "01a16d2d-f150-7f02-b4b9-a7e281ed3b57",
+          "01a16d33-0573-71b0-8452-44ec80a5251e",
+          "01a16d38-14e3-70e3-b5a0-f4015c29feb7",
+          "01a16d3d-27bb-7623-8cde-239b804a045d",
+          "01a16d42-3bff-70d1-bf8d-910677f3e790",
+          "01a16d47-4ce3-71f2-99a7-03f8bf33b51c",
+          "01a16d4c-607d-7032-af18-1ac632e1c6a2",
+          "01a16d51-7585-7660-90cf-7042774b6e54",
+          "01a16d51-f34b-75a2-b081-3991c60c8aac",
+          "01a16d57-11f7-7fb2-94e6-2568483a7922",
+          "01a16d5c-33e5-7640-961f-000d93069d8a",
+          "01a16d61-464d-79d3-929f-8054d8154d2e",
+          "01a16d67-21be-7fe2-857f-e3d3636e7b2e",
+          "01a16d7d-1308-72a2-bed9-f1184c69a892",
+          "01a16d82-2ce5-7540-8afc-5c5533e3dd32",
+          "01a16d87-9e0c-73b0-8167-59ea0e5c72ab",
+          "01a16d8c-b8c5-7951-b474-76bd331979e9",
+          "01a16d91-d6d7-7140-8fb8-2a90c8706414",
+          "01a16d96-e875-73f0-acb3-a7f35ebacd88",
+          "01a16d97-5b5e-7331-9530-be5f6d9d3e9d",
+          "01a16d9c-78c3-7ba1-8926-8d5bd5e856ff",
+          "01a16da1-9893-79d0-aeb4-8454bf1662a5",
+          "01a16da6-bb42-71a1-85bf-d055fa4a6aeb",
+          "01a16dab-d866-7971-953b-f886d7c7321f",
+          "01a16db0-f40b-7fc3-b4d3-2c1d436d5e22",
+          "01a16db6-14c7-7162-8595-5647c07086bf",
+          "01a16dbb-92b9-7b11-95ee-b7430e9a728e",
+          "01a16dc1-118e-7b82-a6ce-3d77a68db5f1",
+          "01a16dc6-9462-7751-9a63-d74039b01b93",
+          "01a16dcb-b5c4-7330-9a94-b15e7317fdfa",
+          "01a16dcc-3379-7d61-a002-cd54d5bfa888",
+          "01a16dd1-459d-7ba2-97d5-95602b3e0318",
+          "01a16dd6-bc7c-7c73-9abf-9616e6f4b54a",
+          "01a16ddc-3782-7cb3-9dfa-6f1d3806f7d8",
+          "01a16de1-b015-7550-af4a-38530ac52a64",
+          "01a16de7-2a86-7d10-9ccc-46f8f55b3dff",
+          "01a16dec-3fad-74c3-8cf4-30adee587a05",
+          "01a16df1-b427-73f3-a7bf-98e17dda0adc",
+          "01a16df7-2fbd-7c71-97e7-19f086ce0be0",
+          "01a16dfc-ab8a-7673-a74e-a20bb8ee398b",
+          "01a16e02-223c-7280-8935-e12f64f1aa84",
+          "01a16e03-0655-7bf0-9728-73cb558138e1",
+          "01a16e08-284e-7753-9866-2f4c877c8a15",
+          "01a16e0d-6670-75b2-8d73-303e01b269d3",
+          "01a16e12-90f6-72e1-b735-4d4d58dc463c",
+          "01a16e17-d923-7bd1-b506-533804242acc",
+          "01a16e1c-ff8e-7d80-beab-31687b2b06d2",
+          "01a16e22-3f0b-7060-aebb-88a6ee26d000",
+          "01a16e27-7584-7e71-8d2d-fcd092e10740",
+          "01a16e2c-b894-7a30-afe8-1934694babd1",
+          "01a16e31-dd03-7ab2-9ac8-1d820e0a5ce8",
+          "01a16e38-3ea8-7510-b359-106323299243",
+          "01a16e38-c12e-7af3-a03e-89687acdb441",
+          "01a16e3b-c681-7191-9237-b816868e719d",
+          "01a16e41-03d8-79b2-9d93-55354662c31a",
+          "01a16e46-3ff8-7672-a29c-8d1dd1791b7f",
+          "01a16e4b-6985-7a41-b40e-377e4d6008c2",
+          "01a16e50-ab58-7e72-bbc5-ba3fcf28747d",
+          "01a16e55-da0e-77a3-a269-46b3fa0ba076",
+          "01a16e5b-4c8b-7262-9b4e-c9b65def69e7",
+          "01a16e60-76da-7560-a039-3ce06a68b22f",
+          "01a16e65-b736-7343-a57b-51a07dc23f46",
+          "01a16e6b-55d5-7602-84f9-c915401df259",
+          "01a16e70-db74-7451-86ee-d07f91d72db0",
+          "01a16e71-bbb1-7010-903a-ea12a14cfcd9",
+          "01a16e77-2f75-7101-8585-5acad400791c",
+          "01a16e7c-b3e3-7573-8aad-d0a154c622d9",
+          "01a16e82-3e61-7580-ae84-60718bee70a6",
+          "01a16e87-bbcd-7e40-b77b-f8ab8af9cba8",
+          "01a16e8d-3b55-7d53-86df-55f79ef41fca",
+          "01a16ea2-1379-7e21-b04f-cf56056c3711",
+          "01a16eb1-e291-7073-a3d5-1f7e902246d9",
+          "01a16eb7-2ba9-7e40-966c-534a6793188e",
+          "01a16ebc-77c9-7681-acbe-ff8b7d096941",
+          "01a16ec1-ac0f-73e1-a2ae-7b4d87af9bc7",
+          "01a16ec2-542d-7dd0-b5b9-8cc188c762e1",
+          "01a16ec5-4c41-7472-b365-cb2a81d78e6c",
+          "01a16eca-6474-7c52-8690-32b39ab475ad",
+          "01a16ecf-8156-7971-9da8-f7a79d1ec081",
+          "01a16ed4-967d-7ff0-bc0e-5f3596711d55",
+          "01a16ed9-ae29-79f1-a789-3d709af78221",
+          "01a16ede-c4fb-74b1-951c-02e202c41425",
+          "01a16ee3-de9b-7691-ab7f-d1ef8284490c",
+          "01a16ee9-2364-76d1-bdb5-e2be906c3a79",
+          "01a16eee-3ffa-7522-8f3f-22d363f5db3a",
+          "01a16ef3-55ac-7cf0-9a10-5a7447c953ae",
+          "01a16f01-3e9f-7e62-9ce5-995652eee3dd"
+        ],
+        "notes": [],
+        "cli_args": {
+          "dry_run": false,
+          "submit": true,
+          "sim_device": null,
+          "analyse": null,
+          "kappa": false,
+          "dd_ablation": false,
+          "window_id": "w01A",
+          "campaign": "odra_campaign",
+          "root": "runs",
+          "points": [
+            "star",
+            "circular"
+          ],
+          "cdr_arms": [
+            "off_copies:near_target",
+            "twirl_native:near_target",
+            "spread:near_target",
+            "twirl_logical:shared_random",
+            "twirl_native:shared_random"
+          ],
+          "eval_points": 24,
+          "point_set": 0,
+          "night": "A",
+          "n_train": 20,
+          "frames": 6,
+          "shots": 8192,
+          "no_zne": false,
+          "seed": 42,
+          "resume": true,
+          "chunk": 400,
+          "no_qasm": false,
+          "sim_theta": 0.0,
+          "sim_phi": 0.0,
+          "sim_eps": 0.0,
+          "allow_env_mismatch": false
+        },
+        "calibration_set_id": {
+          "start": "b1b5d2a8-b846-4505-99e3-3a708233d32b",
+          "end": "b1b5d2a8-b846-4505-99e3-3a708233d32b"
+        },
+        "git_commit": "4b0d84974293194f3f8324c8bc11030397ff3bc8",
+        "git_dirty": true
+      }
+    ],
+    "plan": {
+      "block_order": [
+        "circular/cdr/twirl_logical/shared_random",
+        "star/cdr/spread/near_target",
+        "star/cdr/twirl_native/shared_random",
+        "circular/cdr/spread/near_target",
+        "star/cdr/off_copies/near_target",
+        "circular/cdr/twirl_native/near_target",
+        "star/zne",
+        "circular/cdr/twirl_native/shared_random",
+        "circular/cdr/off_copies/near_target",
+        "circular/zne",
+        "star/cdr/twirl_native/near_target",
+        "star/cdr/twirl_logical/shared_random"
+      ],
+      "block_order_seed": 42,
+      "rungs": {
+        "star": {
+          "n_cz": 12,
+          "skeleton": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          "insertion": null
+        },
+        "circular": {
+          "n_cz": 39,
+          "skeleton": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "insertion": null
+        }
+      },
+      "n_circuits": 10192,
+      "eval_points": [
+        0,
+        3,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21
+      ]
+    },
+    "blocks": [
+      {
+        "block": "star/cdr/twirl_native/near_target",
+        "order": 10,
+        "n": 208,
+        "cal_before": "b1b5d2a8-b846-4505-99e3-3a708233d32b",
+        "cal_after": "b1b5d2a8-b846-4505-99e3-3a708233d32b",
+        "seconds": 692.1
+      },
+      {
+        "block": "star/cdr/twirl_logical/shared_random",
+        "order": 11,
+        "n": 1008,
+        "cal_before": "b1b5d2a8-b846-4505-99e3-3a708233d32b",
+        "cal_after": "b1b5d2a8-b846-4505-99e3-3a708233d32b",
+        "seconds": 3351.7
+      }
+    ]
+  },
+  "environment": {
+    "python": "3.13.9",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "argv": [
+      "campaign/odra_window.py",
+      "--submit",
+      "--window-id",
+      "w01A",
+      "--night",
+      "A",
+      "--point-set",
+      "0",
+      "--resume"
+    ],
+    "packages": {
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3"
+    },
+    "locked": {
+      "python": "3.13.9",
+      "qiskit": "2.4.1",
+      "qiskit-aer": "0.17.2",
+      "qiskit-machine-learning": "0.9.0",
+      "qiskit-ibm-runtime": "0.47.0",
+      "iqm-client": "35.0.0",
+      "numpy": "2.5.1",
+      "scipy": "1.16.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.6",
+      "scikit-learn": "1.7.2",
+      "statsmodels": "0.14.5",
+      "torch": "2.12.0",
+      "qml_benchmarks": "0.1"
+    },
+    "git_commit": "ecaa139ec0f49c0a00158bfe8a33055421342e0a",
+    "git_branch": "paper-odra-campaign",
+    "git_dirty": true,
+    "git_dirty_files": 2
+  },
+  "split_window": false
+}

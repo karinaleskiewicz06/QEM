@@ -1,0 +1,60 @@
+{
+  "num_qubits": 5,
+  "hub": 0,
+  "t1": [
+    1.7199602942367138e-05,
+    1.8900657913865767e-05,
+    1.6375506237142814e-05,
+    2.264150035142006e-05,
+    1.651396649065209e-05
+  ],
+  "t2": [
+    2.5826533981845583e-06,
+    6.804653195249614e-06,
+    3.441708106307073e-06,
+    5.061996927283537e-06,
+    4.187028141043275e-06
+  ],
+  "t2_echo": [
+    6.940674213312955e-06,
+    1.1215427317531596e-05,
+    7.875650604535549e-06,
+    9.254111525484031e-06,
+    8.202642387817121e-06
+  ],
+  "t_1q": 2e-08,
+  "t_2q": 6e-08,
+  "p_1q": [
+    0.0014762994709988098,
+    0.00213438427191881,
+    0.0022332893466747716,
+    0.0023287498202976264,
+    0.0022109733126064457
+  ],
+  "p_2q": 0.023673393094724687,
+  "p_ro": [
+    0.0152,
+    0.0272,
+    0.0183,
+    0.02135,
+    0.02295
+  ],
+  "meta": {
+    "collected_at": "2026-11-05T22:08:12.162081+00:00",
+    "source": "get_calibration_quality_metrics",
+    "hub_physical": "QB3",
+    "qubit_order_logical_to_physical": [
+      "QB3",
+      "QB1",
+      "QB2",
+      "QB4",
+      "QB5"
+    ],
+    "t2_note": "t2 = Ramsey T2*; t2_echo = Hahn-echo T2 (DD ceiling); both clamped",
+    "t2_echo_defaulted_to_t2star": false,
+    "p_2q_note": "mean (1 - CZ Clifford RB fidelity) over star edges",
+    "p_ro_note": "mean of SSRO error_0_to_1 and error_1_to_0",
+    "unmapped_fields_kept_as_placeholder": [],
+    "n_observations_parsed": 462
+  }
+}
